@@ -1,9 +1,9 @@
 # Decode framework.jar
 DECODE_APK "system" "system/framework/framework.jar" || exit 1
-FW_DIR="$APKTOOL_DIR/system/framework/framework.jar"
+FRAMEWORK_JAR_DIR="$APKTOOL_DIR/system/framework/framework.jar"
 
 # 1. Patch SemFingerprintManager$Characteristics: getSensorType() -> 0x1 (capacitive side-fingerprint)
-CHAR_SMALI="$(find "$FW_DIR" -name "*Characteristics.smali" 2>/dev/null | grep -i "fingerprint" | head -n 1)"
+CHAR_SMALI="$(find "$FRAMEWORK_JAR_DIR" -name "*Characteristics.smali" 2>/dev/null | grep -i "fingerprint" | head -n 1)"
 if [ -n "$CHAR_SMALI" ]; then
     LOG "- Patching getSensorType() to 0x1 in $(basename "$CHAR_SMALI")"
     python3 -c "
@@ -20,7 +20,7 @@ if re.search(pattern, c):
 fi
 
 # 2. Patch InputRune.smali: PWM_SKIP_TOO_FAST_DOUBLE_PRESS -> false (0x0)
-INPUT_RUNE="$(find "$FW_DIR" -name "InputRune.smali" 2>/dev/null | head -n 1)"
+INPUT_RUNE="$(find "$FRAMEWORK_JAR_DIR" -name "InputRune.smali" 2>/dev/null | head -n 1)"
 if [ -n "$INPUT_RUNE" ]; then
     LOG "- Ensuring PWM_SKIP_TOO_FAST_DOUBLE_PRESS=false in InputRune.smali"
     python3 -c "
@@ -91,3 +91,5 @@ if re.search(pattern, c):
         fp.write(c)
 " "$FP_SERV_1"
 fi
+
+unset FRAMEWORK_JAR_DIR CHAR_SMALI INPUT_RUNE SRV_DIR BIO_FEAT EXT_IMPL FP_SERV_1
