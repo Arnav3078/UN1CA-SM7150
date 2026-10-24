@@ -1,5 +1,6 @@
 device=m51
-version=4.0.0-m51
-timestamp=1790002932
-security_patch_version=2026-08-05
+version=5.0.0-m51
+oneui_version=9.0
+timestamp=1792835600
+security_patch_version=2026-10-01
 incremental=0

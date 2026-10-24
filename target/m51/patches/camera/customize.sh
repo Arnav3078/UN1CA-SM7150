@@ -17,11 +17,13 @@ ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" "system/lib64/libhumantracking_util.
 ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" "system/lib64/libveengine.arcsoft.so"
 LOG_STEP_OUT
 
-LOG_STEP_IN "- Adding camera libs from extra"
-ADD_TO_WORK_DIR "$TARGET_EXTRA_FIRMWARES" "system" "system/lib64/libsecimaging_pdk.camera.samsung.so"
-ADD_TO_WORK_DIR "$TARGET_EXTRA_FIRMWARES" "system" "system/lib64/libSceneDetector_v1.camera.samsung.so"
-EVAL "echo \"libSceneDetector_v1.camera.samsung.so\" >> \"$WORK_DIR/system/system/etc/public.libraries-camera.samsung.txt\""
-LOG_STEP_OUT
+if [ -n "$TARGET_EXTRA_FIRMWARES" ]; then
+    LOG_STEP_IN "- Adding camera libs from extra"
+    ADD_TO_WORK_DIR "$TARGET_EXTRA_FIRMWARES" "system" "system/lib64/libsecimaging_pdk.camera.samsung.so"
+    ADD_TO_WORK_DIR "$TARGET_EXTRA_FIRMWARES" "system" "system/lib64/libSceneDetector_v1.camera.samsung.so"
+    EVAL "echo \"libSceneDetector_v1.camera.samsung.so\" >> \"$WORK_DIR/system/system/etc/public.libraries-camera.samsung.txt\""
+    LOG_STEP_OUT
+fi
 
 LOG_STEP_IN "- Replacing HIDL snap HAL with AIDL from extra"
 BLOBS_LIST="

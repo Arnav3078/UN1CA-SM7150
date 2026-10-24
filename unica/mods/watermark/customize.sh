@@ -1,6 +1,6 @@
 LOG_STEP_IN "- Downloading latest Sprite Wallpaper app"
-DOWNLOAD_FILE "$(GET_GALAXY_STORE_DOWNLOAD_URL "000008552712")" \
-    "$WORK_DIR/system/system/priv-app/SpriteWallpaper/SpriteWallpaper.apk"
+SW_URL="$(GET_GALAXY_STORE_DOWNLOAD_URL "000008552712" 2>/dev/null || true)"
+[ -n "$SW_URL" ] && DOWNLOAD_FILE "$SW_URL" "$WORK_DIR/system/system/priv-app/SpriteWallpaper/SpriteWallpaper.apk" || true
 LOG_STEP_OUT
 
 LOG_STEP_IN "- Removing \"AI-generated content\" watermark from all image generation apps"

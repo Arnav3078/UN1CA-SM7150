@@ -3,11 +3,17 @@ DOWNLOAD_KERNEL()
     EVAL "rm -rf \"$TMP_DIR\""
     EVAL "mkdir -p \"$TMP_DIR/out/kernel_extracted\""
 
+    KERNEL_ZIP="$TMP_DIR/LostPrime-Kernel-m51.zip"
+    LOCAL_KERNEL=$(find /mnt/c/Users/s/Downloads -maxdepth 1 -name "*LostPrime*m51*ksu*.zip" 2>/dev/null | head -n 1)
+    if [ -n "$LOCAL_KERNEL" ] && [ -f "$LOCAL_KERNEL" ]; then
+        LOG "- Using cached LostPrime kernel: $(basename "$LOCAL_KERNEL")"
+        cp -af "$LOCAL_KERNEL" "$KERNEL_ZIP"
+        return 0
+    fi
+
     KERNEL_REPO="https://api.github.com/repos/kurtnettle/android_kernel_samsung_sm7150/releases/latest"
     KERNEL_URL=$(curl -s ${GITHUB_TOKEN:+-H "Authorization: token $GITHUB_TOKEN"} \
         "$KERNEL_REPO" | grep -o 'https://[^"]*m51-ksu[^"]*\.zip' | head -n1)
-    
-    KERNEL_ZIP="$TMP_DIR/LostPrime-Kernel-m51.zip"
     
     DOWNLOAD_FILE "$KERNEL_URL" "$KERNEL_ZIP"
 }

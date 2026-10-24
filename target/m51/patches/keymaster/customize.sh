@@ -1,3 +1,4 @@
+if [ -n "$TARGET_EXTRA_FIRMWARES" ]; then
 LOG_STEP_IN "- Adding keymaster 4.0 libs from extra"
 ADD_TO_WORK_DIR "$TARGET_EXTRA_FIRMWARES" "system" "system/lib/android.hardware.keymaster@3.0.so"
 ADD_TO_WORK_DIR "$TARGET_EXTRA_FIRMWARES" "system" "system/lib/android.hardware.keymaster@4.0.so"
@@ -16,3 +17,4 @@ DELETE_FROM_WORK_DIR "system" "system/lib64/libdk_native_keymint.so"
 ADD_TO_WORK_DIR "$TARGET_EXTRA_FIRMWARES" "system" "system/lib64/libdk_native_keymaster.so"
 DELETE_FROM_WORK_DIR "system" "system/lib64/vendor.samsung.hardware.keymint-V1-ndk.so"
 LOG_STEP_OUT
+fi

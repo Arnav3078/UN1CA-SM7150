@@ -1,3 +1,4 @@
+if [ -n "$TARGET_EXTRA_FIRMWARES" ]; then
 LOG_STEP_IN "- Adding 32-bit WFD blobs from extra"
 ADD_TO_WORK_DIR "$TARGET_EXTRA_FIRMWARES" "system" "system/bin/insthk"
 ADD_TO_WORK_DIR "$TARGET_EXTRA_FIRMWARES" "system" "system/bin/remotedisplay"
@@ -18,3 +19,4 @@ DELETE_FROM_WORK_DIR "system" "system/lib64/wfd_log.so"
 LOG_STEP_OUT
 
 ADD_TO_WORK_DIR "a73xqxx" "vendor" "bin/hw/wpa_supplicant"
+fi
