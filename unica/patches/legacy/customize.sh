@@ -642,7 +642,7 @@ fi
 #
 # Pre-API 36
 # - Update midas_config.json
-if ! grep -q "\"version\": \"4\." "$WORK_DIR/vendor/etc/midas/midas_config.json"; then
+if [ -f "$WORK_DIR/vendor/etc/midas/midas_config.json" ] && ! grep -q "\"version\": \"4\." "$WORK_DIR/vendor/etc/midas/midas_config.json"; then
     if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "35" ]; then
         PATCHED=true
         DELETE_FROM_WORK_DIR "vendor" "etc/midas"
