@@ -15,6 +15,16 @@ PATCH_FSTAB()
             "$f"; then
             LOG "- Patching $(sed -e "s|$WORK_DIR||g" -e "s|$TMP_DIR/out/ramdisk_extracted|$BOOT_FILE|g" <<< "$f")"
         fi
+                # Decrypt: Remove forced encryption flags
+        sed -E -i \
+            -e 's/fileencryption=[^,[:space:]]+,?//g' \
+            -e 's/metadata_encryption=[^,[:space:]]+,?//g' \
+            -e 's/keydirectory=[^,[:space:]]+,?//g' \
+            -e 's/forceencrypt=[^,[:space:]]+,?//g' \
+            -e 's/forcefde=[^,[:space:]]+,?//g' \
+            -e 's/,,/,/g' \
+            -e 's/,[[:space:]]*$/ /' \
+            "$f"
         EVAL "uniq \"$f\" \"$TMP_DIR/tmp\" && mv -f \"$TMP_DIR/tmp\" \"$f\""
     done < <(find "$1" -type f -name "fstab.*")
 }
