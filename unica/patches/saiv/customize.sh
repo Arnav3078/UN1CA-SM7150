@@ -4,8 +4,8 @@ TARGET_FIRMWARE_PATH="$(cut -d "/" -f 1 -s <<< "$TARGET_FIRMWARE")_$(cut -d "/" 
 SAFE_ADD_FROM_SOURCE() {
     local PARTITION="$1"
     local FILE="$2"
-    local UID="${3:-0}"
-    local GID="${4:-0}"
+    local FILE_UID="${3:-0}"
+    local FILE_GID="${4:-0}"
     local MODE="${5:-644}"
     local SELABEL="${6:-u:object_r:system_file:s0}"
 
@@ -15,7 +15,7 @@ SAFE_ADD_FROM_SOURCE() {
     fi
 
     if [ -e "$CHECK_PATH" ]; then
-        ADD_TO_WORK_DIR "$SOURCE_FIRMWARE" "$PARTITION" "$FILE" "$UID" "$GID" "$MODE" "$SELABEL"
+        ADD_TO_WORK_DIR "$SOURCE_FIRMWARE" "$PARTITION" "$FILE" "$FILE_UID" "$FILE_GID" "$MODE" "$SELABEL"
     fi
 }
 
