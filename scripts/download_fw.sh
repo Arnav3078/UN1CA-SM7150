@@ -4,7 +4,7 @@
 
 # [
 source "$SRC_DIR/scripts/utils/firmware_utils.sh" || exit 1
-source "$TOOLS_DIR/venv/bin/activate" || exit 1
+[ -f "$TOOLS_DIR/venv/bin/activate" ] && source "$TOOLS_DIR/venv/bin/activate"
 
 FORCE=false
 
@@ -151,8 +151,15 @@ for i in "${FIRMWARES[@]}"; do
     rm -rf "$ODIN_DIR/${MODEL}_${CSC}"
     mkdir -p "$ODIN_DIR/${MODEL}_${CSC}"
 
-    # Download samloader 
-    curl -sSLf "https://github.com/topjohnwu/samloader-rs/releases/download/2.0.0/samloader-v2.0.0-linux-x86_64.tar.xz" | tar -xJ -C "$TOOLS_DIR"
+    # Ensure samloader is present
+    if [ ! -f "$TOOLS_DIR/samloader" ]; then
+        if [ -f "/home/arnav/tools/samloader" ]; then
+            cp "/home/arnav/tools/samloader" "$TOOLS_DIR/samloader"
+            chmod +x "$TOOLS_DIR/samloader"
+        else
+            curl -sSLf "https://github.com/topjohnwu/samloader-rs/releases/download/2.0.0/samloader-v2.0.0-linux-x86_64.tar.xz" | tar -xJ -C "$TOOLS_DIR"
+        fi
+    fi
 
     # Download firmware into destination folder and create completion marker
     (
@@ -177,6 +184,6 @@ for i in "${FIRMWARES[@]}"; do
     LOG_STEP_OUT; LOG_STEP_OUT
 done
 
-deactivate
+type -t deactivate &>/dev/null && deactivate
 
 exit 0

@@ -6,7 +6,7 @@ PATCH_FSTAB()
     local f
 
     while IFS= read -r f; do
-        if [[ "$f" == *"emmc" ]] || [[ "$f" == *"ramplus" ]]; then
+        if [[ "$f" == *"ramplus" ]]; then
             continue
         fi
         if sed -E -i \
