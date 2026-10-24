@@ -31,8 +31,11 @@ EVAL "cd \"$SRC_DIR\"; zip -q \"$WORK_DIR/system/system/etc/security/otacerts.zi
 
 DECODE_APK "system" "system/priv-app/SecSettings/SecSettings.apk"
 
-APPLY_PATCH "system" "system/priv-app/SecSettings/SecSettings.apk" \
-    "$MODPATH/suggestions/SecSettings.apk/0001-Launch-UN1CA-Updates-from-suggestions.patch"
+SETTINGS_DIR="$APKTOOL_DIR/system/priv-app/SecSettings/SecSettings.apk"
+if [ -f "$SETTINGS_DIR/smali_classes2/com/android/settings/Settings\$FOTASuggestionActivity.smali" ]; then
+    APPLY_PATCH "system" "system/priv-app/SecSettings/SecSettings.apk" \
+        "$MODPATH/suggestions/SecSettings.apk/0001-Launch-UN1CA-Updates-from-suggestions.patch"
+fi
 
 # Disable stock OTA references
 SMALI_PATCH "system" "system/priv-app/SecSettings/SecSettings.apk" \
