@@ -19,7 +19,7 @@ This repository delivers the official port source tree, target device configurat
 - **Target Vendor Base:** Samsung Galaxy M51 (`SM-M515F` / `m51nsxx` / `M515FXXS6DXE4`)
 - **Kernel:** LostPrime Kernel with KernelSU (`4.14.357-openela-LostPrime`)
 - **Filesystem Type:** EROFS / ext4 support
-- **Status:** Verified 1:1 Stable Release (Zero Bootloop Architecture)
+- **Status:** Stable Release (Zero Bootloop Architecture)
 
 ---
 
