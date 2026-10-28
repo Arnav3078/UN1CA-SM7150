@@ -124,7 +124,7 @@ for apk_rel in \
     "system/system/priv-app/SpriteWallpaper/SpriteWallpaper.apk" \
     "system/system/priv-app/SamsungCamera/SamsungCamera.apk" \
     "system/system/priv-app/SecureFolder/SecureFolder.apk" \
-    "system/system/priv-app/KnoxCore/KnoxCore.apk" \
+    "system/system/priv-app/KnoxCore/KnoxCore.apk"
 do
     if [ -f "$FW_S23_SRC/$apk_rel" ]; then
         mkdir -p "$(dirname "$WORK_DIR/$apk_rel")"
