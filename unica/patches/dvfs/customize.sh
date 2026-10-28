@@ -1,8 +1,5 @@
-if [[ "$SOURCE_DVFSAPP_CONFIG_DVFS_POLICY_FILENAME" == "$TARGET_DVFSAPP_CONFIG_DVFS_POLICY_FILENAME" ]] && \
-    [[ "$SOURCE_DVFSAPP_CONFIG_SSRM_POLICY_FILENAME" == "$TARGET_DVFSAPP_CONFIG_SSRM_POLICY_FILENAME" ]]; then
-    LOG "\033[0;33m! Nothing to do\033[0m"
-    return 0
-fi
+LOG "- Skipping SDHMS modification to preserve authentic Samsung platform signature"
+return 0
 
 _LOG() { if $DEBUG; then LOGW "$1"; else ABORT "$1"; fi }
 

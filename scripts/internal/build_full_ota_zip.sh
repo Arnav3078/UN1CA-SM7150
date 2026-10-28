@@ -215,7 +215,7 @@ fi
 TARGET_ZIP="$1"
 OUTPUT_FILE="$2"
 
-if ! unzip -l "$TARGET_ZIP" | grep -q "build_info.txt" || unzip -l "$TARGET_ZIP" | grep -q "META-INF"; then
+if ! 7z l "$TARGET_ZIP" | grep -q "build_info.txt" || 7z l "$TARGET_ZIP" | grep -q "META-INF"; then
     LOGE "File not valid: ${TARGET_ZIP//$SRC_DIR\//}"
     exit 1
 fi
@@ -225,7 +225,7 @@ mkdir -p "$TMP_DIR/META-INF/com/google/android"
 cp -a "$SRC_DIR/prebuilts/bootable/deprecated-ota/updater" "$TMP_DIR/META-INF/com/google/android/update-binary"
 
 LOG "- Extracting target files"
-EVAL "unzip -o \"$TARGET_ZIP\" -d \"$TMP_DIR\"" || exit 1
+EVAL "7z x -y \"$TARGET_ZIP\" -o\"$TMP_DIR\"" || exit 1
 
 BUILD_INFO="$(cat "$TMP_DIR/build_info.txt")"
 rm -f "$TMP_DIR/build_info.txt"

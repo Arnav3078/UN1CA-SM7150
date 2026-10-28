@@ -6,5 +6,17 @@ find "$TMP_DIR/M51-FIRMWARES" -type f -name '*.??' -exec sh -c 'b=${0%.*};[ -e $
 
 EVAL "mv \"$TMP_DIR/M51-FIRMWARES/\"* \"$TMP_DIR\""
 EVAL "rm -rf \"$TMP_DIR/M51-FIRMWARES\""
-LOG_STEP_OUT
 
+# Never package or overwrite user's custom recovery (TWRP/OrangeFox)
+EVAL "rm -f \"$TMP_DIR/recovery.img\""
+
+# Always use patched vbmeta_samsung with verification and hashtree disabled (Flags: 3) to prevent dm-verity bootloops
+if [ -f "$FW_DIR/SM-M515F_BVO/avb/vbmeta_samsung_patched.img" ]; then
+    EVAL "cp -af \"$FW_DIR/SM-M515F_BVO/avb/vbmeta_samsung_patched.img\" \"$TMP_DIR/vbmeta_samsung.img\""
+fi
+
+if [ -f "$FW_DIR/SM-M515F_BVO/avb/vbmeta_patched.img" ]; then
+    EVAL "cp -af \"$FW_DIR/SM-M515F_BVO/avb/vbmeta_patched.img\" \"$TMP_DIR/vbmeta.img\""
+fi
+
+LOG_STEP_OUT

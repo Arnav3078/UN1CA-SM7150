@@ -40,10 +40,7 @@ EVAL "sed -i '/<name>vendor\.samsung\.hardware\.bluetooth<\/name>/ {
 }' \"$WORK_DIR/vendor/etc/vintf/manifest.xml\""
 LOG_STEP_OUT
 
-LOG_STEP_IN "- Adding audioflinger blobs from m44xktt"
-ADD_TO_WORK_DIR "m44xktt" "system" "system/bin/audioserver"
-ADD_TO_WORK_DIR "m44xktt" "system" "system/lib64/libaudioflinger.so"
-LOG_STEP_OUT
+# Audioflinger and audioserver kept authentic S23 One UI 9.0
 
 LOG_STEP_IN "- Increasing audio offload buffer size"
 SET_PROP "vendor" "vendor.audio.offload.buffer.size.kb" "256"

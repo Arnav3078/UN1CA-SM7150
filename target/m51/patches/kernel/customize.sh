@@ -1,7 +1,7 @@
 DOWNLOAD_KERNEL()
 {
     EVAL "rm -rf \"$TMP_DIR\""
-    EVAL "mkdir -p \"$TMP_DIR/out/kernel_extracted\""
+    EVAL "mkdir -p \"$TMP_DIR/kernel_zip_extracted\""
 
     KERNEL_ZIP="$TMP_DIR/LostPrime-Kernel-m51.zip"
     LOCAL_KERNEL=$(find /mnt/c/Users/s/Downloads -maxdepth 1 -name "*LostPrime*m51*ksu*.zip" 2>/dev/null | head -n 1)
@@ -20,7 +20,7 @@ DOWNLOAD_KERNEL()
 
 EXTRACT_KERNEL()
 {
-    EVAL "unzip -oq \"$KERNEL_ZIP\" -d \"$TMP_DIR/out/kernel_extracted\""
+    EVAL "unzip -oq \"$KERNEL_ZIP\" -d \"$TMP_DIR/kernel_zip_extracted\""
     
     BOOT_FILE="boot.img"
     EVAL "cp -a \"$WORK_DIR/kernel/$BOOT_FILE\" \"$TMP_DIR/$BOOT_FILE\""
@@ -52,9 +52,9 @@ PATCH_KERNEL()
 {
     DTBO_FILE="dtbo.img"
 
-    KERNEL_IMG="$(find "$TMP_DIR/out/kernel_extracted" -type f \( -name "Image" -o -name "Image.gz" -o -name "Image.lz4" -o -name "zImage" \) | LC_ALL=C sort | head -n 1)"
-    DTB_IMG="$TMP_DIR/out/kernel_extracted/dtb"
-    DTBO_IMG="$TMP_DIR/out/kernel_extracted/dtbo.img"
+    KERNEL_IMG="$(find "$TMP_DIR/kernel_zip_extracted" -type f \( -name "Image" -o -name "Image.gz" -o -name "Image.lz4" -o -name "zImage" \) | LC_ALL=C sort | head -n 1)"
+    DTB_IMG="$TMP_DIR/kernel_zip_extracted/dtb"
+    DTBO_IMG="$TMP_DIR/kernel_zip_extracted/dtbo.img"
 
     WORK_FMT=$(DETECT_KERNEL_FORMAT "$OUT_KERNEL")
     NEW_FMT=$(DETECT_KERNEL_FORMAT "$KERNEL_IMG")
@@ -96,10 +96,14 @@ PATCH_KERNEL()
     EVAL "cp -af \"$KERNEL_IMG\" \"$OUT_KERNEL\""
     EVAL "cp -af \"$DTB_IMG\" \"$OUT_DTB\""
 
-    EVAL "mkbootimg $MKBOOT_FILEIMG_ARGS -o \"$TMP_DIR/new-$BOOT_FILE\""
+    eval "mkbootimg $MKBOOT_FILEIMG_ARGS -o \"$TMP_DIR/new-$BOOT_FILE\""
 
-    EVAL "mv -f \"$TMP_DIR/new-$BOOT_FILE\" \"$WORK_DIR/kernel/$BOOT_FILE\""    
-    EVAL "mv -f \"$DTBO_IMG\" \"$WORK_DIR/kernel/$DTBO_FILE\""
+    if [ -f "$TMP_DIR/new-$BOOT_FILE" ]; then
+        EVAL "mv -f \"$TMP_DIR/new-$BOOT_FILE\" \"$WORK_DIR/kernel/$BOOT_FILE\""
+    fi
+    if [ -f "$DTBO_IMG" ]; then
+        EVAL "mv -f \"$DTBO_IMG\" \"$WORK_DIR/kernel/$DTBO_FILE\""
+    fi
 
     EVAL "rm -rf \"$TMP_DIR\""
 }

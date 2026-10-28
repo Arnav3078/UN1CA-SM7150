@@ -110,7 +110,8 @@ if [ "$#" != "1" ]; then
     exit 1
 fi
 
-OUTPUT_FILE="$1"
+mkdir -p "$(dirname "$1")"
+OUTPUT_FILE="$(realpath "$1")"
 
 [ -d "$TMP_DIR" ] && rm -rf "$TMP_DIR"
 mkdir -p "$TMP_DIR"
