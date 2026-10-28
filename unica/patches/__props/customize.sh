@@ -4,6 +4,7 @@ EVAL "echo \"ro.unica.version u:object_r:build_prop:s0 exact string\" >> \"$WORK
 
 # Property identifying the UN1CA codename (Mind Blowing)
 SET_PROP "system" "ro.unica.codename" "Mind Blowing"
+SET_PROP "system" "ro.build.display.id" "UN1CA 5.2.0 (Mind Blowing)"
 EVAL "echo \"ro.unica.codename u:object_r:build_prop:s0 exact string\" >> \"$WORK_DIR/system/system/etc/selinux/plat_property_contexts\""
 
 # Property identifying the UN1CA build time

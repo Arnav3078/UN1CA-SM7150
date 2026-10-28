@@ -97,8 +97,13 @@ if [ -f "$WORK_DIR/vendor/bin/hw/android.hardware.graphics.composer@2.4-service"
 fi
 LOG_STEP_OUT
 
-LOG_STEP_IN "- Deleting KnoxGuard to prevent 3010 device lock and ICCC crash"
-DELETE_FROM_WORK_DIR "system" "system/priv-app/KnoxGuard" || true
+LOG_STEP_IN "- Neutralizing ICCC client to prevent system_server crash"
+for lib in "$WORK_DIR/system/system/lib64/hidl_comm_iccc_client.so" \
+           "$WORK_DIR/system/system/lib/hidl_comm_iccc_client.so"; do
+    if [ -f "$lib" ]; then
+        python3 "$SRC_DIR/target/m51/patches/tweaks/patch_iccc.py" "$lib" || true
+    fi
+done
 LOG_STEP_OUT
 
 LOG_STEP_IN "- Removing crashing Knox components"
@@ -124,7 +129,8 @@ for apk_rel in \
     "system/system/priv-app/SpriteWallpaper/SpriteWallpaper.apk" \
     "system/system/priv-app/SamsungCamera/SamsungCamera.apk" \
     "system/system/priv-app/SecureFolder/SecureFolder.apk" \
-    "system/system/priv-app/KnoxCore/KnoxCore.apk"
+    "system/system/priv-app/KnoxCore/KnoxCore.apk" \
+    "system/system/priv-app/KnoxGuard/KnoxGuard.apk"
 do
     if [ -f "$FW_S23_SRC/$apk_rel" ]; then
         mkdir -p "$(dirname "$WORK_DIR/$apk_rel")"
