@@ -97,14 +97,8 @@ if [ -f "$WORK_DIR/vendor/bin/hw/android.hardware.graphics.composer@2.4-service"
 fi
 LOG_STEP_OUT
 
-LOG_STEP_IN "- Restoring authentic Samsung KnoxGuard"
-FW_S23_SRC="${FW_DIR:-$SRC_DIR/out/fw}/SM-S911B_EUX"
-if [ -f "$FW_S23_SRC/system/system/priv-app/KnoxGuard/KnoxGuard.apk" ]; then
-    mkdir -p "$WORK_DIR/system/system/priv-app/KnoxGuard"
-    cp -f "$FW_S23_SRC/system/system/priv-app/KnoxGuard/KnoxGuard.apk" "$WORK_DIR/system/system/priv-app/KnoxGuard/KnoxGuard.apk"
-    chmod 644 "$WORK_DIR/system/system/priv-app/KnoxGuard/KnoxGuard.apk"
-    rm -rf "$WORK_DIR/system/system/priv-app/KnoxGuard/oat"
-fi
+LOG_STEP_IN "- Deleting KnoxGuard to prevent 3010 device lock and ICCC crash"
+DELETE_FROM_WORK_DIR "system" "system/priv-app/KnoxGuard" || true
 LOG_STEP_OUT
 
 LOG_STEP_IN "- Removing crashing Knox components"
@@ -131,7 +125,6 @@ for apk_rel in \
     "system/system/priv-app/SamsungCamera/SamsungCamera.apk" \
     "system/system/priv-app/SecureFolder/SecureFolder.apk" \
     "system/system/priv-app/KnoxCore/KnoxCore.apk" \
-    "system/system/priv-app/KnoxGuard/KnoxGuard.apk"
 do
     if [ -f "$FW_S23_SRC/$apk_rel" ]; then
         mkdir -p "$(dirname "$WORK_DIR/$apk_rel")"

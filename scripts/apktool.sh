@@ -45,6 +45,16 @@ BUILD()
         EVAL "signapk \"$SRC_DIR/security/${CERT_PREFIX}_platform.x509.pem\" \"$SRC_DIR/security/${CERT_PREFIX}_platform.pk8\" \"$OUTPUT_PATH/dist/$FILE_NAME\" \"$OUTPUT_PATH/dist/temp.apk\"" || exit 1
         mv -f "$OUTPUT_PATH/dist/temp.apk" "$OUTPUT_PATH/dist/$FILE_NAME"
     else
+        if [ -f "$INPUT_FILE" ]; then
+            local TMP_RES="/tmp/jar_res_$$"
+            mkdir -p "$TMP_RES"
+            if unzip -l "$INPUT_FILE" "res/*" >/dev/null 2>&1; then
+                unzip -q -o "$INPUT_FILE" "res/*" -d "$TMP_RES" 2>/dev/null || true
+                (cd "$TMP_RES" && zip -u -q "$OUTPUT_PATH/dist/$FILE_NAME" res/* 2>/dev/null || true)
+            fi
+            rm -rf "$TMP_RES"
+        fi
+
         LOG "- Zipaligning ${INPUT_FILE//$WORK_DIR/}"
         EVAL "zipalign -p 4 \"$OUTPUT_PATH/dist/$FILE_NAME\" \"$OUTPUT_PATH/dist/temp\"" || exit 1
         mv -f "$OUTPUT_PATH/dist/temp" "$OUTPUT_PATH/dist/$FILE_NAME"
