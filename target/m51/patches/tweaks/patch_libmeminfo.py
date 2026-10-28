@@ -1,7 +1,9 @@
 import os
 import sys
 
-target = sys.argv[1] if len(sys.argv) > 1 else "/home/arnav/UN1CA-4.0-M51/out/target/m51/work_dir/system/system/lib64/libmeminfo.so"
+work_dir = os.environ.get("WORK_DIR", "/home/arnav/UN1CA-4.0-M51/out/target/m51/work_dir")
+default_target = f"{work_dir}/system/system/lib64/libmeminfo.so"
+target = sys.argv[1] if len(sys.argv) > 1 else default_target
 
 if not os.path.exists(target):
     print("Target file not found:", target)

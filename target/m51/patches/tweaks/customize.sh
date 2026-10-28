@@ -98,9 +98,10 @@ fi
 LOG_STEP_OUT
 
 LOG_STEP_IN "- Restoring authentic Samsung KnoxGuard"
-if [ -f "$SRC_DIR/out/fw/SM-S911B_EUX/system/system/priv-app/KnoxGuard/KnoxGuard.apk" ]; then
+FW_S23_SRC="${FW_DIR:-$SRC_DIR/out/fw}/SM-S911B_EUX"
+if [ -f "$FW_S23_SRC/system/system/priv-app/KnoxGuard/KnoxGuard.apk" ]; then
     mkdir -p "$WORK_DIR/system/system/priv-app/KnoxGuard"
-    cp -f "$SRC_DIR/out/fw/SM-S911B_EUX/system/system/priv-app/KnoxGuard/KnoxGuard.apk" "$WORK_DIR/system/system/priv-app/KnoxGuard/KnoxGuard.apk"
+    cp -f "$FW_S23_SRC/system/system/priv-app/KnoxGuard/KnoxGuard.apk" "$WORK_DIR/system/system/priv-app/KnoxGuard/KnoxGuard.apk"
     chmod 644 "$WORK_DIR/system/system/priv-app/KnoxGuard/KnoxGuard.apk"
     rm -rf "$WORK_DIR/system/system/priv-app/KnoxGuard/oat"
 fi
@@ -133,11 +134,11 @@ for apk_rel in \
     "system/system/priv-app/KnoxCore/KnoxCore.apk" \
     "system/system/priv-app/KnoxGuard/KnoxGuard.apk"
 do
-    if [ -f "$SRC_DIR/out/fw/SM-S911B_EUX/$apk_rel" ]; then
+    if [ -f "$FW_S23_SRC/$apk_rel" ]; then
         mkdir -p "$(dirname "$WORK_DIR/$apk_rel")"
-        cp -f "$SRC_DIR/out/fw/SM-S911B_EUX/$apk_rel" "$WORK_DIR/$apk_rel"
-        if [ -f "$SRC_DIR/out/fw/SM-S911B_EUX/${apk_rel}.prof" ]; then
-            cp -f "$SRC_DIR/out/fw/SM-S911B_EUX/${apk_rel}.prof" "$WORK_DIR/${apk_rel}.prof" 2>/dev/null || true
+        cp -f "$FW_S23_SRC/$apk_rel" "$WORK_DIR/$apk_rel"
+        if [ -f "$FW_S23_SRC/${apk_rel}.prof" ]; then
+            cp -f "$FW_S23_SRC/${apk_rel}.prof" "$WORK_DIR/${apk_rel}.prof" 2>/dev/null || true
         fi
         chmod 644 "$WORK_DIR/$apk_rel"
     fi
@@ -172,8 +173,9 @@ LOG_STEP_OUT
 LOG_STEP_IN "- Patching libstagefright to prevent fortify fread abort during video encoding"
 python3 - << 'EOF'
 import os
+work_dir = os.environ.get("WORK_DIR", "/home/arnav/UN1CA-4.0-M51/out/target/m51/work_dir")
 for is64 in [False, True]:
-    lib_path = "/home/arnav/UN1CA-4.0-M51/out/target/m51/work_dir/system/system/lib64/libstagefright.so" if is64 else "/home/arnav/UN1CA-4.0-M51/out/target/m51/work_dir/system/system/lib/libstagefright.so"
+    lib_path = f"{work_dir}/system/system/lib64/libstagefright.so" if is64 else f"{work_dir}/system/system/lib/libstagefright.so"
     if not os.path.exists(lib_path):
         continue
     with open(lib_path, "rb") as f:
