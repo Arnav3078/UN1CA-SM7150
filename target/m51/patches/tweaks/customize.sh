@@ -127,7 +127,6 @@ for apk_rel in \
     "system/system/priv-app/Telecom/Telecom.apk" \
     "system/system/priv-app/DressRoom/DressRoom.apk" \
     "system/system/priv-app/PhotoEditor_AIFull/PhotoEditor_AIFull.apk" \
-    "system/system/priv-app/SamsungDeviceHealthManagerService/SamsungDeviceHealthManagerService.apk" \
     "system/system/priv-app/SpriteWallpaper/SpriteWallpaper.apk" \
     "system/system/priv-app/SamsungCamera/SamsungCamera.apk" \
     "system/system/priv-app/SecureFolder/SecureFolder.apk" \

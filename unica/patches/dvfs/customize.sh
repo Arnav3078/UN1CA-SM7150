@@ -1,5 +1,8 @@
-LOG "- Skipping SDHMS modification to preserve authentic Samsung platform signature"
-return 0
+LOG "- Patching SDHMS to eliminate SSRM Warning"
+SMALI_PATCH "system" "system/priv-app/SamsungDeviceHealthManagerService/SamsungDeviceHealthManagerService.apk" \
+    "smali/n5/f1.smali" \
+    "null" \
+    "M(Landroid/content/Context;Ljava/lang/String;)V"
 
 _LOG() { if $DEBUG; then LOGW "$1"; else ABORT "$1"; fi }
 

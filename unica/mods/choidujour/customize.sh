@@ -5,15 +5,16 @@ ADD_TO_WORK_DIR "$MODPATH" "system" "." 0 0 755 "u:object_r:system_file:s0"
 
 BUILDER="$(git -C "$SRC_DIR" config --get remote.origin.url | sed -nE \
     's#^(https://github\.com/|git@github\.com:)([^/]+)/.*#\2#p')"
-    
-LOG_STEP_IN "- Forcing ChoiDujour to fetch OTA metadata from @${BUILDER}'s repository"
+BUILDER="${BUILDER:-Arnav3078}"
+
+LOG_STEP_IN "- Forcing ChoiDujour to fetch OTA metadata from @${BUILDER}'s UN1CA-M51-Updates repository"
 SMALI_PATCH "system" \
 	"system/priv-app/ChoiDujour/ChoiDujour.apk" \
 	"smali/t81.smali" \
 	"replace" \
     "b(Z)V" \
     "const-wide v4, 0x5c18d946d5d38297L" \
-    "    const-string v3, \"https://raw.githubusercontent.com/$BUILDER/static_resources/refs/heads/sixteen/updates/manifest${BUILD_TYPE}.json\"\n
+    "    const-string v3, \"https://raw.githubusercontent.com/$BUILDER/UN1CA-M51-Updates/main/updates/manifest${BUILD_TYPE}.json\"\n
     const-wide v4, 0x5c18d946d5d38297L"
 SMALI_PATCH "system" \
     "system/priv-app/ChoiDujour/ChoiDujour.apk" \
@@ -21,7 +22,7 @@ SMALI_PATCH "system" \
     "replace" \
     "onCreate(Landroid/os/Bundle;)V" \
     "invoke-direct {v2, v9}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V" \
-    "    const-string v9, \"https://raw.githubusercontent.com/$BUILDER/static_resources/refs/heads/sixteen/updates/\"\n
+    "    const-string v9, \"https://raw.githubusercontent.com/$BUILDER/UN1CA-M51-Updates/main/updates/\"\n
     invoke-direct {v2, v9}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V"
 LOG_STEP_OUT
 

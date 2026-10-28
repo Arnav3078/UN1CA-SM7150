@@ -6,14 +6,15 @@
   <a href="https://github.com/Arnav3078/UN1CA-SM7150/commits/un1ca-5.0"><img loading="lazy" src="https://img.shields.io/github/last-commit/Arnav3078/UN1CA-SM7150/un1ca-5.0?style=for-the-badge"/></a>
   <a href="https://github.com/Arnav3078/UN1CA-SM7150/stargazers"><img loading="lazy" src="https://img.shields.io/github/stars/Arnav3078/UN1CA-SM7150?style=for-the-badge"/></a>
 </p>
-<p align="center"><b>UN1CA 5.0</b> — One UI 9.0 Custom Firmware for <b>Samsung Galaxy M51 (SM-M515F / m51)</b></p>
+<p align="center"><b>UN1CA 5.2 (Mind Blowing)</b> — One UI 9.0 Custom Firmware for <b>Samsung Galaxy M51 (SM-M515F / m51)</b></p>
 
 ---
 
 ## 📱 About This Release
-This repository delivers the official port source tree, target device configurations, and zero-bootloop stability architecture for **UN1CA 5.0 (One UI 9.0)** ported from the **Samsung Galaxy S23** series, tailored specifically for the **Samsung Galaxy M51** (Qualcomm Snapdragon 730G / `sm7150`).
+This repository delivers the official port source tree, target device configurations, and zero-bootloop stability architecture for **UN1CA 5.2 (One UI 9.0)** ported from the **Samsung Galaxy S23** series, tailored specifically for the **Samsung Galaxy M51** (Qualcomm Snapdragon 730G / `sm7150`).
 
-- **ROM Name / Version:** UN1CA 5.0 (`5.0.0-m51`)
+- **ROM Name / Version:** UN1CA 5.2 (`5.2.0-m51`)
+- **ROM Codename:** Mind Blowing
 - **One UI Version:** One UI 9.0 (Android 17 / SDK 36 Base)
 - **Source Firmware:** Samsung Galaxy S23 (`SM-S911B` / `dm1q`)
 - **Target Vendor Base:** Samsung Galaxy M51 (`SM-M515F` / `m51nsxx` / `M515FXXS6DXE4`)
