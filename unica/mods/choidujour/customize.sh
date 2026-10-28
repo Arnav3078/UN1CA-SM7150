@@ -39,9 +39,11 @@ if [ -f "$SETTINGS_DIR/smali_classes2/com/android/settings/Settings\$FOTASuggest
 fi
 
 # Disable stock OTA references
-SMALI_PATCH "system" "system/priv-app/SecSettings/SecSettings.apk" \
-    "smali_classes3/com/samsung/android/settings/softwareupdate/SoftwareUpdateUtils.smali" "return" \
-    "isOTAUpgradeAllowed(Landroid/content/Context;)Z" "false"
+if grep -q "isOTAUpgradeAllowed(Landroid/content/Context;)Z" "$SETTINGS_DIR/smali_classes3/com/samsung/android/settings/softwareupdate/SoftwareUpdateUtils.smali" 2>/dev/null; then
+    SMALI_PATCH "system" "system/priv-app/SecSettings/SecSettings.apk" \
+        "smali_classes3/com/samsung/android/settings/softwareupdate/SoftwareUpdateUtils.smali" "return" \
+        "isOTAUpgradeAllowed(Landroid/content/Context;)Z" "false"
+fi
 
 # Dynamically patch SecSettings
 # - Add missing/non-xml files in place
