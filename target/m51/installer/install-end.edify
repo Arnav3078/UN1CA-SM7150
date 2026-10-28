@@ -22,3 +22,6 @@ ui_print("Flashing firmwares...");
   delete_recursive("/data/user_de/0/com.samsung.android.kgclient");
   delete_recursive("/data/system/users/0/kg");
   delete_recursive("/data/system/kg");
+  ui_print("Clearing dalvik-cache for dirty flash...");
+  delete_recursive("/data/dalvik-cache");
+  delete_recursive("/data/system/package_cache");
