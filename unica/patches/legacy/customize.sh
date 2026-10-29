@@ -150,7 +150,7 @@ if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "35" ]; then
 fi
 
 # Support legacy Face HAL (pre-API 34)
-if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "34" ]; then
+if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "34" ] && [ "$SOURCE_PLATFORM_SDK_VERSION" -lt "37" ]; then
     if [ ! -f "$WORK_DIR/vendor/bin/hw/vendor.samsung.hardware.biometrics.face@3.0-service" ]; then
         PATCHED=true
         APPLY_PATCH "system" "system/framework/services.jar" \
@@ -182,7 +182,7 @@ fi
 
 # Support legacy SehLights HAL (pre-API 35)
 # - Check for [lsr wD, wS, #0x18] to determine if the newer HAL is already in place
-if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "35" ]; then
+if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "35" ] && [ "$SOURCE_PLATFORM_SDK_VERSION" -lt "37" ]; then
     if [ -f "$WORK_DIR/vendor/bin/hw/vendor.samsung.hardware.light-service" ] && \
             ! xxd -p -c 4 "$WORK_DIR/vendor/bin/hw/vendor.samsung.hardware.light-service" | grep -q "1853$"; then
         PATCHED=true
@@ -450,7 +450,7 @@ if [ -f "$WORK_DIR/system/system/bin/sbauth" ] && \
 fi
 
 # Ensure PASS support (pre-API 35)
-if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "35" ]; then
+if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "35" ] && [ "$SOURCE_PLATFORM_SDK_VERSION" -lt "37" ]; then
     if ! grep -q "sec_pass_data_file" "$WORK_DIR/vendor/etc/selinux/vendor_file_contexts"; then
         PATCHED=true
         SMALI_PATCH "system" "system/framework/services.jar" \
@@ -517,7 +517,7 @@ fi
 
 # Ensure EU eco recharge support (pre-API 34)
 # - Check for 'batt_soc_rechg' to determine if newer battery drivers are in place
-if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "34" ]; then
+if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "34" ] && [ "$SOURCE_PLATFORM_SDK_VERSION" -lt "37" ]; then
     VBOOT_MISSING=true
     KERNEL_MISSING=true
 
@@ -551,7 +551,7 @@ fi
 # Support legacy usb_notify kernel drivers (pre-API 36)
 # https://github.com/salvogiangri/UN1CA/discussions/519
 # - Check for 'SKY_DEFAULT' to determine if newer usb_notify drivers are in place
-if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "36" ]; then
+if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "36" ] && [ "$SOURCE_PLATFORM_SDK_VERSION" -lt "37" ]; then
     VBOOT_MISSING=true
     KERNEL_MISSING=true
 
