@@ -193,7 +193,7 @@ fi
 
 # Ensure config_num_physical_slots is configured (pre-API 36)
 # https://android.googlesource.com/platform/frameworks/opt/telephony/+/42e37234cee15c9f3fcfac0532110abfc8843b99%5E%21/#F0
-if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "36" ]; then
+if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "36" ] && [ "$SOURCE_PLATFORM_SDK_VERSION" -lt "37" ]; then
     if [ ! "$(GET_PROP "ro.telephony.sim_slots.count")" ] && \
             ! grep -q "ro.telephony.sim_slots.count" "$WORK_DIR/vendor/bin/secril_config_svc" && \
             ! grep -q -r "config_num_physical_slots" "$WORK_DIR/vendor/overlay"; then
