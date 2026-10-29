@@ -13,6 +13,10 @@ SET_PROP "vendor" "ro.crypto.type" "none"
 SET_PROP "vendor" "ro.crypto.override" "false"
 SET_PROP "system" "ro.crypto.state" "unencrypted"
 SET_PROP "system" "ro.crypto.type" "none"
+SET_PROP "vendor" "ro.product.first_api_level" "31"
+SET_PROP "system" "ro.product.first_api_level" "31"
+SET_PROP "product" "ro.product.first_api_level" "31"
+SET_PROP "system_ext" "ro.product.first_api_level" "31"
 for f in "$WORK_DIR/vendor/etc"/fstab*; do
     [ -f "$f" ] || continue
     sed -E -i \
@@ -130,7 +134,8 @@ for apk_rel in \
     "system/system/priv-app/SamsungCamera/SamsungCamera.apk" \
     "system/system/priv-app/SecureFolder/SecureFolder.apk" \
     "system/system/priv-app/KnoxCore/KnoxCore.apk" \
-    "system/system/priv-app/KnoxGuard/KnoxGuard.apk"
+    "system/system/priv-app/KnoxGuard/KnoxGuard.apk" \
+    "system/system/priv-app/FotaAgent/FotaAgent.apk"
 do
     if [ -f "$FW_S23_SRC/$apk_rel" ]; then
         mkdir -p "$(dirname "$WORK_DIR/$apk_rel")"
@@ -141,6 +146,30 @@ do
         chmod 644 "$WORK_DIR/$apk_rel"
     fi
 done
+
+if [ -f "$FW_S23_SRC/system/system/etc/permissions/privapp-permissions-com.wssyncmldm.xml" ]; then
+    mkdir -p "$WORK_DIR/system/system/etc/permissions"
+    cp -f "$FW_S23_SRC/system/system/etc/permissions/privapp-permissions-com.wssyncmldm.xml" "$WORK_DIR/system/system/etc/permissions/"
+    chmod 644 "$WORK_DIR/system/system/etc/permissions/privapp-permissions-com.wssyncmldm.xml"
+fi
+LOG_STEP_OUT
+
+LOG_STEP_IN "- Installing UN1CA Updates (ChoiDujour) package"
+if [ -f "$SRC_DIR/unica/mods/choidujour/system/priv-app/ChoiDujour/ChoiDujour.apk" ]; then
+    mkdir -p "$WORK_DIR/system/system/priv-app/ChoiDujour"
+    cp -f "$SRC_DIR/unica/mods/choidujour/system/priv-app/ChoiDujour/ChoiDujour.apk" "$WORK_DIR/system/system/priv-app/ChoiDujour/"
+    chmod 644 "$WORK_DIR/system/system/priv-app/ChoiDujour/ChoiDujour.apk"
+fi
+if [ -f "$SRC_DIR/unica/mods/choidujour/system/etc/permissions/privapp-permissions-io.mesalabs.choidujour.xml" ]; then
+    mkdir -p "$WORK_DIR/system/system/etc/permissions"
+    cp -f "$SRC_DIR/unica/mods/choidujour/system/etc/permissions/privapp-permissions-io.mesalabs.choidujour.xml" "$WORK_DIR/system/system/etc/permissions/"
+    chmod 644 "$WORK_DIR/system/system/etc/permissions/privapp-permissions-io.mesalabs.choidujour.xml"
+fi
+if [ -f "$SRC_DIR/unica/mods/choidujour/system/etc/default-permissions/default-permissions-io.mesalabs.choidujour.xml" ]; then
+    mkdir -p "$WORK_DIR/system/system/etc/default-permissions"
+    cp -f "$SRC_DIR/unica/mods/choidujour/system/etc/default-permissions/default-permissions-io.mesalabs.choidujour.xml" "$WORK_DIR/system/system/etc/default-permissions/"
+    chmod 644 "$WORK_DIR/system/system/etc/default-permissions/default-permissions-io.mesalabs.choidujour.xml"
+fi
 LOG_STEP_OUT
 
 

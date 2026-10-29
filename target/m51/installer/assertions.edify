@@ -1,1 +1,12 @@
+run_program("/sbin/killall", "-9", "mtpserver");
+run_program("/bin/killall", "-9", "mtpserver");
+run_program("/system/bin/killall", "-9", "mtpserver");
+run_program("/sbin/umount", "-f", "-l", "/system_root");
+run_program("/bin/umount", "-f", "-l", "/system_root");
+run_program("/system/bin/umount", "-f", "-l", "/system_root");
+unmount("/system_root");
+unmount("/system");
+unmount("/vendor");
+unmount("/product");
+unmount("/odm");
 is_substring("M515FXX", getprop("ro.boot.bootloader")) && verify_no_downgrade(getprop("ro.boot.bootloader"), "M515FXXS6DXE3") && abort("E3003: This package requires the \"M515FXXS6DXE3\" firmware installed on your device; you have \"" + getprop("ro.boot.bootloader") + "\".");
