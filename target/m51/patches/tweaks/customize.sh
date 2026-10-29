@@ -159,16 +159,20 @@ if [ -f "$SRC_DIR/unica/mods/choidujour/system/priv-app/ChoiDujour/ChoiDujour.ap
     mkdir -p "$WORK_DIR/system/system/priv-app/ChoiDujour"
     cp -f "$SRC_DIR/unica/mods/choidujour/system/priv-app/ChoiDujour/ChoiDujour.apk" "$WORK_DIR/system/system/priv-app/ChoiDujour/"
     chmod 644 "$WORK_DIR/system/system/priv-app/ChoiDujour/ChoiDujour.apk"
+    SET_METADATA "system" "system/priv-app/ChoiDujour" 0 0 755 "u:object_r:system_file:s0"
+    SET_METADATA "system" "system/priv-app/ChoiDujour/ChoiDujour.apk" 0 0 644 "u:object_r:system_file:s0"
 fi
 if [ -f "$SRC_DIR/unica/mods/choidujour/system/etc/permissions/privapp-permissions-io.mesalabs.choidujour.xml" ]; then
     mkdir -p "$WORK_DIR/system/system/etc/permissions"
     cp -f "$SRC_DIR/unica/mods/choidujour/system/etc/permissions/privapp-permissions-io.mesalabs.choidujour.xml" "$WORK_DIR/system/system/etc/permissions/"
     chmod 644 "$WORK_DIR/system/system/etc/permissions/privapp-permissions-io.mesalabs.choidujour.xml"
+    SET_METADATA "system" "system/etc/permissions/privapp-permissions-io.mesalabs.choidujour.xml" 0 0 644 "u:object_r:system_file:s0"
 fi
 if [ -f "$SRC_DIR/unica/mods/choidujour/system/etc/default-permissions/default-permissions-io.mesalabs.choidujour.xml" ]; then
     mkdir -p "$WORK_DIR/system/system/etc/default-permissions"
     cp -f "$SRC_DIR/unica/mods/choidujour/system/etc/default-permissions/default-permissions-io.mesalabs.choidujour.xml" "$WORK_DIR/system/system/etc/default-permissions/"
     chmod 644 "$WORK_DIR/system/system/etc/default-permissions/default-permissions-io.mesalabs.choidujour.xml"
+    SET_METADATA "system" "system/etc/default-permissions/default-permissions-io.mesalabs.choidujour.xml" 0 0 644 "u:object_r:system_file:s0"
 fi
 LOG_STEP_OUT
 
