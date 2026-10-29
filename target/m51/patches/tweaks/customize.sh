@@ -259,6 +259,13 @@ SET_PROP "vendor" "sys.sysctl.swappiness" "100"
 if [ -f "$SRC_DIR/target/m51/camera/camera-feature.xml" ]; then
     cp -f "$SRC_DIR/target/m51/camera/camera-feature.xml" "$WORK_DIR/system/system/cameradata/camera-feature.xml"
 fi
+
+if [ -f "$SRC_DIR/target/m51/camera/SamsungCamera.apk.00" ]; then
+    LOG "- Restoring stable SamsungCamera from 5.0.0"
+    cat "$SRC_DIR/target/m51/camera/SamsungCamera.apk."[0-9][0-9] > "$WORK_DIR/system/system/priv-app/SamsungCamera/SamsungCamera.apk"
+    chmod 644 "$WORK_DIR/system/system/priv-app/SamsungCamera/SamsungCamera.apk"
+    SET_METADATA "system" "system/priv-app/SamsungCamera/SamsungCamera.apk" 0 0 644 "u:object_r:system_file:s0"
+fi
 LOG_STEP_OUT
 
 LOG_STEP_IN "- Fixing Qualcomm Codec2 seccomp policy"
