@@ -310,7 +310,7 @@ fi
 # Ensure Sem eBPF Smart Hotspot functionality (pre-API 35)
 # - Check for TARGET_PLATFORM_SDK_VERSION < 35 as 4.14 kernel support has been deprecated in Android V
 # - Disable "ro.kernel.version" == "4.14" leftover checks, 4.14 needs eBPF kernel backports anyway
-if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "35" ]; then
+if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "35" ] && [ "$SOURCE_PLATFORM_SDK_VERSION" -lt "37" ]; then
     EXTRACT_KERNEL_IMAGE
     if grep -q "Linux version 4.14" "$TMP_DIR/out/kernel"; then
         PATCHED=true
@@ -324,7 +324,7 @@ fi
 
 # Ensure IQtiComposer support (pre-API 36)
 # - Disable "ro.product.first_api_level" < 34 check
-if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "36" ]; then
+if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "36" ] && [ "$SOURCE_PLATFORM_SDK_VERSION" -lt "37" ]; then
     if [[ "$TARGET_OS_SINGLE_SYSTEM_IMAGE" == "qssi" ]] && \
             ! grep -q -r "IQtiComposer" "$WORK_DIR/vendor/etc/vintf"; then
         PATCHED=true
@@ -463,7 +463,7 @@ fi
 # - Replace COLOR_FormatYUV420Flexible with COLOR_FormatSurface/OMX_COLOR_FormatAndroidOpaque
 #   (https://android.googlesource.com/platform/frameworks/av/+/android-16.0.0_r2/media/libstagefright/omx/OMXNodeInstance.cpp#1687)
 # - Disable ACodec HEVC limitation for RECORDING_MODE_HDR10_PLUS/RECORDING_MODE_PRO_HDR10_PLUS
-if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "35" ]; then
+if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "35" ] && [ "$SOURCE_PLATFORM_SDK_VERSION" -lt "37" ]; then
     if ! find "$WORK_DIR/vendor/etc" -maxdepth 1 -type f -name "media_codecs*.xml" ! -name "*performance*" -exec cat {} + | \
             grep -q -P -z '<MediaCodec\s[^>]*name="c2\.(?!android\.|sec\.)[^"]*"(?:(?!</?MediaCodec[\s>])[\s\S])*?="video/'; then
         PATCHED=true
