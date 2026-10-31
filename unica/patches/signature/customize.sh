@@ -1,18 +1,26 @@
-CERT_PREFIX="aosp"
-$ROM_IS_OFFICIAL && CERT_PREFIX="unica"
+#!/usr/bin/env bash
 
-if [ ! -f "$SRC_DIR/security/${CERT_PREFIX}_platform.x509.pem" ]; then
-    ABORT "File not found: security/${CERT_PREFIX}_platform.x509.pem"
-fi
+# Delete disable if present
+rm -f "$MODPATH/disable" 2>/dev/null || true
 
-APPLY_PATCH "system" "system/framework/services.jar" "$MODPATH/services.jar/0001-Allow-custom-platform-signature.patch"
+LOG_STEP_IN "- Patching framework.jar for custom platform signatures"
+DECODE_APK "system" "system/framework/framework.jar"
 
-CERT_SIGNATURE="$(sed "/CERTIFICATE/d" "$SRC_DIR/security/${CERT_PREFIX}_platform.x509.pem" | tr -d "\n" | base64 -d | xxd -p -c 0)"
-SMALI_PATCH "system" "system/framework/services.jar" \
-    "smali_classes2/com/android/server/pm/InstallPackageHelper.smali" "replace" \
-    '<init>(Lcom/android/server/pm/PackageManagerService;Lcom/android/server/pm/AppDataHelper;Lcom/android/server/pm/RemovePackageHelper;Lcom/android/server/pm/DeletePackageHelper;Lcom/android/server/pm/BroadcastHelper;)V' \
-    'CONFIG_CUSTOM_PLATFORM_SIGNATURE' \
-    "$CERT_SIGNATURE" \
-    > /dev/null
+python3 "$MODPATH/patch_signature.py" framework "$APKTOOL_DIR"
+LOG_STEP_OUT
 
-unset CERT_PREFIX CERT_SIGNATURE
+LOG_STEP_IN "- Binary patching services.jar for shared user 1000 reconciliation"
+python3 "$MODPATH/patch_signature.py" services "$WORK_DIR"
+
+# Remove services.jar from apktool dir so apktool does not attempt to rebuild DEX 041
+rm -rf "$APKTOOL_DIR/system/framework/services.jar" 2>/dev/null || true
+
+# Remove precompiled oat/art/vdex so ART executes the patched dex container directly
+rm -rf "$WORK_DIR/system/system/framework/oat/arm64/services."* 2>/dev/null || true
+rmdir "$WORK_DIR/system/system/framework/oat/arm64" 2>/dev/null || true
+rmdir "$WORK_DIR/system/system/framework/oat" 2>/dev/null || true
+
+sed -i "/framework\/oat/d" "$WORK_DIR/configs/fs_config-system" 2>/dev/null || true
+sed -i "/framework\/oat/d" "$WORK_DIR/configs/file_context-system" 2>/dev/null || true
+
+LOG_STEP_OUT

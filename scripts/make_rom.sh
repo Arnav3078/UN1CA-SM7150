@@ -162,34 +162,6 @@ if $BUILD_ROM; then
 
     BUILD_APKS
 
-    # Android 15/17 (S23 One UI 9.0) services.jar uses a DEX 041 MultiDex Container.
-    # Apktool cannot safely rebuild DEX 041 containers without dropping 8,000+ classes.
-    # Restore the official 100% complete S23 services.jar and its precompiled oat/odex/art files.
-    LOG_STEP_IN true "Restoring complete official S23 services.jar and oat prebuilts"
-    rm -rf "$APKTOOL_DIR/system/framework/services.jar" 2>/dev/null || true
-    cp -a "$FW_DIR/$SOURCE_FIRMWARE_PATH/system/system/framework/services.jar" "$WORK_DIR/system/system/framework/services.jar"
-    mkdir -p "$WORK_DIR/system/system/framework/oat/arm64"
-    cp -a "$FW_DIR/$SOURCE_FIRMWARE_PATH/system/system/framework/oat/arm64/services."* "$WORK_DIR/system/system/framework/oat/arm64/"
-
-    for ext in art odex vdex; do
-        if ! grep -q "framework/oat/arm64/services\.$ext" "$WORK_DIR/configs/fs_config-system"; then
-            echo "system/framework/oat/arm64/services.$ext 0 0 644 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-system"
-        fi
-        if ! grep -q "framework/oat/arm64/services\\.$ext" "$WORK_DIR/configs/file_context-system"; then
-            echo "/system/framework/oat/arm64/services\.$ext u:object_r:system_file:s0" >> "$WORK_DIR/configs/file_context-system"
-        fi
-    done
-    if ! grep -q "^system/framework/oat " "$WORK_DIR/configs/fs_config-system"; then
-        echo "system/framework/oat 0 0 755 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-system"
-    fi
-    if ! grep -q "^system/framework/oat/arm64 " "$WORK_DIR/configs/fs_config-system"; then
-        echo "system/framework/oat/arm64 0 0 755 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-system"
-    fi
-    if ! grep -q "framework/oat/arm64 " "$WORK_DIR/configs/file_context-system"; then
-        echo "/system/framework/oat/arm64 u:object_r:system_file:s0" >> "$WORK_DIR/configs/file_context-system"
-    fi
-    LOG_STEP_OUT
-
     echo -n "$(GET_WORK_DIR_HASH)" > "$WORK_DIR/.completed"
 fi
 
