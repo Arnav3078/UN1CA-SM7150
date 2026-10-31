@@ -44,6 +44,13 @@ SMALI_PATCH "system" "system/priv-app/SecSettings/SecSettings.apk" \
     'ro.product.model' \
     'ro.boot.em.model'
 
+# Allow UN1CA fragments in SettingsActivity.isValidFragment
+SMALI_PATCH "system" "system/priv-app/SecSettings/SecSettings.apk" \
+    "smali/com/android/settings/SettingsActivity.smali" "replace" \
+    'isValidFragment(Ljava/lang/String;)Z' \
+    'const/4 p0, 0x0' \
+    '    const-string v0, \"io.mesalabs.unica\"\n    invoke-virtual {p1, v0}, Ljava/lang/String;->startsWith(Ljava/lang/String;)Z\n    move-result v0\n    if-eqz v0, :cond_unica\n    const/4 p0, 0x1\n    return p0\n    :cond_unica\n    const/4 p0, 0x0'
+
 LOG_STEP_IN "- Adding UN1CA Settings"
 
 # Dynamically patch SecSettings
