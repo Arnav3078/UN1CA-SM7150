@@ -24,13 +24,6 @@ SMALI_PATCH "system" \
     "invoke-direct {v2, v9}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V" \
     "    const-string v9, \"https://raw.githubusercontent.com/$BUILDER/UN1CA-M51-Updates/main/updates/\"\n
     invoke-direct {v2, v9}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V"
-SMALI_PATCH "system" \
-    "system/priv-app/ChoiDujour/ChoiDujour.apk" \
-    "smali/io/mesalabs/choidujour/activity/HomeActivity.smali" \
-    "replace" \
-    "onResume()V" \
-    "if-eqz p2, :cond_2" \
-    "goto :cond_2"
 LOG_STEP_OUT
 
 LOG "- Patching /system/system/etc/security/otacerts.zip"
