@@ -4,6 +4,7 @@ SMALI_PATCH "system" "system/priv-app/SamsungDeviceHealthManagerService/SamsungD
     "smali/n5/f1.smali" \
     "null" \
     "M(Landroid/content/Context;Ljava/lang/String;)V"
+return 0
 
 _LOG() { if $DEBUG; then LOGW "$1"; else ABORT "$1"; fi }
 

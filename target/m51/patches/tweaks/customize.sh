@@ -255,6 +255,10 @@ SET_PROP "vendor" "persist.sys.unica.nativeblur" "true"
 SET_PROP "vendor" "renderthread.skia.reduceopstasksplitting" "true"
 SET_PROP "vendor" "ro.surface_flinger.max_frame_buffer_acquired_buffers" "3"
 SET_PROP "vendor" "sys.sysctl.swappiness" "100"
+SET_PROP "vendor" "external_storage.projid.enabled" "1"
+SET_PROP "vendor" "external_storage.casefold.enabled" "1"
+SET_PROP "vendor" "external_storage.sdcardfs.enabled" "0"
+SET_PROP "vendor" "persist.sys.fuse.passthrough.enable" "false"
 
 if [ -f "$SRC_DIR/target/m51/camera/camera-feature.xml" ]; then
     cp -f "$SRC_DIR/target/m51/camera/camera-feature.xml" "$WORK_DIR/system/system/cameradata/camera-feature.xml"
@@ -265,6 +269,11 @@ if [ -f "$SRC_DIR/target/m51/camera/SamsungCamera.apk.00" ]; then
     cat "$SRC_DIR/target/m51/camera/SamsungCamera.apk."[0-9][0-9] > "$WORK_DIR/system/system/priv-app/SamsungCamera/SamsungCamera.apk"
     chmod 644 "$WORK_DIR/system/system/priv-app/SamsungCamera/SamsungCamera.apk"
     SET_METADATA "system" "system/priv-app/SamsungCamera/SamsungCamera.apk" 0 0 644 "u:object_r:system_file:s0"
+    if [ -f "$SRC_DIR/target/m51/camera/SamsungCamera.apk.prof" ]; then
+        cp -f "$SRC_DIR/target/m51/camera/SamsungCamera.apk.prof" "$WORK_DIR/system/system/priv-app/SamsungCamera/SamsungCamera.apk.prof"
+        chmod 644 "$WORK_DIR/system/system/priv-app/SamsungCamera/SamsungCamera.apk.prof"
+        SET_METADATA "system" "system/priv-app/SamsungCamera/SamsungCamera.apk.prof" 0 0 644 "u:object_r:system_file:s0"
+    fi
 fi
 LOG_STEP_OUT
 
