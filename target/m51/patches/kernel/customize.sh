@@ -4,7 +4,7 @@ DOWNLOAD_KERNEL()
     EVAL "mkdir -p \"$TMP_DIR/kernel_zip_extracted\""
 
     KERNEL_ZIP="$TMP_DIR/LostPrime-Kernel-m51.zip"
-    LOCAL_KERNEL=$(find /mnt/c/Users/s/Downloads -maxdepth 1 -name "*LostPrime*m51*ksu*.zip" 2>/dev/null | head -n 1)
+    LOCAL_KERNEL=$(find /mnt/c/Users/s/Downloads -maxdepth 1 -name "*LostPrime*m51*ksu*.zip" ! -name "*safemode*" 2>/dev/null | sort -V | tail -n 1)
     if [ -n "$LOCAL_KERNEL" ] && [ -f "$LOCAL_KERNEL" ]; then
         LOG "- Using cached LostPrime kernel: $(basename "$LOCAL_KERNEL")"
         cp -af "$LOCAL_KERNEL" "$KERNEL_ZIP"

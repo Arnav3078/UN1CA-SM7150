@@ -14,10 +14,10 @@ UN1CA: this patch is not complete! Please check unica/mods/pif/customize.sh for 
  create mode 100644 smali_classes6/io/mesalabs/unica/PlayIntegrityHooks$1.smali
  create mode 100644 smali_classes6/io/mesalabs/unica/PlayIntegrityHooks.smali
 
-diff --git a/smali_classes3/android/security/keystore2/AndroidKeyStoreSpi.smali b/smali_classes3/android/security/keystore2/AndroidKeyStoreSpi.smali
+diff --git a/smali_classes2/android/security/keystore2/AndroidKeyStoreSpi.smali b/smali_classes2/android/security/keystore2/AndroidKeyStoreSpi.smali
 index c724b464..0579bc5c 100644
---- a/smali_classes3/android/security/keystore2/AndroidKeyStoreSpi.smali
-+++ b/smali_classes3/android/security/keystore2/AndroidKeyStoreSpi.smali
+--- a/smali_classes2/android/security/keystore2/AndroidKeyStoreSpi.smali
++++ b/smali_classes2/android/security/keystore2/AndroidKeyStoreSpi.smali
 @@ -3223,6 +3223,8 @@
  .method public whitelist test-api engineGetCertificateChain(Ljava/lang/String;)[Ljava/security/cert/Certificate;
      .locals 4
