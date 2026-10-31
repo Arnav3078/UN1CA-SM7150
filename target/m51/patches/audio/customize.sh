@@ -65,10 +65,7 @@ EVAL "sed -i \"s/^libraries {/libraries {\\n  spatializer {\\n    path \\/system
 	\"$WORK_DIR/vendor/etc/audio_effects_common.conf\""
 LOG_STEP_OUT
 
-LOG_STEP_IN "- Adding audioflinger blobs from m44xktt"
-ADD_TO_WORK_DIR "m44xktt" "system" "system/bin/audioserver"
-ADD_TO_WORK_DIR "m44xktt" "system" "system/lib64/libaudioflinger.so"
-LOG_STEP_OUT
+# Authentic S23 One UI 9.0 audioserver and libaudioflinger.so are kept (m44xktt blobs are incompatible with Android 17)
 
 LOG_STEP_IN "- Enabling Audio Spatializer"
 SET_PROP "system" "ro.audio.spatializer_enabled" "true"

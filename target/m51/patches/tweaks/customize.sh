@@ -275,7 +275,7 @@ if [ -f "$SRC_DIR/target/m51/camera/SamsungCamera.apk.00" ]; then
 fi
 LOG_STEP_OUT
 
-LOG_STEP_IN "- Applying Codec2 & Media seccomp policy patch (Mehedi Joy)"
+LOG_STEP_IN "- Applying Codec2 & Media seccomp policy patch"
 for policy in \
     "$WORK_DIR/vendor/etc/seccomp_policy/samsung.software.media.c2-base-policy" \
     "$WORK_DIR/vendor/etc/seccomp_policy/samsung.software.media.c2-ext-policy" \
@@ -285,10 +285,9 @@ for policy in \
     "$WORK_DIR/system/system/etc/seccomp_policy/mediacodec.policy" \
     "$WORK_DIR/system/system/etc/seccomp_policy/mediaextractor.policy"; do
     if [ -f "$policy" ]; then
-        sed -i 's/^mremap: arg3 == 3$/mremap: arg3 == 3 || arg3 == MREMAP_MAYMOVE/' "$policy"
-        sed -i 's/^mremap: 1$/mremap: arg3 == 3 || arg3 == MREMAP_MAYMOVE/' "$policy"
-        if ! grep -q "mremap" "$policy"; then
-            echo "mremap: arg3 == 3 || arg3 == MREMAP_MAYMOVE" >> "$policy"
+        sed -i 's/^mremap:.*/mremap: 1/' "$policy"
+        if ! grep -q "^mremap:" "$policy"; then
+            echo "mremap: 1" >> "$policy"
         fi
     fi
 done
