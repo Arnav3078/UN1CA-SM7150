@@ -279,7 +279,7 @@
 
     invoke-static {v0, v1}, Lcom/samsung/android/settings/PkgUtils;->isPackageEnabled(Landroid/content/Context;Ljava/lang/String;)Z
 
-    move-result v0
+    const/4 v0, 0x1
 
     if-eqz v0, :cond_0
 
