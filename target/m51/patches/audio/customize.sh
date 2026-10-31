@@ -65,6 +65,11 @@ EVAL "sed -i \"s/^libraries {/libraries {\\n  spatializer {\\n    path \\/system
 	\"$WORK_DIR/vendor/etc/audio_effects_common.conf\""
 LOG_STEP_OUT
 
+LOG_STEP_IN "- Enabling Audio Spatializer"
+SET_PROP "system" "ro.audio.spatializer_enabled" "true"
+SET_PROP "vendor" "ro.audio.spatializer_enabled" "true"
+LOG_STEP_OUT
+
 # Audioflinger and audioserver kept authentic S23 One UI 9.0
 
 LOG_STEP_IN "- Increasing audio offload buffer size"

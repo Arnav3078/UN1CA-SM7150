@@ -53,9 +53,6 @@ def patch_services(work_dir):
         (0x1237560, b"\x0e\x00", "Utils.setRemoteLockToLockscreen(1) -> return-void"),
         (0x12375ac, b"\x0e\x00", "Utils.setRemoteLockToLockscreen(2) -> return-void"),
         (0x1232dbc, b"\x12\x00\x0f\x00", "KnoxGuardSeService.shouldBlockCustomRom -> return false"),
-        (0xc14abc, b"\x0e\x00", "LockSettingsService.applyRemoteLock -> return-void"),
-        (0xc15824, b"\x12\x00\x0f\x00", "LockSettingsService.isRemoteLock -> return false"),
-        (0xc1ddb8, b"\x12\x00\x11\x00", "LockSettingsService.requestRemoteLockInfo -> return null"),
     ]
 
     for off, replacement, name in kg_patches:
