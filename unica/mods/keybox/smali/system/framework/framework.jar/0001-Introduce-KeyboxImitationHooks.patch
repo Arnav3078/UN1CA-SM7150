@@ -212,10 +212,9 @@ index 3f9a0c3e..09d89d0b 100644
      new-instance p0, Landroid/os/RemoteException;
  
 diff --git a/smali_classes4/android/system/keystore2/IKeystoreService$Stub$Proxy.smali b/smali_classes4/android/system/keystore2/IKeystoreService$Stub$Proxy.smali
-index 2bf02c02..0526df77 100644
 --- a/smali_classes4/android/system/keystore2/IKeystoreService$Stub$Proxy.smali
 +++ b/smali_classes4/android/system/keystore2/IKeystoreService$Stub$Proxy.smali
-@@ -62,6 +62,15 @@
+@@ -67,6 +67,17 @@
          }
      .end annotation
  
@@ -223,33 +222,17 @@ index 2bf02c02..0526df77 100644
 +
 +    move-result v0
 +
-+    if-eqz v0, :cond_0
++    if-eqz v0, :cond_k0
 +
 +    return-void
 +
-+    :cond_0
++    :cond_k0
++
++
+     .line 413
      invoke-virtual {p0}, Landroid/system/keystore2/IKeystoreService$Stub$Proxy;->asBinder()Landroid/os/IBinder;
  
-     move-result-object v0
-@@ -91,7 +100,7 @@
- 
-     move-result p0
- 
--    if-eqz p0, :cond_0
-+    if-eqz p0, :cond_1
- 
-     invoke-virtual {v1}, Landroid/os/Parcel;->readException()V
-     :try_end_0
-@@ -103,7 +112,7 @@
- 
-     return-void
- 
--    :cond_0
-+    :cond_1
-     :try_start_1
-     new-instance p0, Landroid/os/RemoteException;
- 
-@@ -307,6 +316,15 @@
+@@ -351,6 +362,17 @@
          }
      .end annotation
  
@@ -257,33 +240,17 @@ index 2bf02c02..0526df77 100644
 +
 +    move-result-object v0
 +
-+    if-eqz v0, :cond_0
++    if-eqz v0, :cond_k0
 +
 +    return-object v0
 +
-+    :cond_0
++    :cond_k0
++
++
+     .line 348
      invoke-virtual {p0}, Landroid/system/keystore2/IKeystoreService$Stub$Proxy;->asBinder()Landroid/os/IBinder;
  
-     move-result-object v0
-@@ -336,7 +354,7 @@
- 
-     move-result p0
- 
--    if-eqz p0, :cond_0
-+    if-eqz p0, :cond_1
- 
-     invoke-virtual {v1}, Landroid/os/Parcel;->readException()V
- 
-@@ -356,7 +374,7 @@
- 
-     return-object p0
- 
--    :cond_0
-+    :cond_1
-     :try_start_1
-     new-instance p0, Landroid/os/RemoteException;
- 
-@@ -386,6 +404,19 @@
+@@ -443,6 +465,21 @@
          }
      .end annotation
  
@@ -291,7 +258,7 @@ index 2bf02c02..0526df77 100644
 +
 +    move-result-object v0
 +
-+    if-eqz v0, :cond_0
++    if-eqz v0, :cond_k0
 +
 +    invoke-virtual {v0}, Ljava/lang/Integer;->intValue()I
 +
@@ -299,29 +266,13 @@ index 2bf02c02..0526df77 100644
 +
 +    return p0
 +
-+    :cond_0
++    :cond_k0
++
++
+     .line 473
      invoke-virtual {p0}, Landroid/system/keystore2/IKeystoreService$Stub$Proxy;->asBinder()Landroid/os/IBinder;
  
-     move-result-object v0
-@@ -417,7 +448,7 @@
- 
-     move-result p0
- 
--    if-eqz p0, :cond_0
-+    if-eqz p0, :cond_1
- 
-     invoke-virtual {v1}, Landroid/os/Parcel;->readException()V
- 
-@@ -433,7 +464,7 @@
- 
-     return p0
- 
--    :cond_0
-+    :cond_1
-     :try_start_1
-     new-instance p0, Landroid/os/RemoteException;
- 
-@@ -617,6 +648,15 @@
+@@ -714,6 +751,17 @@
          }
      .end annotation
  
@@ -329,33 +280,17 @@ index 2bf02c02..0526df77 100644
 +
 +    move-result-object v0
 +
-+    if-eqz v0, :cond_0
++    if-eqz v0, :cond_k0
 +
 +    return-object v0
 +
-+    :cond_0
++    :cond_k0
++
++
+     .line 431
      invoke-virtual {p0}, Landroid/system/keystore2/IKeystoreService$Stub$Proxy;->asBinder()Landroid/os/IBinder;
  
-     move-result-object v0
-@@ -650,7 +690,7 @@
- 
-     move-result p0
- 
--    if-eqz p0, :cond_0
-+    if-eqz p0, :cond_1
- 
-     invoke-virtual {v1}, Landroid/os/Parcel;->readException()V
- 
-@@ -670,7 +710,7 @@
- 
-     return-object p0
- 
--    :cond_0
-+    :cond_1
-     :try_start_1
-     new-instance p0, Landroid/os/RemoteException;
- 
-@@ -700,6 +740,15 @@
+@@ -812,6 +860,17 @@
          }
      .end annotation
  
@@ -363,33 +298,17 @@ index 2bf02c02..0526df77 100644
 +
 +    move-result-object v0
 +
-+    if-eqz v0, :cond_0
++    if-eqz v0, :cond_k0
 +
 +    return-object v0
 +
-+    :cond_0
-     invoke-virtual {p0}, Landroid/system/keystore2/IKeystoreService$Stub$Proxy;->asBinder()Landroid/os/IBinder;
++    :cond_k0
++
++
+     .annotation runtime Ljava/lang/Deprecated;
+     .end annotation
  
-     move-result-object v0
-@@ -731,7 +780,7 @@
- 
-     move-result p0
- 
--    if-eqz p0, :cond_0
-+    if-eqz p0, :cond_1
- 
-     invoke-virtual {v1}, Landroid/os/Parcel;->readException()V
- 
-@@ -751,7 +800,7 @@
- 
-     return-object p0
- 
--    :cond_0
-+    :cond_1
-     :try_start_1
-     new-instance p0, Landroid/os/RemoteException;
- 
-@@ -781,6 +830,15 @@
+@@ -910,6 +969,17 @@
          }
      .end annotation
  
@@ -397,33 +316,17 @@ index 2bf02c02..0526df77 100644
 +
 +    move-result-object v0
 +
-+    if-eqz v0, :cond_0
++    if-eqz v0, :cond_k0
 +
 +    return-object v0
 +
-+    :cond_0
++    :cond_k0
++
++
+     .line 495
      invoke-virtual {p0}, Landroid/system/keystore2/IKeystoreService$Stub$Proxy;->asBinder()Landroid/os/IBinder;
  
-     move-result-object v0
-@@ -814,7 +872,7 @@
- 
-     move-result p0
- 
--    if-eqz p0, :cond_0
-+    if-eqz p0, :cond_1
- 
-     invoke-virtual {v1}, Landroid/os/Parcel;->readException()V
- 
-@@ -834,7 +892,7 @@
- 
-     return-object p0
- 
--    :cond_0
-+    :cond_1
-     :try_start_1
-     new-instance p0, Landroid/os/RemoteException;
- 
-@@ -864,6 +922,15 @@
+@@ -1008,6 +1078,17 @@
          }
      .end annotation
  
@@ -431,33 +334,17 @@ index 2bf02c02..0526df77 100644
 +
 +    move-result v0
 +
-+    if-eqz v0, :cond_0
++    if-eqz v0, :cond_k0
 +
 +    return-void
 +
-+    :cond_0
++    :cond_k0
++
++
+     .line 454
      invoke-virtual {p0}, Landroid/system/keystore2/IKeystoreService$Stub$Proxy;->asBinder()Landroid/os/IBinder;
  
-     move-result-object v0
-@@ -895,7 +962,7 @@
- 
-     move-result p0
- 
--    if-eqz p0, :cond_0
-+    if-eqz p0, :cond_1
- 
-     invoke-virtual {v1}, Landroid/os/Parcel;->readException()V
-     :try_end_0
-@@ -907,7 +974,7 @@
- 
-     return-void
- 
--    :cond_0
-+    :cond_1
-     :try_start_1
-     new-instance p0, Landroid/os/RemoteException;
- 
-@@ -937,6 +1004,15 @@
+@@ -1094,6 +1175,17 @@
          }
      .end annotation
  
@@ -465,31 +352,15 @@ index 2bf02c02..0526df77 100644
 +
 +    move-result v0
 +
-+    if-eqz v0, :cond_0
++    if-eqz v0, :cond_k0
 +
 +    return-void
 +
-+    :cond_0
++    :cond_k0
++
++
+     .line 369
      invoke-virtual {p0}, Landroid/system/keystore2/IKeystoreService$Stub$Proxy;->asBinder()Landroid/os/IBinder;
- 
-     move-result-object v0
-@@ -970,7 +1046,7 @@
- 
-     move-result p0
- 
--    if-eqz p0, :cond_0
-+    if-eqz p0, :cond_1
- 
-     invoke-virtual {v1}, Landroid/os/Parcel;->readException()V
-     :try_end_0
-@@ -982,7 +1058,7 @@
- 
-     return-void
- 
--    :cond_0
-+    :cond_1
-     :try_start_1
-     new-instance p0, Landroid/os/RemoteException;
  
 diff --git a/smali_classes5/com/android/internal/org/bouncycastle/jcajce/provider/asymmetric/EC$Mappings.smali b/smali_classes5/com/android/internal/org/bouncycastle/jcajce/provider/asymmetric/EC$Mappings.smali
 index 7da5e848..581668b7 100644
