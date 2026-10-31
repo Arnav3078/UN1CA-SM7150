@@ -160,7 +160,20 @@ if $BUILD_ROM; then
         LOG_STEP_OUT
     fi
 
+    if [ -f "$SRC_DIR/target/$TARGET_CODENAME/camera/SamsungCamera.apk.00" ]; then
+        rm -rf "$APKTOOL_DIR/system/priv-app/SamsungCamera"
+    fi
+
     BUILD_APKS
+
+    if [ -f "$SRC_DIR/target/$TARGET_CODENAME/camera/SamsungCamera.apk.00" ]; then
+        LOG_STEP_IN "- Restoring stable SamsungCamera from 5.0.0"
+        cat "$SRC_DIR/target/$TARGET_CODENAME/camera/SamsungCamera.apk."[0-9][0-9] > "$WORK_DIR/system/system/priv-app/SamsungCamera/SamsungCamera.apk"
+        chmod 644 "$WORK_DIR/system/system/priv-app/SamsungCamera/SamsungCamera.apk"
+        SET_METADATA "system" "system/priv-app/SamsungCamera/SamsungCamera.apk" 0 0 644 "u:object_r:system_file:s0"
+        rm -f "$WORK_DIR/system/system/priv-app/SamsungCamera/SamsungCamera.apk.prof"
+        LOG_STEP_OUT
+    fi
 
     echo -n "$(GET_WORK_DIR_HASH)" > "$WORK_DIR/.completed"
 fi

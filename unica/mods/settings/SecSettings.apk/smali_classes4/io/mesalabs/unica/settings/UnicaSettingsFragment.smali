@@ -132,6 +132,16 @@
 
     move-result-object v1
 
+    if-eqz v1, :cond_anchor
+
+    goto :goto_anchor
+
+    :cond_anchor
+    invoke-virtual {p0}, Landroidx/fragment/app/Fragment;->getView()Landroid/view/View;
+
+    move-result-object v1
+
+    :goto_anchor
     invoke-direct {p1, v2, v1}, Landroidx/appcompat/widget/PopupMenu;-><init>(Landroid/content/Context;Landroid/view/View;)V
 
     iput-object p1, p0, Lio/mesalabs/unica/settings/UnicaSettingsFragment;->mPopupMenu:Landroidx/appcompat/widget/PopupMenu;

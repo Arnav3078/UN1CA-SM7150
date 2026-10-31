@@ -1,5 +1,3 @@
-LOG "- Skipping SDHMS modification to preserve authentic Samsung platform signature"
-return 0
 
 LOG "- Patching SDHMS to eliminate SSRM Warning"
 SMALI_PATCH "system" "system/priv-app/SamsungDeviceHealthManagerService/SamsungDeviceHealthManagerService.apk" \
