@@ -38,8 +38,33 @@ def patch_services(work_dir):
     with zipfile.ZipFile(serv_path, "r") as zin:
         dex = bytearray(zin.read("classes.dex"))
 
+    patched_any = False
+
+    # 1. Signature reconciliation bypass
     if dex[0xde83dc : 0xde83dc + 4] == b"\x39\x00\x47\x00":
         dex[0xde83dc] = 0x29
+        patched_any = True
+        print("- Patched signature reconciliation check")
+
+    # 2. KnoxGuard & RemoteLock complete neutralization (prevents 3010, 8135, 4099)
+    kg_patches = [
+        (0x12372d4, b"\x0e\x00", "Utils.lockSeDevice(1) -> return-void"),
+        (0x12372f0, b"\x0e\x00", "Utils.lockSeDevice(2) -> return-void"),
+        (0x1237560, b"\x0e\x00", "Utils.setRemoteLockToLockscreen(1) -> return-void"),
+        (0x12375ac, b"\x0e\x00", "Utils.setRemoteLockToLockscreen(2) -> return-void"),
+        (0x1232dbc, b"\x12\x00\x0f\x00", "KnoxGuardSeService.shouldBlockCustomRom -> return false"),
+        (0xc14abc, b"\x0e\x00", "LockSettingsService.applyRemoteLock -> return-void"),
+        (0xc15824, b"\x12\x00\x0f\x00", "LockSettingsService.isRemoteLock -> return false"),
+        (0xc1ddb8, b"\x12\x00\x11\x00", "LockSettingsService.requestRemoteLockInfo -> return null"),
+    ]
+
+    for off, replacement, name in kg_patches:
+        if dex[off : off + len(replacement)] != replacement:
+            dex[off : off + len(replacement)] = replacement
+            patched_any = True
+            print(f"- Patched {name}")
+
+    if patched_any:
         d1_start = 0x99607c
         d1_size = 18038232
         new_sha1 = hashlib.sha1(dex[d1_start + 32 : d1_start + d1_size]).digest()
@@ -56,11 +81,9 @@ def patch_services(work_dir):
                     else:
                         zout.writestr(item, zin.read(item.filename))
         os.replace(tmp_path, serv_path)
-        print("services.jar successfully binary-patched in place")
-    elif dex[0xde83dc : 0xde83dc + 4] == b"\x29\x00\x47\x00":
-        print("services.jar already patched")
+        print("services.jar successfully binary-patched in place (Signature bypass + KnoxGuard/RemoteLock neutralized)")
     else:
-        print("Unknown bytes at 0xde83dc:", dex[0xde83dc : 0xde83dc + 4].hex())
+        print("services.jar already fully patched")
 
 if __name__ == "__main__":
     if len(sys.argv) > 2 and sys.argv[1] == "framework":
