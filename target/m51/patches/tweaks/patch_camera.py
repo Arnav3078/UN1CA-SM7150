@@ -20,26 +20,18 @@ def patch_camera_apk(apk_path, src_dir):
         print("[*] Disassembling classes3.dex...")
         subprocess.check_call(['baksmali', 'disassemble', dex_path, '-o', smali_dir])
 
+        # 1. Patch x1/k.smali (One UI 9.0 version enum crash)
         k_smali = os.path.join(smali_dir, 'x1', 'k.smali')
-        if not os.path.exists(k_smali):
-            print(f"[-] {k_smali} not found!")
-            return False
+        if os.path.exists(k_smali):
+            with open(k_smali, 'r', encoding='utf-8') as f:
+                code = f.read()
 
-        with open(k_smali, 'r', encoding='utf-8') as f:
-            code = f.read()
-
-        start_marker = ".method public static a(I)Lx1/k;"
-        end_marker = ".end method"
-
-        start_pos = code.find(start_marker)
-        if start_pos == -1:
-            print("[-] Method a(I)Lx1/k; not found!")
-            return False
-
-        end_pos = code.find(end_marker, start_pos) + len(end_marker)
-
-        # Replacement method that returns V8_0 when unknown One UI version (like 90000) is passed
-        replacement = """
+            start_marker = ".method public static a(I)Lx1/k;"
+            end_marker = ".end method"
+            start_pos = code.find(start_marker)
+            if start_pos != -1:
+                end_pos = code.find(end_marker, start_pos) + len(end_marker)
+                replacement = """
 .method public static a(I)Lx1/k;
     .registers 6
 
@@ -77,12 +69,63 @@ def patch_camera_apk(apk_path, src_dir):
     return-object v0
 .end method
 """.strip()
+                new_code = code[:start_pos] + replacement + code[end_pos:]
+                with open(k_smali, 'w', encoding='utf-8') as f:
+                    f.write(new_code)
+                print("[+] Patched x1/k.smali successfully!")
 
-        new_code = code[:start_pos] + replacement + code[end_pos:]
+        # 2. Patch CameraServiceWorkerWrapper.smali (NoSuchMethodError ICameraServiceWorker$Stub.asInterface)
+        csw_smali = os.path.join(smali_dir, 'com', 'samsung', 'android', 'camera', 'wrapper', 'CameraServiceWorkerWrapper.smali')
+        if os.path.exists(csw_smali):
+            with open(csw_smali, 'r', encoding='utf-8') as f:
+                code = f.read()
 
-        with open(k_smali, 'w', encoding='utf-8') as f:
-            f.write(new_code)
-        print("[+] Replaced method a(I)Lx1/k; successfully!")
+            start_marker = ".method public static getInstance(Landroid/content/Context;)Lcom/samsung/android/camera/wrapper/CameraServiceWorkerWrapper;"
+            end_marker = ".end method"
+            start_pos = code.find(start_marker)
+            if start_pos != -1:
+                end_pos = code.find(end_marker, start_pos) + len(end_marker)
+                replacement = """
+.method public static getInstance(Landroid/content/Context;)Lcom/samsung/android/camera/wrapper/CameraServiceWorkerWrapper;
+    .registers 2
+
+    const/4 v0, 0x0
+
+    return-object v0
+.end method
+""".strip()
+                new_code = code[:start_pos] + replacement + code[end_pos:]
+                with open(csw_smali, 'w', encoding='utf-8') as f:
+                    f.write(new_code)
+                print("[+] Patched CameraServiceWorkerWrapper.smali successfully!")
+
+        # 3. Patch SemWrapper.smali (SecurityException ActivityManager.semGetCurrentUser requires INTERACT_ACROSS_USERS)
+        sem_smali = os.path.join(smali_dir, 'com', 'samsung', 'android', 'camera', 'core2', 'util', 'SemWrapper.smali')
+        if os.path.exists(sem_smali):
+            with open(sem_smali, 'r', encoding='utf-8') as f:
+                code = f.read()
+
+            target = """.method public static semGetCurrentUser()I
+    .registers 1
+
+    invoke-static {}, Landroid/app/ActivityManager;->semGetCurrentUser()I
+
+    move-result v0
+
+    return v0
+.end method"""
+            replacement = """.method public static semGetCurrentUser()I
+    .registers 1
+
+    const/4 v0, 0x0
+
+    return v0
+.end method"""
+            if target in code:
+                code = code.replace(target, replacement)
+                with open(sem_smali, 'w', encoding='utf-8') as f:
+                    f.write(code)
+                print("[+] Patched SemWrapper.smali successfully!")
 
         # Re-assemble with smali
         patched_dex = os.path.join(tmp_dir, 'classes3.dex')
