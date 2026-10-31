@@ -255,10 +255,6 @@ SET_PROP "vendor" "persist.sys.unica.nativeblur" "true"
 SET_PROP "vendor" "renderthread.skia.reduceopstasksplitting" "true"
 SET_PROP "vendor" "ro.surface_flinger.max_frame_buffer_acquired_buffers" "3"
 SET_PROP "vendor" "sys.sysctl.swappiness" "100"
-SET_PROP "vendor" "external_storage.projid.enabled" "1"
-SET_PROP "vendor" "external_storage.casefold.enabled" "1"
-SET_PROP "vendor" "external_storage.sdcardfs.enabled" "0"
-SET_PROP "vendor" "persist.sys.fuse.passthrough.enable" "false"
 
 if [ -f "$SRC_DIR/target/m51/camera/camera-feature.xml" ]; then
     cp -f "$SRC_DIR/target/m51/camera/camera-feature.xml" "$WORK_DIR/system/system/cameradata/camera-feature.xml"
