@@ -40,6 +40,31 @@ EVAL "sed -i '/<name>vendor\.samsung\.hardware\.bluetooth<\/name>/ {
 }' \"$WORK_DIR/vendor/etc/vintf/manifest.xml\""
 LOG_STEP_OUT
 
+LOG_STEP_IN "- Adding missing audio spatializer HAL from extra"
+BLOBS_LIST="
+etc/audio_effects_spatializer.xml
+lib/libspatializerparamstorage.so
+lib64/libspatializerparamstorage.so
+lib/libeffects.so
+lib64/libeffects.so
+lib/spatializer-aidl-V1-cpp.so
+lib64/spatializer-aidl-V1-cpp.so
+lib/soundfx/libswspatializer.so
+lib64/soundfx/libswspatializer.so
+lib/soundfx/libswdap.so
+lib64/soundfx/libswdap.so
+lib64/libcodec2_soft_eac3dec.so
+"
+for blob in $BLOBS_LIST; do
+    ADD_TO_WORK_DIR "$TARGET_EXTRA_FIRMWARES" "vendor" "$blob"
+done
+
+EVAL "sed -i \"s/^effects {/effects {\\n  dlb_spatializer {\\n    library spatializer\\n    uuid ccd4cf09-a79d-46c2-9aae-06a1698d6c8f\\n  }/g\" \
+	\"$WORK_DIR/vendor/etc/audio_effects_common.conf\""
+EVAL "sed -i \"s/^libraries {/libraries {\\n  spatializer {\\n    path \\/system\\/lib\\/libswspatializer_legacy.so\\n  }/g\" \
+	\"$WORK_DIR/vendor/etc/audio_effects_common.conf\""
+LOG_STEP_OUT
+
 # Audioflinger and audioserver kept authentic S23 One UI 9.0
 
 LOG_STEP_IN "- Increasing audio offload buffer size"

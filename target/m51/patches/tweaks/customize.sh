@@ -119,6 +119,7 @@ DELETE_FROM_WORK_DIR "system" "system/priv-app/KnoxCustomManagerService" || true
 DELETE_FROM_WORK_DIR "system" "system/priv-app/KnoxPushManager" || true
 DELETE_FROM_WORK_DIR "system" "system/priv-app/KnoxSandbox" || true
 DELETE_FROM_WORK_DIR "system" "system/priv-app/KnoxZtFramework" || true
+DELETE_FROM_WORK_DIR "system" "system/priv-app/KnoxGuard" || true
 LOG_STEP_OUT
 
 LOG_STEP_IN "- Enabling permanent root ADB and USB debugging"
@@ -138,7 +139,6 @@ for apk_rel in \
     "system/system/priv-app/SamsungCamera/SamsungCamera.apk" \
     "system/system/priv-app/SecureFolder/SecureFolder.apk" \
     "system/system/priv-app/KnoxCore/KnoxCore.apk" \
-    "system/system/priv-app/KnoxGuard/KnoxGuard.apk" \
     "system/system/priv-app/FotaAgent/FotaAgent.apk"
 do
     if [ -f "$FW_S23_SRC/$apk_rel" ]; then
