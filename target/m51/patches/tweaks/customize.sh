@@ -27,8 +27,6 @@ for f in "$WORK_DIR/vendor/etc"/fstab*; do
         -e 's/forcefde=[^,[:space:]]+,?//g' \
         -e 's/,sysfs_path=\/sys\/devices\/platform\/soc\/1d84000\.ufshc//g' \
         -e 's/sysfs_path=\/sys\/devices\/platform\/soc\/1d84000\.ufshc,?//g' \
-        -e 's|/dev/block/platform/soc/1d84000.ufshc/by-name/|/dev/block/by-name/|g' \
-        -e 's/voldmanaged=sdcard:auto/voldmanaged=sdcard1:auto/g' \
         -e 's/,,/,/g' \
         -e 's/,[[:space:]]*$/ /' \
         "$f"
@@ -277,22 +275,30 @@ if [ -f "$SRC_DIR/target/m51/camera/SamsungCamera.apk.00" ]; then
 fi
 LOG_STEP_OUT
 
-LOG_STEP_IN "- Applying Qualcomm Codec2 seccomp policy patch (Mehedi Joy)"
-CODEC2_POLICY="$WORK_DIR/vendor/etc/seccomp_policy/samsung.software.media.c2-base-policy"
-if [ -f "$CODEC2_POLICY" ]; then
-    sed -i 's/^mremap: arg3 == 3$/mremap: arg3 == 3 || arg3 == MREMAP_MAYMOVE/' "$CODEC2_POLICY"
-    sed -i 's/^mremap: 1$/mremap: arg3 == 3 || arg3 == MREMAP_MAYMOVE/' "$CODEC2_POLICY"
-    if ! grep -q "mremap: arg3 == 3 || arg3 == MREMAP_MAYMOVE" "$CODEC2_POLICY"; then
-        echo "mremap: arg3 == 3 || arg3 == MREMAP_MAYMOVE" >> "$CODEC2_POLICY"
+LOG_STEP_IN "- Applying Codec2 & Media seccomp policy patch (Mehedi Joy)"
+for policy in \
+    "$WORK_DIR/vendor/etc/seccomp_policy/samsung.software.media.c2-base-policy" \
+    "$WORK_DIR/vendor/etc/seccomp_policy/samsung.software.media.c2-ext-policy" \
+    "$WORK_DIR/vendor/etc/seccomp_policy/codec2.vendor.ext.policy" \
+    "$WORK_DIR/vendor/etc/seccomp_policy/mediacodec.policy" \
+    "$WORK_DIR/vendor/etc/seccomp_policy/mediaextractor_sec.policy" \
+    "$WORK_DIR/system/system/etc/seccomp_policy/mediacodec.policy" \
+    "$WORK_DIR/system/system/etc/seccomp_policy/mediaextractor.policy"; do
+    if [ -f "$policy" ]; then
+        sed -i 's/^mremap: arg3 == 3$/mremap: arg3 == 3 || arg3 == MREMAP_MAYMOVE/' "$policy"
+        sed -i 's/^mremap: 1$/mremap: arg3 == 3 || arg3 == MREMAP_MAYMOVE/' "$policy"
+        if ! grep -q "mremap" "$policy"; then
+            echo "mremap: arg3 == 3 || arg3 == MREMAP_MAYMOVE" >> "$policy"
+        fi
     fi
-fi
+done
 LOG_STEP_OUT
 
-LOG_STEP_IN "- Adding Codec2 & FUSE storage properties for Snapdragon 730G (Linux 4.14 kernel)"
+LOG_STEP_IN "- Setting FUSE storage & Codec2 properties for Snapdragon 730G"
 SET_PROP "system" "debug.codec2.stop_hal_before_surface" "1"
 SET_PROP "vendor" "debug.codec2.stop_hal_before_surface" "1"
-SET_PROP "system" "persist.sys.fuse.passthrough.enable" "false"
-SET_PROP "vendor" "persist.sys.fuse.passthrough.enable" "false"
+SET_PROP "system" "persist.sys.fuse.passthrough.enable" "true"
+SET_PROP "vendor" "persist.sys.fuse.passthrough.enable" "true"
 SET_PROP "system" "persist.sys.fuse" "true"
 SET_PROP "vendor" "persist.sys.fuse" "true"
 SET_PROP "system" "external_storage.projid.enabled" "1"
