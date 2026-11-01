@@ -252,21 +252,8 @@ if [ -f "$SRC_DIR/target/m51/camera/SamsungCamera.apk.00" ]; then
 fi
 LOG_STEP_OUT
 
-LOG_STEP_IN "- Applying Codec2 & Media seccomp policy patch"
-for policy in \
-    "$WORK_DIR/vendor/etc/seccomp_policy/samsung.software.media.c2-base-policy" \
-    "$WORK_DIR/vendor/etc/seccomp_policy/samsung.software.media.c2-ext-policy" \
-    "$WORK_DIR/vendor/etc/seccomp_policy/codec2.vendor.ext.policy" \
-    "$WORK_DIR/vendor/etc/seccomp_policy/mediacodec.policy" \
-    "$WORK_DIR/vendor/etc/seccomp_policy/mediaextractor_sec.policy" \
-    "$WORK_DIR/system/system/etc/seccomp_policy/mediacodec.policy" \
-    "$WORK_DIR/system/system/etc/seccomp_policy/mediaextractor.policy"; do
-    if [ -f "$policy" ]; then
-        sed -i 's/^mremap:.*/mremap: 1/' "$policy"
-        if ! grep -q "^mremap:" "$policy"; then
-            echo "mremap: 1" >> "$policy"
-        fi
-    fi
-done
+LOG_STEP_IN "- Fixing Qualcomm Codec2 seccomp policy"
+if [ -f "$WORK_DIR/vendor/etc/seccomp_policy/samsung.software.media.c2-base-policy" ]; then
+    sed -i 's/mremap: arg3 == 3/mremap: 1/' "$WORK_DIR/vendor/etc/seccomp_policy/samsung.software.media.c2-base-policy"
+fi
 LOG_STEP_OUT
-
