@@ -7,6 +7,26 @@ LOG_STEP_IN "- Removing WAV 32-bit PCM support"
 SET_PROP "system" "media.extractor.sec.pcm-32bit" --delete
 LOG_STEP_OUT
 
+LOG_STEP_IN "- Setting unencrypted ROM properties"
+SET_PROP "vendor" "ro.crypto.state" "unencrypted"
+SET_PROP "vendor" "ro.crypto.type" "none"
+SET_PROP "vendor" "ro.crypto.override" "false"
+SET_PROP "system" "ro.crypto.state" "unencrypted"
+SET_PROP "system" "ro.crypto.type" "none"
+for f in "$WORK_DIR/vendor/etc"/fstab*; do
+    [ -f "$f" ] || continue
+    sed -E -i \
+        -e 's/fileencryption=[^,[:space:]]+,?//g' \
+        -e 's/metadata_encryption=[^,[:space:]]+,?//g' \
+        -e 's/keydirectory=[^,[:space:]]+,?//g' \
+        -e 's/forceencrypt=[^,[:space:]]+,?//g' \
+        -e 's/forcefde=[^,[:space:]]+,?//g' \
+        -e 's/,,/,/g' \
+        -e 's/,[[:space:]]*$/ /' \
+        "$f"
+done
+LOG_STEP_OUT
+
 LOG_STEP_IN "- Fixing Qualcomm hardware device nodes in ueventd and init.rc"
 if [ -f "$WORK_DIR/system/system/etc/ueventd.rc" ]; then
     if ! grep -q "import /vendor/ueventd.rc" "$WORK_DIR/system/system/etc/ueventd.rc"; then
@@ -77,11 +97,7 @@ if [ -f "$WORK_DIR/vendor/bin/hw/android.hardware.graphics.composer@2.4-service"
 fi
 LOG_STEP_OUT
 
-LOG_STEP_IN "- Patching vold to enforce pure FUSE emulated storage and disable legacy sdcardfs"
-if [ -f "$WORK_DIR/system/system/bin/vold" ]; then
-    python3 "$SRC_DIR/target/m51/patches/tweaks/patch_vold.py" "$WORK_DIR/system/system/bin/vold" || true
-fi
-LOG_STEP_OUT
+
 
 LOG_STEP_IN "- Neutralizing ICCC client to prevent system_server crash"
 for lib in "$WORK_DIR/system/system/lib64/hidl_comm_iccc_client.so" \
@@ -97,7 +113,6 @@ DELETE_FROM_WORK_DIR "system" "system/priv-app/KnoxCustomManagerService" || true
 DELETE_FROM_WORK_DIR "system" "system/priv-app/KnoxPushManager" || true
 DELETE_FROM_WORK_DIR "system" "system/priv-app/KnoxSandbox" || true
 DELETE_FROM_WORK_DIR "system" "system/priv-app/KnoxZtFramework" || true
-DELETE_FROM_WORK_DIR "system" "system/priv-app/KnoxGuard" || true
 LOG_STEP_OUT
 
 LOG_STEP_IN "- Enabling permanent root ADB and USB debugging"
@@ -234,12 +249,4 @@ if [ -f "$SRC_DIR/target/m51/camera/SamsungCamera.apk.00" ]; then
 fi
 LOG_STEP_OUT
 
-LOG_STEP_IN "- Fixing Qualcomm Codec2 seccomp policy"
-CODEC2_POLICY="$WORK_DIR/vendor/etc/seccomp_policy/samsung.software.media.c2-base-policy"
-if [ -f "$CODEC2_POLICY" ]; then
-    sed -i 's/^mremap: arg3 == 3$/mremap: arg3 == 3 || arg3 == MREMAP_MAYMOVE/' "$CODEC2_POLICY"
-    if ! grep -q "mremap: arg3 == 3 || arg3 == MREMAP_MAYMOVE" "$CODEC2_POLICY"; then
-        echo "mremap: arg3 == 3 || arg3 == MREMAP_MAYMOVE" >> "$CODEC2_POLICY"
-    fi
-fi
-LOG_STEP_OUT
+
