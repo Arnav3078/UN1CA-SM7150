@@ -270,18 +270,3 @@ for policy in \
 done
 LOG_STEP_OUT
 
-LOG_STEP_IN "- Configuring FUSE emulated storage and disabling legacy sdcardfs"
-SET_PROP "vendor" "external_storage.projid.enabled" "1"
-SET_PROP "vendor" "external_storage.casefold.enabled" "1"
-SET_PROP "vendor" "external_storage.sdcardfs.enabled" "0"
-SET_PROP "vendor" "ro.sys.sdcardfs" "false"
-SET_PROP "vendor" "persist.sys.fuse.passthrough.enable" "true"
-SET_PROP "vendor" "ro.fuse.bpf.enabled" "false"
-
-SET_PROP "system" "external_storage.projid.enabled" "1"
-SET_PROP "system" "external_storage.casefold.enabled" "1"
-SET_PROP "system" "external_storage.sdcardfs.enabled" "0"
-SET_PROP "system" "ro.sys.sdcardfs" "false"
-SET_PROP "system" "persist.sys.fuse.passthrough.enable" "true"
-SET_PROP "system" "ro.fuse.bpf.enabled" "false"
-LOG_STEP_OUT

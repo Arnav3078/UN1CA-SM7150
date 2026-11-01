@@ -1,4 +1,0 @@
-id=emulated_storage
-name=Emulated storage
-author=Google
-description=Properties from AOSP target emulated_storage.mk for FUSE emulated storage.

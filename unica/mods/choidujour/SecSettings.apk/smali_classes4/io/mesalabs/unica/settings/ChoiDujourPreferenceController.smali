@@ -106,7 +106,7 @@
 
     const-string v0, "io.mesalabs.choidujour"
 
-    const-string v1, "io.mesalabs.choidujour.activity.HomeActivity"
+    const-string v1, "io.mesalabs.choidujour.LauncherActivity"
 
     invoke-virtual {p1, v0, v1}, Landroid/content/Intent;->setClassName(Ljava/lang/String;Ljava/lang/String;)Landroid/content/Intent;
 
@@ -125,7 +125,7 @@
 
     invoke-virtual {v0, p1}, Landroid/content/Context;->startActivity(Landroid/content/Intent;)V
     :try_end_0
-    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
+    .catch Ljava/lang/Throwable; {:try_start_0 .. :try_end_0} :catch_0
 
     const/4 p0, 0x1
 
@@ -155,7 +155,7 @@
 
     invoke-virtual {p0, p1}, Landroid/content/Context;->startActivity(Landroid/content/Intent;)V
     :try_end_1
-    .catch Ljava/lang/Exception; {:try_start_1 .. :try_end_1} :catch_1
+    .catch Ljava/lang/Throwable; {:try_start_1 .. :try_end_1} :catch_1
 
     :cond_1
     :catch_1
