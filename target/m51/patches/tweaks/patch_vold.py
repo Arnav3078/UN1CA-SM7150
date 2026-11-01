@@ -10,9 +10,10 @@ def patch_vold(target):
     with open(target, "rb") as f:
         data = bytearray(f.read())
 
-    # 1. Verify original instructions at 0x85dd4 and 0x85e98
+    # 1. Verify instructions at 0x85dd4 and 0x85e98
     orig_dd4 = bytes.fromhex("c1fcff90") # adrp x1, 1d000
     orig_e98 = bytes.fromhex("78350394") # bl 153478 <__errno@plt>
+    prev_hook_start = bytes.fromhex("8a024039") # ldrb w10, [x20]
 
     b_to_hook = bytes.fromhex("31000014") # b 0x85e98
     hook_code = bytes.fromhex(
@@ -30,30 +31,31 @@ def patch_vold(target):
         "c002889a"  # csel x0, x22, x8, eq (target.c_str())
         "013d8052"  # mov w1, #0x1e8 (mode 0750)
         "0f3d0394"  # bl 0x155308 (fs_mkdirs@plt)
-        "e00313aa"  # mov x0, x19
-        "2d000094"  # bl 0x85f88 (UnmountTree)
-        "c6ffff17"  # b 0x85df0 (return to mount)
+        "c9ffff17"  # b 0x85df4 (SKIP UnmountTree, go straight to mount)
     )
 
     if data[0x85dd4:0x85dd8] == b_to_hook and data[0x85e98:0x85e98+len(hook_code)] == hook_code:
-        print("[+] vold is already patched with BindMount fs_mkdirs hook.")
+        print("[+] vold is already patched with latest BindMount hook.")
         return
 
-    if data[0x85dd4:0x85dd8] != orig_dd4:
-        print(f"[-] Warning: unexpected bytes at 0x85dd4: {data[0x85dd4:0x85dd8].hex()}, expected {orig_dd4.hex()}")
+    if data[0x85dd4:0x85dd8] not in (orig_dd4, b_to_hook):
+        print(f"[-] Warning: unexpected bytes at 0x85dd4: {data[0x85dd4:0x85dd8].hex()}")
         sys.exit(1)
 
-    if data[0x85e98:0x85e9c] != orig_e98:
-        print(f"[-] Warning: unexpected bytes at 0x85e98: {data[0x85e98:0x85e9c].hex()}, expected {orig_e98.hex()}")
+    if data[0x85e98:0x85e9c] not in (orig_e98, prev_hook_start):
+        print(f"[-] Warning: unexpected bytes at 0x85e98: {data[0x85e98:0x85e9c].hex()}")
         sys.exit(1)
 
     data[0x85dd4:0x85dd8] = b_to_hook
+    # Pad remainder of previous hook with NOPs if any
     data[0x85e98:0x85e98+len(hook_code)] = hook_code
+    for off in range(0x85e98 + len(hook_code), 0x85e98 + 68, 4):
+        data[off:off+4] = bytes.fromhex("1f2003d5") # nop
 
     with open(target, "wb") as f:
         f.write(data)
 
-    print(f"[+] Successfully hooked BindMount in {target} ({len(hook_code)} bytes).")
+    print(f"[+] Successfully hooked BindMount in {target} ({len(hook_code)} bytes, direct to mount).")
 
 if __name__ == "__main__":
     target_path = sys.argv[1] if len(sys.argv) > 1 else "/home/arnav/UN1CA-4.0-M51/out/target/m51/work_dir/system/system/bin/vold"
