@@ -7,30 +7,6 @@ LOG_STEP_IN "- Removing WAV 32-bit PCM support"
 SET_PROP "system" "media.extractor.sec.pcm-32bit" --delete
 LOG_STEP_OUT
 
-LOG_STEP_IN "- Setting unencrypted ROM properties"
-SET_PROP "vendor" "ro.crypto.state" "unencrypted"
-SET_PROP "vendor" "ro.crypto.type" "none"
-SET_PROP "vendor" "ro.crypto.override" "false"
-SET_PROP "system" "ro.crypto.state" "unencrypted"
-SET_PROP "system" "ro.crypto.type" "none"
-SET_PROP "vendor" "ro.product.first_api_level" "31"
-SET_PROP "system" "ro.product.first_api_level" "31"
-SET_PROP "product" "ro.product.first_api_level" "31"
-SET_PROP "system_ext" "ro.product.first_api_level" "31"
-for f in "$WORK_DIR/vendor/etc"/fstab*; do
-    [ -f "$f" ] || continue
-    sed -E -i \
-        -e 's/fileencryption=[^,[:space:]]+,?//g' \
-        -e 's/metadata_encryption=[^,[:space:]]+,?//g' \
-        -e 's/keydirectory=[^,[:space:]]+,?//g' \
-        -e 's/forceencrypt=[^,[:space:]]+,?//g' \
-        -e 's/forcefde=[^,[:space:]]+,?//g' \
-        -e 's/,,/,/g' \
-        -e 's/,[[:space:]]*$/ /' \
-        "$f"
-done
-LOG_STEP_OUT
-
 LOG_STEP_IN "- Fixing Qualcomm hardware device nodes in ueventd and init.rc"
 if [ -f "$WORK_DIR/system/system/etc/ueventd.rc" ]; then
     if ! grep -q "import /vendor/ueventd.rc" "$WORK_DIR/system/system/etc/ueventd.rc"; then
@@ -253,7 +229,11 @@ fi
 LOG_STEP_OUT
 
 LOG_STEP_IN "- Fixing Qualcomm Codec2 seccomp policy"
-if [ -f "$WORK_DIR/vendor/etc/seccomp_policy/samsung.software.media.c2-base-policy" ]; then
-    sed -i 's/mremap: arg3 == 3/mremap: 1/' "$WORK_DIR/vendor/etc/seccomp_policy/samsung.software.media.c2-base-policy"
+CODEC2_POLICY="$WORK_DIR/vendor/etc/seccomp_policy/samsung.software.media.c2-base-policy"
+if [ -f "$CODEC2_POLICY" ]; then
+    sed -i 's/^mremap: arg3 == 3$/mremap: arg3 == 3 || arg3 == MREMAP_MAYMOVE/' "$CODEC2_POLICY"
+    if ! grep -q "mremap: arg3 == 3 || arg3 == MREMAP_MAYMOVE" "$CODEC2_POLICY"; then
+        echo "mremap: arg3 == 3 || arg3 == MREMAP_MAYMOVE" >> "$CODEC2_POLICY"
+    fi
 fi
 LOG_STEP_OUT
