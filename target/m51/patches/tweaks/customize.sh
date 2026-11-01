@@ -249,4 +249,14 @@ if [ -f "$SRC_DIR/target/m51/camera/SamsungCamera.apk.00" ]; then
 fi
 LOG_STEP_OUT
 
+LOG_STEP_IN "- Fixing Qualcomm Codec2 seccomp policy"
+CODEC2_POLICY="$WORK_DIR/vendor/etc/seccomp_policy/samsung.software.media.c2-base-policy"
+if [ -f "$CODEC2_POLICY" ]; then
+    sed -i 's/^mremap: .*/mremap: 1/' "$CODEC2_POLICY"
+    if ! grep -q "mremap: 1" "$CODEC2_POLICY"; then
+        echo "mremap: 1" >> "$CODEC2_POLICY"
+    fi
+fi
+LOG_STEP_OUT
+
 
