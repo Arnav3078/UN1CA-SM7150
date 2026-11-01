@@ -13,10 +13,10 @@ SET_PROP "vendor" "ro.crypto.type" "none"
 SET_PROP "vendor" "ro.crypto.override" "false"
 SET_PROP "system" "ro.crypto.state" "unencrypted"
 SET_PROP "system" "ro.crypto.type" "none"
-SET_PROP "vendor" "ro.product.first_api_level" "29"
-SET_PROP "system" "ro.product.first_api_level" "29"
-SET_PROP "product" "ro.product.first_api_level" "29"
-SET_PROP "system_ext" "ro.product.first_api_level" "29"
+SET_PROP "vendor" "ro.product.first_api_level" "31"
+SET_PROP "system" "ro.product.first_api_level" "31"
+SET_PROP "product" "ro.product.first_api_level" "31"
+SET_PROP "system_ext" "ro.product.first_api_level" "31"
 for f in "$WORK_DIR/vendor/etc"/fstab*; do
     [ -f "$f" ] || continue
     sed -E -i \
@@ -25,8 +25,6 @@ for f in "$WORK_DIR/vendor/etc"/fstab*; do
         -e 's/keydirectory=[^,[:space:]]+,?//g' \
         -e 's/forceencrypt=[^,[:space:]]+,?//g' \
         -e 's/forcefde=[^,[:space:]]+,?//g' \
-        -e 's/,sysfs_path=\/sys\/devices\/platform\/soc\/1d84000\.ufshc//g' \
-        -e 's/sysfs_path=\/sys\/devices\/platform\/soc\/1d84000\.ufshc,?//g' \
         -e 's/,,/,/g' \
         -e 's/,[[:space:]]*$/ /' \
         "$f"
@@ -293,17 +291,4 @@ for policy in \
 done
 LOG_STEP_OUT
 
-LOG_STEP_IN "- Setting FUSE storage & Codec2 properties for Snapdragon 730G"
-SET_PROP "system" "debug.codec2.stop_hal_before_surface" "1"
-SET_PROP "vendor" "debug.codec2.stop_hal_before_surface" "1"
-SET_PROP "system" "persist.sys.fuse.passthrough.enable" "true"
-SET_PROP "vendor" "persist.sys.fuse.passthrough.enable" "true"
-SET_PROP "system" "persist.sys.fuse" "true"
-SET_PROP "vendor" "persist.sys.fuse" "true"
-SET_PROP "system" "external_storage.projid.enabled" "1"
-SET_PROP "vendor" "external_storage.projid.enabled" "1"
-SET_PROP "system" "external_storage.casefold.enabled" "1"
-SET_PROP "vendor" "external_storage.casefold.enabled" "1"
-SET_PROP "system" "external_storage.sdcardfs.enabled" "0"
-SET_PROP "vendor" "external_storage.sdcardfs.enabled" "0"
-LOG_STEP_OUT
+

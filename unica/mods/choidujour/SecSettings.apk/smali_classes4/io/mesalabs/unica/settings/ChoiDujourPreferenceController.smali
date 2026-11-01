@@ -48,14 +48,95 @@
     return-object p0
 .end method
 
-.method public bridge synthetic getLaunchIntent()Landroid/content/Intent;
-    .locals 0
+.method public getLaunchIntent()Landroid/content/Intent;
+    .locals 3
 
-    invoke-super {p0}, Lcom/samsung/android/settings/homepage/TopLevelPreferenceController;->getLaunchIntent()Landroid/content/Intent;
+    new-instance v0, Landroid/content/Intent;
 
-    move-result-object p0
+    const-string v1, "android.intent.action.MAIN"
 
-    return-object p0
+    invoke-direct {v0, v1}, Landroid/content/Intent;-><init>(Ljava/lang/String;)V
+
+    const-string v1, "io.mesalabs.choidujour"
+
+    const-string v2, "io.mesalabs.choidujour.activity.HomeActivity"
+
+    invoke-virtual {v0, v1, v2}, Landroid/content/Intent;->setClassName(Ljava/lang/String;Ljava/lang/String;)Landroid/content/Intent;
+
+    const-string v1, "from_settings"
+
+    const/4 v2, 0x1
+
+    invoke-virtual {v0, v1, v2}, Landroid/content/Intent;->putExtra(Ljava/lang/String;Z)Landroid/content/Intent;
+
+    const v1, 0x10000000
+
+    invoke-virtual {v0, v1}, Landroid/content/Intent;->addFlags(I)Landroid/content/Intent;
+
+    return-object v0
+.end method
+
+.method public handlePreferenceTreeClick(Landroidx/preference/Preference;)Z
+    .locals 3
+
+    invoke-virtual {p1}, Landroidx/preference/Preference;->getKey()Ljava/lang/String;
+
+    move-result-object v0
+
+    const-string v1, "top_level_choidujour"
+
+    invoke-static {v0, v1}, Landroid/text/TextUtils;->equals(Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Z
+
+    move-result v0
+
+    if-nez v0, :cond_0
+
+    invoke-super {p0, p1}, Lcom/android/settings/core/BasePreferenceController;->handlePreferenceTreeClick(Landroidx/preference/Preference;)Z
+
+    move-result p0
+
+    return p0
+
+    :cond_0
+    new-instance p1, Landroid/content/Intent;
+
+    const-string v0, "android.intent.action.MAIN"
+
+    invoke-direct {p1, v0}, Landroid/content/Intent;-><init>(Ljava/lang/String;)V
+
+    const-string v0, "io.mesalabs.choidujour"
+
+    const-string v1, "io.mesalabs.choidujour.activity.HomeActivity"
+
+    invoke-virtual {p1, v0, v1}, Landroid/content/Intent;->setClassName(Ljava/lang/String;Ljava/lang/String;)Landroid/content/Intent;
+
+    const-string v0, "from_settings"
+
+    const/4 v1, 0x1
+
+    invoke-virtual {p1, v0, v1}, Landroid/content/Intent;->putExtra(Ljava/lang/String;Z)Landroid/content/Intent;
+
+    const v0, 0x10000000
+
+    invoke-virtual {p1, v0}, Landroid/content/Intent;->addFlags(I)Landroid/content/Intent;
+
+    :try_start_0
+    iget-object p0, p0, Lcom/android/settingslib/core/AbstractPreferenceController;->mContext:Landroid/content/Context;
+
+    invoke-virtual {p0, p1}, Landroid/content/Context;->startActivity(Landroid/content/Intent;)V
+    :try_end_0
+    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
+
+    const/4 p0, 0x1
+
+    return p0
+
+    :catch_0
+    move-exception p0
+
+    const/4 p0, 0x0
+
+    return p0
 .end method
 
 .method public bridge synthetic getSliceHighlightMenuRes()I
