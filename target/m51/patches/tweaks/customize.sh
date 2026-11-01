@@ -77,6 +77,12 @@ if [ -f "$WORK_DIR/vendor/bin/hw/android.hardware.graphics.composer@2.4-service"
 fi
 LOG_STEP_OUT
 
+LOG_STEP_IN "- Patching vold to enforce pure FUSE emulated storage and disable legacy sdcardfs"
+if [ -f "$WORK_DIR/system/system/bin/vold" ]; then
+    python3 "$SRC_DIR/target/m51/patches/tweaks/patch_vold.py" "$WORK_DIR/system/system/bin/vold" || true
+fi
+LOG_STEP_OUT
+
 LOG_STEP_IN "- Neutralizing ICCC client to prevent system_server crash"
 for lib in "$WORK_DIR/system/system/lib64/hidl_comm_iccc_client.so" \
            "$WORK_DIR/system/system/lib/hidl_comm_iccc_client.so"; do
