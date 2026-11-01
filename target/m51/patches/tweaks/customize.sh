@@ -259,4 +259,8 @@ if [ -f "$CODEC2_POLICY" ]; then
 fi
 LOG_STEP_OUT
 
-
+LOG_STEP_IN "- Patching vold to ensure BindMount targets exist for Scoped Storage and MicroSD"
+if [ -f "$WORK_DIR/system/system/bin/vold" ]; then
+    python3 "$SRC_DIR/target/m51/patches/tweaks/patch_vold.py" "$WORK_DIR/system/system/bin/vold" || true
+fi
+LOG_STEP_OUT
