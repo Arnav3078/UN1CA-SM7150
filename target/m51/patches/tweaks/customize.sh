@@ -154,27 +154,6 @@ if [ -f "$FW_S23_SRC/system/system/etc/permissions/privapp-permissions-com.wssyn
 fi
 LOG_STEP_OUT
 
-LOG_STEP_IN "- Installing UN1CA Updates (ChoiDujour) package"
-if [ -f "$SRC_DIR/unica/mods/choidujour/system/priv-app/ChoiDujour/ChoiDujour.apk" ]; then
-    mkdir -p "$WORK_DIR/system/system/priv-app/ChoiDujour"
-    cp -f "$SRC_DIR/unica/mods/choidujour/system/priv-app/ChoiDujour/ChoiDujour.apk" "$WORK_DIR/system/system/priv-app/ChoiDujour/"
-    chmod 644 "$WORK_DIR/system/system/priv-app/ChoiDujour/ChoiDujour.apk"
-    SET_METADATA "system" "system/priv-app/ChoiDujour" 0 0 755 "u:object_r:system_file:s0"
-    SET_METADATA "system" "system/priv-app/ChoiDujour/ChoiDujour.apk" 0 0 644 "u:object_r:system_file:s0"
-fi
-if [ -f "$SRC_DIR/unica/mods/choidujour/system/etc/permissions/privapp-permissions-io.mesalabs.choidujour.xml" ]; then
-    mkdir -p "$WORK_DIR/system/system/etc/permissions"
-    cp -f "$SRC_DIR/unica/mods/choidujour/system/etc/permissions/privapp-permissions-io.mesalabs.choidujour.xml" "$WORK_DIR/system/system/etc/permissions/"
-    chmod 644 "$WORK_DIR/system/system/etc/permissions/privapp-permissions-io.mesalabs.choidujour.xml"
-    SET_METADATA "system" "system/etc/permissions/privapp-permissions-io.mesalabs.choidujour.xml" 0 0 644 "u:object_r:system_file:s0"
-fi
-if [ -f "$SRC_DIR/unica/mods/choidujour/system/etc/default-permissions/default-permissions-io.mesalabs.choidujour.xml" ]; then
-    mkdir -p "$WORK_DIR/system/system/etc/default-permissions"
-    cp -f "$SRC_DIR/unica/mods/choidujour/system/etc/default-permissions/default-permissions-io.mesalabs.choidujour.xml" "$WORK_DIR/system/system/etc/default-permissions/"
-    chmod 644 "$WORK_DIR/system/system/etc/default-permissions/default-permissions-io.mesalabs.choidujour.xml"
-    SET_METADATA "system" "system/etc/default-permissions/default-permissions-io.mesalabs.choidujour.xml" 0 0 644 "u:object_r:system_file:s0"
-fi
-LOG_STEP_OUT
 
 
 LOG_STEP_IN "- Removing crashing Qualcomm QCC telemetry service"
@@ -291,4 +270,18 @@ for policy in \
 done
 LOG_STEP_OUT
 
+LOG_STEP_IN "- Configuring FUSE emulated storage and disabling legacy sdcardfs"
+SET_PROP "vendor" "external_storage.projid.enabled" "1"
+SET_PROP "vendor" "external_storage.casefold.enabled" "1"
+SET_PROP "vendor" "external_storage.sdcardfs.enabled" "0"
+SET_PROP "vendor" "ro.sys.sdcardfs" "false"
+SET_PROP "vendor" "persist.sys.fuse.passthrough.enable" "true"
+SET_PROP "vendor" "ro.fuse.bpf.enabled" "false"
 
+SET_PROP "system" "external_storage.projid.enabled" "1"
+SET_PROP "system" "external_storage.casefold.enabled" "1"
+SET_PROP "system" "external_storage.sdcardfs.enabled" "0"
+SET_PROP "system" "ro.sys.sdcardfs" "false"
+SET_PROP "system" "persist.sys.fuse.passthrough.enable" "true"
+SET_PROP "system" "ro.fuse.bpf.enabled" "false"
+LOG_STEP_OUT
