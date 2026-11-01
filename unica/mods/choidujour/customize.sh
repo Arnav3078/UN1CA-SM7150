@@ -26,6 +26,14 @@ SMALI_PATCH "system" \
     invoke-direct {v2, v9}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V"
 LOG_STEP_OUT
 
+LOG "- Enabling ChoiDujour LauncherActivity in AndroidManifest.xml"
+_CHOI_MANIFEST="$APKTOOL_DIR/system/priv-app/ChoiDujour/ChoiDujour.apk/AndroidManifest.xml"
+if [ -f "$_CHOI_MANIFEST" ]; then
+    sed -i 's/android:enabled="false" android:exported="true" android:name="io\.mesalabs\.choidujour\.LauncherActivity"/android:enabled="true" android:exported="true" android:name="io.mesalabs.choidujour.LauncherActivity"/g' "$_CHOI_MANIFEST"
+    sed -i 's/android:name="io\.mesalabs\.choidujour\.LauncherActivity" android:enabled="false"/android:name="io.mesalabs.choidujour.LauncherActivity" android:enabled="true"/g' "$_CHOI_MANIFEST"
+fi
+unset _CHOI_MANIFEST
+
 LOG "- Patching /system/system/etc/security/otacerts.zip"
 EVAL "rm \"$WORK_DIR/system/system/etc/security/otacerts.zip\""
 EVAL "cd \"$SRC_DIR\"; zip -q \"$WORK_DIR/system/system/etc/security/otacerts.zip\" \"./security/aosp_testkey.x509.pem\""
