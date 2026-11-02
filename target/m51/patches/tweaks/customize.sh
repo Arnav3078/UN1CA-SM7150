@@ -259,3 +259,24 @@ if [ -f "$CODEC2_POLICY" ]; then
 fi
 LOG_STEP_OUT
 
+
+LOG_STEP_IN "- Setting first_api_level to 33 to prevent Knox Abnormal Detection (3010)"
+SET_PROP "vendor" "ro.product.first_api_level" "33"
+SET_PROP "system" "ro.product.first_api_level" "33"
+LOG_STEP_OUT
+
+LOG_STEP_IN "- Restoring authentic Samsung platform SecSettings and KnoxGuard"
+FW_S23_SRC="${FW_DIR:-$SRC_DIR/out/fw}/SM-S911B_EUX"
+if [ -f "$FW_S23_SRC/system/system/priv-app/SecSettings/SecSettings.apk" ]; then
+    rm -rf "$WORK_DIR/system/system/priv-app/SecSettings"
+    cp -af "$FW_S23_SRC/system/system/priv-app/SecSettings" "$WORK_DIR/system/system/priv-app/SecSettings"
+fi
+if [ -f "$FW_S23_SRC/system/system/priv-app/KnoxGuard/KnoxGuard.apk" ]; then
+    rm -rf "$WORK_DIR/system/system/priv-app/KnoxGuard"
+    cp -af "$FW_S23_SRC/system/system/priv-app/KnoxGuard" "$WORK_DIR/system/system/priv-app/KnoxGuard"
+fi
+LOG_STEP_OUT
+
+LOG_STEP_IN "- Neutralizing Knox RemoteLock and custom ROM blocks in services.jar"
+python3 "$SRC_DIR/unica/patches/signature/patch_signature.py" services "$WORK_DIR" || true
+LOG_STEP_OUT

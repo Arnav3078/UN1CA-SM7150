@@ -31,10 +31,6 @@ system/priv-app/EarphoneTypeC
 system/priv-app/IntelligentDynamicFpsService
 system/priv-app/SamsungPositioning
 system/priv-app/OMCAgent5
-system/priv-app/KnoxGuard
-system/etc/permissions/privapp-permissions-com.samsung.android.kgclient.xml
-system/etc/permissions/signature-permissions-com.samsung.android.kgclient.xml
-system/etc/sysconfig/preinstalled-packages-com.samsung.android.kgclient.xml
 "
 
 # GameDriver
