@@ -99,6 +99,8 @@ LOG_STEP_OUT
 
 
 
+
+
 LOG_STEP_IN "- Neutralizing ICCC client to prevent system_server crash"
 for lib in "$WORK_DIR/system/system/lib64/hidl_comm_iccc_client.so" \
            "$WORK_DIR/system/system/lib/hidl_comm_iccc_client.so"; do
@@ -265,18 +267,105 @@ SET_PROP "vendor" "ro.product.first_api_level" "33"
 SET_PROP "system" "ro.product.first_api_level" "33"
 LOG_STEP_OUT
 
-LOG_STEP_IN "- Restoring authentic Samsung platform SecSettings and KnoxGuard"
-FW_S23_SRC="${FW_DIR:-$SRC_DIR/out/fw}/SM-S911B_EUX"
-if [ -f "$FW_S23_SRC/system/system/priv-app/SecSettings/SecSettings.apk" ]; then
-    rm -rf "$WORK_DIR/system/system/priv-app/SecSettings"
-    cp -af "$FW_S23_SRC/system/system/priv-app/SecSettings" "$WORK_DIR/system/system/priv-app/SecSettings"
+LOG_STEP_IN "- Disabling Android RescueParty and adding SSRM/SDHMS property contexts"
+SET_PROP "system" "persist.sys.enable_rescue" "false"
+SET_PROP "system" "persist.sys.disable_rescue" "true"
+if [ -f "$WORK_DIR/system/system/etc/selinux/plat_property_contexts" ]; then
+    if ! grep -q "dev.ssrm." "$WORK_DIR/system/system/etc/selinux/plat_property_contexts"; then
+        echo "dev.ssrm. u:object_r:system_prop:s0" >> "$WORK_DIR/system/system/etc/selinux/plat_property_contexts"
+    fi
+    if ! grep -q "dev.sdhms." "$WORK_DIR/system/system/etc/selinux/plat_property_contexts"; then
+        echo "dev.sdhms. u:object_r:system_prop:s0" >> "$WORK_DIR/system/system/etc/selinux/plat_property_contexts"
+    fi
 fi
+LOG_STEP_OUT
+
+LOG_STEP_IN "- Restoring authentic Samsung platform KnoxGuard"
+FW_S23_SRC="${FW_DIR:-$SRC_DIR/out/fw}/SM-S911B_EUX"
 if [ -f "$FW_S23_SRC/system/system/priv-app/KnoxGuard/KnoxGuard.apk" ]; then
     rm -rf "$WORK_DIR/system/system/priv-app/KnoxGuard"
     cp -af "$FW_S23_SRC/system/system/priv-app/KnoxGuard" "$WORK_DIR/system/system/priv-app/KnoxGuard"
 fi
 LOG_STEP_OUT
 
-LOG_STEP_IN "- Neutralizing Knox RemoteLock and custom ROM blocks in services.jar"
+LOG_STEP_IN "- Binary patching framework.jar and services.jar for custom platform signatures and Knox neutralization"
+python3 "$SRC_DIR/unica/patches/signature/patch_signature.py" framework "$WORK_DIR" || true
 python3 "$SRC_DIR/unica/patches/signature/patch_signature.py" services "$WORK_DIR" || true
+LOG_STEP_OUT
+
+
+LOG_STEP_IN "- Allowing ChoiDujour in Samsung preload apps whitelist"
+if [ -f "$WORK_DIR/system/system/etc/sysconfig/allowed-system-preload-apps.xml" ]; then
+    python3 "$SRC_DIR/target/m51/tools/patch_allowed_preload.py" "$WORK_DIR/system/system/etc/sysconfig/allowed-system-preload-apps.xml" || true
+fi
+LOG_STEP_OUT
+
+LOG_STEP_IN "- Fixing MediaProvider SELinux domain in plat_seapp_contexts"
+PLAT_SEAPP="$WORK_DIR/system/system/etc/selinux/plat_seapp_contexts"
+if [ -f "$PLAT_SEAPP" ]; then
+    python3 "$SRC_DIR/target/m51/tools/patch_seapp.py" "$PLAT_SEAPP" || true
+fi
+LOG_STEP_OUT
+
+LOG_STEP_IN "- Disabling FUSE BPF and Passthrough for Linux 4.14 compatibility"
+SET_PROP "system" "ro.fuse.bpf.enabled" "false"
+SET_PROP "vendor" "ro.fuse.bpf.enabled" "false"
+SET_PROP "system" "persist.sys.fuse.passthrough.enable" "false"
+SET_PROP "vendor" "persist.sys.fuse.passthrough.enable" "false"
+SET_PROP "system" "persist.sys.fuse.bpf.enable" "false"
+SET_PROP "vendor" "persist.sys.fuse.bpf.enable" "false"
+
+if [ -f "$WORK_DIR/vendor/default.prop" ]; then
+    sed -i 's/persist.sys.fuse.passthrough.enable=true/persist.sys.fuse.passthrough.enable=false/g' "$WORK_DIR/vendor/default.prop"
+fi
+LOG_STEP_OUT
+
+LOG_STEP_IN "- Ensuring clean stock Samsung vold binary"
+FW_S23_SRC="${FW_DIR:-$SRC_DIR/out/fw}/SM-S911B_EUX"
+if [ -f "$FW_S23_SRC/system/system/bin/vold" ]; then
+    cp -af "$FW_S23_SRC/system/system/bin/vold" "$WORK_DIR/system/system/bin/vold"
+fi
+LOG_STEP_OUT
+
+LOG_STEP_IN "- Ensuring unlockCeStorage GateKeeper HAT bypass in services.jar"
+python3 "$SRC_DIR/unica/patches/vold/patch_vold_ce.py" "$WORK_DIR" || true
+LOG_STEP_OUT
+
+
+LOG_STEP_IN "- Allowing system_app to set system_prop for Play Integrity Fix"
+PLAT_SEPOLICY="$WORK_DIR/system/system/etc/selinux/plat_sepolicy.cil"
+if [ -f "$PLAT_SEPOLICY" ]; then
+    if ! grep -q "(allow system_app system_prop (property_service (set)))" "$PLAT_SEPOLICY"; then
+        echo "(allow system_app system_prop (property_service (set)))" >> "$PLAT_SEPOLICY"
+    fi
+fi
+LOG_STEP_OUT
+
+LOG_STEP_IN "- Installing fallback Yurikey keybox into system/etc/security/keybox.xml"
+mkdir -p "$WORK_DIR/system/system/etc/security"
+cp -af "$SRC_DIR/target/m51/patches/tweaks/system/etc/security/keybox.xml" "$WORK_DIR/system/system/etc/security/keybox.xml"
+chmod 644 "$WORK_DIR/system/system/etc/security/keybox.xml"
+echo "/system/etc/security/keybox\.xml u:object_r:system_file:s0" >> "$WORK_DIR/configs/file_context-system" 2>/dev/null || true
+echo "system/etc/security/keybox.xml 0 0 644" >> "$WORK_DIR/configs/fs_config-system" 2>/dev/null || true
+LOG_STEP_OUT
+
+LOG_STEP_IN "- Patching services.jar for Play Integrity task permission bypass"
+python3 "$SRC_DIR/target/m51/tools/patch_services_pif.py" "$WORK_DIR" || true
+LOG_STEP_OUT
+
+LOG_STEP_IN "- Configuring native UN1CA Play Integrity and Yurikey keybox defaults"
+SET_PROP "system" "persist.sys.unica.pif" "true"
+SET_PROP "system" "persist.sys.unica.keybox" "true"
+SET_PROP "system" "persist.sys.pif.brand" "google"
+SET_PROP "system" "persist.sys.pif.manufacturer" "Google"
+SET_PROP "system" "persist.sys.pif.model" "Pixel 6a"
+SET_PROP "system" "persist.sys.pif.product" "bluejay_beta"
+SET_PROP "system" "persist.sys.pif.device" "bluejay"
+SET_PROP "system" "persist.sys.pif.release" "CANARY"
+SET_PROP "system" "persist.sys.pif.id" "ZP11.260918.007"
+SET_PROP "system" "persist.sys.pif.incremental" "16484274"
+SET_PROP "system" "persist.sys.pif.fingerprint" "google/bluejay_beta/bluejay:CANARY/ZP11.260918.007/16484274:user/release-keys"
+SET_PROP "system" "persist.sys.pif.security_patch" "2026-10-05"
+SET_PROP "system" "persist.sys.pif.first_api_level" "32"
+SET_PROP "system" "persist.sys.pif.version" "20261016"
 LOG_STEP_OUT

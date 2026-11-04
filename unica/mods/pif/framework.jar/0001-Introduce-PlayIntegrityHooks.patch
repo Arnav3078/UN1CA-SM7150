@@ -153,7 +153,7 @@ new file mode 100644
 index 00000000..52e34332
 --- /dev/null
 +++ b/smali_classes6/io/mesalabs/unica/PlayIntegrityHooks.smali
-@@ -0,0 +1,1032 @@
+@@ -0,0 +1,985 @@
 +.class public final Lio/mesalabs/unica/PlayIntegrityHooks;
 +.super Ljava/lang/Object;
 +.source "PlayIntegrityHooks.java"
@@ -554,56 +554,9 @@ index 00000000..52e34332
 +.end method
 +
 +.method private static blacklist setVersionFieldInt(Ljava/lang/String;I)V
-+    .locals 2
++    .locals 0
 +
-+    :try_start_0
-+    const-class v0, Landroid/os/Build$VERSION;
-+
-+    invoke-virtual {v0, p0}, Ljava/lang/Class;->getDeclaredField(Ljava/lang/String;)Ljava/lang/reflect/Field;
-+
-+    move-result-object v0
-+
-+    const/4 v1, 0x1
-+
-+    invoke-virtual {v0, v1}, Ljava/lang/reflect/Field;->setAccessible(Z)V
-+
-+    invoke-static {p1}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
-+
-+    move-result-object p1
-+
-+    const/4 v1, 0x0
-+
-+    invoke-virtual {v0, v1, p1}, Ljava/lang/reflect/Field;->set(Ljava/lang/Object;Ljava/lang/Object;)V
-+
-+    const/4 p1, 0x0
-+
-+    invoke-virtual {v0, p1}, Ljava/lang/reflect/Field;->setAccessible(Z)V
-+    :try_end_0
-+    .catch Ljava/lang/NoSuchFieldException; {:try_start_0 .. :try_end_0} :catch_0
-+    .catch Ljava/lang/IllegalAccessException; {:try_start_0 .. :try_end_0} :catch_0
-+
-+    return-void
-+
-+    :catch_0
-+    move-exception p1
-+
-+    new-instance v0, Ljava/lang/StringBuilder;
-+
-+    const-string v1, "Failed to spoof Build."
-+
-+    invoke-direct {v0, v1}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
-+
-+    invoke-virtual {v0, p0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-+
-+    move-result-object p0
-+
-+    invoke-virtual {p0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
-+
-+    move-result-object p0
-+
-+    const-string v0, "PlayIntegrityHooks"
-+
-+    invoke-static {v0, p0, p1}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
++    sput p1, Landroid/os/Build$VERSION;->DEVICE_INITIAL_SDK_INT:I
 +
 +    return-void
 +.end method

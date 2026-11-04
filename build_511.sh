@@ -5,6 +5,8 @@ cd /home/arnav/UN1CA-4.0-M51
 source buildenv.sh m51
 
 TARGET_FILES="$OUT_DIR/m51_5.1.1-target_files.zip"
+rm -f "$TARGET_FILES"
+
 echo "[+] Step 1: Building target-files zip: $TARGET_FILES"
 "$SRC_DIR/scripts/internal/create_target_files_zip.sh" "$TARGET_FILES"
 
