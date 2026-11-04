@@ -3,10 +3,9 @@
 # Delete disable if present
 rm -f "$MODPATH/disable" 2>/dev/null || true
 
-LOG_STEP_IN "- Patching framework.jar for custom platform signatures"
-DECODE_APK "system" "system/framework/framework.jar"
-
-python3 "$MODPATH/patch_signature.py" framework "$APKTOOL_DIR"
+LOG_STEP_IN "- Binary patching framework.jar for custom platform signatures"
+python3 "$MODPATH/patch_signature.py" framework "$WORK_DIR"
+rm -rf "$APKTOOL_DIR/system/framework/framework.jar" 2>/dev/null || true
 LOG_STEP_OUT
 
 LOG_STEP_IN "- Binary patching services.jar for shared user 1000 reconciliation"

@@ -1,39 +1,17 @@
 import sys, os, struct, zlib, hashlib, zipfile
 
-def patch_framework(apktool_dir):
-    path = os.path.join(apktool_dir, "system/framework/framework.jar/smali/android/content/pm/Signature.smali")
-    if not os.path.isfile(path):
-        print("File not found:", path)
-        return
-    with open(path, "r", encoding="utf-8") as f:
-        content = f.read()
-
-    target = """.method static blacklist areExactArraysMatch([Landroid/content/pm/Signature;[Landroid/content/pm/Signature;)Z
-    .locals 2
-
-    invoke-static {p0}, Lcom/android/internal/util/ArrayUtils;->size([Ljava/lang/Object;)I"""
-
-    replacement = """.method static blacklist areExactArraysMatch([Landroid/content/pm/Signature;[Landroid/content/pm/Signature;)Z
-    .locals 2
-
-    const/4 p0, 0x1
-
-    return p0
-
-    invoke-static {p0}, Lcom/android/internal/util/ArrayUtils;->size([Ljava/lang/Object;)I"""
-
-    if target in content:
-        content = content.replace(target, replacement, 1)
-        with open(path, "w", encoding="utf-8") as f:
-            f.write(content)
-        print("Signature.areExactArraysMatch patched to return true")
-    else:
-        print("Target already patched or not found")
+def patch_framework(work_dir):
+    # Do NOT patch Signature.areExactArraysMatch to return true.
+    # Returning true causes all third-party apps (WhatsApp, YouTube, etc.) to get seinfo=platform,
+    # placing them into the platform_app domain where SELinux prevents mapping and executing
+    # native libraries from app_data_file (e.g. WhatsApp libs.spo dlopen Permission denied).
+    print("[+] Skipping framework.jar patch to preserve correct app domain isolation")
+    return
 
 def patch_services(work_dir):
     serv_path = os.path.join(work_dir, "system/system/framework/services.jar")
     if not os.path.isfile(serv_path):
-        print("File not found:", serv_path)
+        print("services.jar not found:", serv_path)
         return
     with zipfile.ZipFile(serv_path, "r") as zin:
         dex = bytearray(zin.read("classes.dex"))
@@ -60,6 +38,16 @@ def patch_services(work_dir):
             dex[off : off + len(replacement)] = replacement
             patched_any = True
             print(f"- Patched {name}")
+
+    # 3. unlockCeStorage fix for One UI 9 on SM7150 (Samuel Pascua fix)
+    target_offset = 0xc200ca
+    expected_header = bytes.fromhex("5253081613041e003643260038060e00")
+    if dex[target_offset : target_offset + 16] == expected_header:
+        dex[target_offset : target_offset + 2] = b"\x28\x2a"
+        dex[target_offset + 2 : 0xc2011e] = b"\x00" * (0xc2011e - (target_offset + 2))
+        dex[0xc2012a : 0xc20130] = b"\x28\x0e\x00\x00\x00\x00"
+        patched_any = True
+        print("- Patched unlockCeStorage (bypassed GateKeeperHAT requirement)")
 
     if patched_any:
         d1_start = 0x99607c
