@@ -6,7 +6,7 @@ PATCH_FSTAB()
     local f
 
     while IFS= read -r f; do
-        if [[ "$f" == *"ramplus" ]]; then
+        if [[ "$f" == *"emmc" ]] || [[ "$f" == *"ramplus" ]]; then
             continue
         fi
         if sed -E -i \
@@ -15,16 +15,6 @@ PATCH_FSTAB()
             "$f"; then
             LOG "- Patching $(sed -e "s|$WORK_DIR||g" -e "s|$TMP_DIR/out/ramdisk_extracted|$BOOT_FILE|g" <<< "$f")"
         fi
-                # Decrypt: Remove forced encryption flags
-        sed -E -i \
-            -e 's/fileencryption=[^,[:space:]]+,?//g' \
-            -e 's/metadata_encryption=[^,[:space:]]+,?//g' \
-            -e 's/keydirectory=[^,[:space:]]+,?//g' \
-            -e 's/forceencrypt=[^,[:space:]]+,?//g' \
-            -e 's/forcefde=[^,[:space:]]+,?//g' \
-            -e 's/,,/,/g' \
-            -e 's/,[[:space:]]*$/ /' \
-            "$f"
         EVAL "uniq \"$f\" \"$TMP_DIR/tmp\" && mv -f \"$TMP_DIR/tmp\" \"$f\""
     done < <(find "$1" -type f -name "fstab.*")
 }
@@ -62,29 +52,24 @@ while IFS= read -r f; do
         ABORT "Ramdisk format not valid\n\n$(LC_ALL=C file -b "$f")"
     fi
 
-    RAMDISK_SIZE="$(wc -c < "$f")"
-    if [ "$RAMDISK_SIZE" -gt 64 ]; then
-        EVAL "mkdir -p \"$TMP_DIR/out/ramdisk_extracted\""
-        if [[ "$RAMDISK_FORMAT" == "gz" ]]; then
-            EVAL "cat \"$f\" | gzip -d | cpio --quiet -i -D \"$TMP_DIR/out/ramdisk_extracted\" || true"
-        elif [[ "$RAMDISK_FORMAT" == "lz4" ]]; then
-            EVAL "cat \"$f\" | lz4 -d | cpio --quiet -i -D \"$TMP_DIR/out/ramdisk_extracted\" || true"
-        fi
-
-        PATCH_FSTAB "$TMP_DIR/out/ramdisk_extracted"
-
-        LOG "- Repacking $BOOT_FILE/$(basename "$f")"
-
-        if [[ "$RAMDISK_FORMAT" == "gz" ]]; then
-            EVAL "mkbootfs \"$TMP_DIR/out/ramdisk_extracted\" | gzip > \"$f\""
-        elif [[ "$RAMDISK_FORMAT" == "lz4" ]]; then
-            EVAL "mkbootfs \"$TMP_DIR/out/ramdisk_extracted\" | lz4 -l -12 --favor-decSpeed > \"$f\""
-        fi
-
-        EVAL "rm -rf \"$TMP_DIR/out/ramdisk_extracted\""
-    else
-        LOG "- Dummy/empty ramdisk detected (${RAMDISK_SIZE} bytes), skipping unpack"
+    EVAL "mkdir -p \"$TMP_DIR/out/ramdisk_extracted\""
+    if [[ "$RAMDISK_FORMAT" == "gz" ]]; then
+        EVAL "cat \"$f\" | gzip -d | cpio --quiet -i -D \"$TMP_DIR/out/ramdisk_extracted\""
+    elif [[ "$RAMDISK_FORMAT" == "lz4" ]]; then
+        EVAL "cat \"$f\" | lz4 -d | cpio --quiet -i -D \"$TMP_DIR/out/ramdisk_extracted\""
     fi
+
+    PATCH_FSTAB "$TMP_DIR/out/ramdisk_extracted"
+
+    LOG "- Repacking $BOOT_FILE/$(basename "$f")"
+
+    if [[ "$RAMDISK_FORMAT" == "gz" ]]; then
+        EVAL "mkbootfs \"$TMP_DIR/out/ramdisk_extracted\" | gzip > \"$f\""
+    elif [[ "$RAMDISK_FORMAT" == "lz4" ]]; then
+        EVAL "mkbootfs \"$TMP_DIR/out/ramdisk_extracted\" | lz4 -l -12 --favor-decSpeed > \"$f\""
+    fi
+
+    EVAL "rm -rf \"$TMP_DIR/out/ramdisk_extracted\""
 done < <(find "$TMP_DIR/out" -type f -name "*ramdisk*" | LC_ALL=C sort)
 
 PATCH_FSTAB "$WORK_DIR/vendor/etc"
