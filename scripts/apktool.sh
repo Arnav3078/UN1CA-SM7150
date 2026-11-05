@@ -162,10 +162,8 @@ PREPARE_SCRIPT()
         MAX_THREADS="$(nproc)"
         [ -n "$GITHUB_ACTIONS" ] && MAX_THREADS="1"
 
-        # Do not use more threads than half the total system memory in GB
-        THREAD_COUNT="$(bc -l <<< "scale=0; $MEM_TOTAL_MB / (1024 * 2)")"
-        [ "$THREAD_COUNT" -gt "$MAX_THREADS" ] && THREAD_COUNT="$MAX_THREADS"
-        [ "$THREAD_COUNT" -lt "1" ] && THREAD_COUNT="1"
+        # Avoid OpenJDK 25 / Apktool parallel worker futex deadlock
+        THREAD_COUNT="1"
     fi
 
     PARTITION="$1"

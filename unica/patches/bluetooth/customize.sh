@@ -45,7 +45,7 @@ BUILD_APEX()
     mkdir -p "$TMP_DIR/build/apk"
     cp -a "$TMP_DIR/original/META-INF" "$TMP_DIR/build/apk/META-INF"
 
-    EVAL "apktool b -j \"$(nproc)\" \"$TMP_DIR\""
+    EVAL "apktool b -j 1 \"$TMP_DIR\""
 
     mv -f "$TMP_DIR/dist/$(basename "$1")" "$1"
 }
@@ -64,7 +64,7 @@ BUILD_PAYLOAD()
 DECODE_APEX()
 {
     LOG "- Decoding ${1//$WORK_DIR/}"
-    EVAL "apktool d -j \"$(nproc)\" -o \"$TMP_DIR\" -r \"$1\""
+    EVAL "apktool d -j 1 -o \"$TMP_DIR\" -r \"$1\""
 }
 
 DECODE_APK_IN_APEX()
