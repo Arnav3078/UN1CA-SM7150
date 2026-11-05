@@ -1,3 +1,4 @@
 # SEC_PRODUCT_FEATURE_KNOX_SUPPORT_KNOXGUARD
-APPLY_PATCH "system" "system/framework/services.jar" \
-    "$MODPATH/services.jar/0001-Disable-KnoxGuard.patch"
+# In One UI 9 / Android 16 (DEX 041), KnoxGuard is neutralized directly in binary bytecode.
+LOG "\033[0;33m! KnoxGuard already neutralized via binary DEX patch, skipping legacy smali patch\033[0m"
+return 0
