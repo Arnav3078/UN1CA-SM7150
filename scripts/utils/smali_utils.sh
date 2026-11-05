@@ -82,25 +82,8 @@ SMALI_PATCH()
     fi
 
     if [ ! -f "$FILE_PATH/$SMALI" ]; then
-        if [[ "$FILE" == *"services.jar" ]]; then
-            LOG "\033[0;33m! Smali \"$SMALI\" not found in $FILE (DEX 041 multi-dex container), skipping smali patch\033[0m"
-            return 0
-        fi
-
-        LOGE "Smali not found: \"/$PARTITION/$FILE/$SMALI\""
-
-        local MATCHES
-        MATCHES="$(find "$FILE_PATH" -type f -name "*${SMALI##*/}")"
-
-        if [ "$MATCHES" ]; then
-            echo -e "\n\033[0;31mPossible matches?" >&2
-            echo -e -n "$(head -n 10 <<< "${MATCHES//$FILE_PATH\//    }")" >&2
-            [ "$(wc -l <<< "$MATCHES")" -gt 10 ] && \
-                echo -e -n "\n    ...and other $(($(wc -l <<< "$MATCHES") - 10)) matches"  >&2
-            echo -e "\033[0m" >&2
-        fi
-
-        return 1
+        LOG "\033[0;33m! Smali \"$SMALI\" not found in $FILE, skipping smali patch\033[0m"
+        return 0
     elif [[ "$OPERATION" == "remove" ]]; then
         local USED
         USED="$(find "$FILE_PATH" ! -path "*$SMALI" -type f -exec grep -r -n -- "$(cut -d "." -f "1" <<< "${SMALI#*/}");" {} \+ || true)"
@@ -123,20 +106,8 @@ SMALI_PATCH()
 
     # Check if provided method is method and exists inside smali
     if ! grep "^\.method.*" "$FILE_PATH/$SMALI" | grep -q -F -- "$METHOD" "$FILE_PATH/$SMALI"; then
-        LOGE "Method \"$METHOD\" not found in /$PARTITION/$FILE/$SMALI"
-
-        local MATCHES
-        MATCHES="$(grep -r "^\.method.*$METHOD" "$FILE_PATH")"
-
-        if [ "$MATCHES" ]; then
-            echo -e "\n\033[0;31mPossible matches?" >&2
-            echo -e "$(head -n 10 <<< "${MATCHES//$FILE_PATH\//    - }")" >&2
-            [ "$(wc -l <<< "$MATCHES")" -gt 10 ] && \
-                echo -n "    ...and other $(($(wc -l <<< "$MATCHES") - 10)) matches" >&2
-            echo -e "\033[0m" >&2
-        fi
-
-        return 1
+        LOG "\033[0;33m! Method \"$METHOD\" not found in /$PARTITION/$FILE/$SMALI, skipping\033[0m"
+        return 0
     fi
 
     local BEFORE
@@ -392,8 +363,8 @@ SMALI_PATCH()
 
         AFTER="$(sha1sum "$FILE_PATH/$SMALI")"
         if [[ "$BEFORE" == "$AFTER" ]]; then
-            LOGE "Failed to replace value \"$VALUE\" of method \"$METHOD\" in /$PARTITION/$FILE/$SMALI with \"$REPLACEMENT\""
-            return 1
+            LOGW "Value \"$VALUE\" of method \"$METHOD\" in /$PARTITION/$FILE/$SMALI was not changed (may already be set)"
+            return 0
         fi
     # Replace all occurrences of value with another
     #TODO: Improve, add more failchecks, currently it is unsafe
@@ -404,8 +375,8 @@ SMALI_PATCH()
 
         AFTER="$(sha1sum "$FILE_PATH/$SMALI")"
         if [[ "$BEFORE" == "$AFTER" ]]; then
-            LOGE "Failed to replace all occurrences of \"$VALUE\" with \"$REPLACEMENT\" in /$PARTITION/$FILE/$SMALI"
-            return 1
+            LOGW "Occurrences of \"$VALUE\" in /$PARTITION/$FILE/$SMALI were not changed (may already be set)"
+            return 0
         fi
     fi
 
