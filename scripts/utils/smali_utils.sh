@@ -73,6 +73,20 @@ SMALI_PATCH()
 
     # Check if provided smali exists
     if [ ! -f "$FILE_PATH/$SMALI" ]; then
+        local REL_PATH="${SMALI#smali*/}"
+        local ALT_FILE
+        ALT_FILE="$(find "$FILE_PATH" -path "*/$REL_PATH" 2>/dev/null | head -n 1)"
+        if [ -n "$ALT_FILE" ] && [ -f "$ALT_FILE" ]; then
+            SMALI="${ALT_FILE#$FILE_PATH/}"
+        fi
+    fi
+
+    if [ ! -f "$FILE_PATH/$SMALI" ]; then
+        if [[ "$FILE" == *"services.jar" ]]; then
+            LOG "\033[0;33m! Smali \"$SMALI\" not found in $FILE (DEX 041 multi-dex container), skipping smali patch\033[0m"
+            return 0
+        fi
+
         LOGE "Smali not found: \"/$PARTITION/$FILE/$SMALI\""
 
         local MATCHES
