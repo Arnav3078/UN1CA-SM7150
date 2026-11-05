@@ -308,7 +308,7 @@ def patch_framework_security(apktool_dir, src_dir=None, work_dir=None):
             content = f.read()
 
         old_set_int = re.search(r'(\.method private static blacklist setVersionFieldInt\(Ljava/lang/String;I\)V[\s\S]*?\.end method)', content)
-        if old_set_int and "getDeclaredField" not in old_set_int.group(1):
+        if old_set_int and "setAccessible(Z)V" not in old_set_int.group(1):
             new_set_int = (
                 ".method private static blacklist setVersionFieldInt(Ljava/lang/String;I)V\n"
                 "    .locals 2\n"
@@ -322,15 +322,15 @@ def patch_framework_security(apktool_dir, src_dir=None, work_dir=None):
                 "\n"
                 "    const/4 v1, 0x1\n"
                 "\n"
-                "    invoke-virtual {v0, v1}, Ljava/lang/reflect/Field;->setAccessible(Z)\n"
+                "    invoke-virtual {v0, v1}, Ljava/lang/reflect/Field;->setAccessible(Z)V\n"
                 "\n"
                 "    const/4 v1, 0x0\n"
                 "\n"
-                "    invoke-virtual {v0, v1, p1}, Ljava/lang/reflect/Field;->setInt(Ljava/lang/Object;I)\n"
+                "    invoke-virtual {v0, v1, p1}, Ljava/lang/reflect/Field;->setInt(Ljava/lang/Object;I)V\n"
                 "\n"
-                "    const/4 v1, 0x0\n"
+                "    const/4 p1, 0x0\n"
                 "\n"
-                "    invoke-virtual {v0, v1, p1}, Ljava/lang/reflect/Field;->setAccessible(Z)\n"
+                "    invoke-virtual {v0, p1}, Ljava/lang/reflect/Field;->setAccessible(Z)V\n"
                 "    :try_end_0\n"
                 "    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0\n"
                 "\n"
