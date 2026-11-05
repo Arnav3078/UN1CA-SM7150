@@ -58,7 +58,7 @@ if [ -f "$WORK_DIR/system/system/etc/init/surfaceflinger.rc" ]; then
 fi
 LOG_STEP_OUT
 
-LOG_STEP_IN "- Enabling Hardware Acceleration & Full One UI 9 Live Blur"
+LOG_STEP_IN "- Enabling Hardware Acceleration & Smooth UI Performance"
 SET_PROP "vendor" "debug.egl.hw" "1"
 SET_PROP "vendor" "debug.sf.hw" "1"
 SET_PROP "vendor" "ro.hwui.use_vulkan" "false"
@@ -67,6 +67,8 @@ SET_PROP "vendor" "ro.surface_flinger.supports_background_blur" "0"
 SET_PROP "vendor" "persist.sys.unica.nativeblur" "false"
 SET_PROP "vendor" "ro.sf.blurs_are_expensive" "1"
 SET_PROP "vendor" "sys.sysctl.swappiness" "60"
+SET_PROP "vendor" "ro.surface_flinger.max_frame_buffer_acquired_buffers" "3"
+SET_PROP "vendor" "sys.use_fifo_ui" "1"
 
 SET_PROP "system" "debug.egl.hw" "1"
 SET_PROP "system" "debug.sf.hw" "1"
@@ -76,7 +78,11 @@ SET_PROP "system" "ro.surface_flinger.supports_background_blur" "0"
 SET_PROP "system" "persist.sys.unica.nativeblur" "false"
 SET_PROP "system" "persist.sys.sf.disable_blurs" "1"
 SET_PROP "system" "ro.sf.blurs_are_expensive" "1"
-SET_PROP "system" "sys.sysctl.swappiness" "60" 
+SET_PROP "system" "sys.sysctl.swappiness" "60"
+SET_PROP "system" "ro.surface_flinger.max_frame_buffer_acquired_buffers" "3"
+SET_PROP "system" "sys.use_fifo_ui" "1"
+SET_PROP "system" "ro.config.avoid_gfx_accel" "false"
+SET_PROP "system" "video.accelerate.hw" "1"
 SET_PROP "vendor" "debug.renderengine.backend" --delete
 SET_PROP "system" "debug.renderengine.backend" --delete
 
@@ -341,6 +347,12 @@ if [ -f "$PLAT_SEPOLICY" ]; then
     if ! grep -q "(allow system_app system_prop (property_service (set)))" "$PLAT_SEPOLICY"; then
         echo "(allow system_app system_prop (property_service (set)))" >> "$PLAT_SEPOLICY"
         echo "(allow system_app system_prop (file (open read getattr map)))" >> "$PLAT_SEPOLICY"
+        echo "(allow untrusted_app system_prop (property_service (set)))" >> "$PLAT_SEPOLICY"
+        echo "(allow untrusted_app system_prop (file (open read getattr map)))" >> "$PLAT_SEPOLICY"
+        echo "(allow untrusted_app_30 system_prop (property_service (set)))" >> "$PLAT_SEPOLICY"
+        echo "(allow untrusted_app_30 system_prop (file (open read getattr map)))" >> "$PLAT_SEPOLICY"
+        echo "(allow untrusted_app_32 system_prop (property_service (set)))" >> "$PLAT_SEPOLICY"
+        echo "(allow untrusted_app_32 system_prop (file (open read getattr map)))" >> "$PLAT_SEPOLICY"
     fi
     if ! grep -q "(allow priv_app fota_data_file" "$PLAT_SEPOLICY"; then
         echo "(allow priv_app fota_data_file (dir (create open read write getattr setattr search add_name remove_name rmdir)))" >> "$PLAT_SEPOLICY"
@@ -349,6 +361,15 @@ if [ -f "$PLAT_SEPOLICY" ]; then
         echo "(allow priv_app_36 fota_data_file (file (create open read write getattr setattr unlink map)))" >> "$PLAT_SEPOLICY"
     fi
 fi
+
+mkdir -p "$WORK_DIR/system/system/etc/init"
+cat << 'EOF' > "$WORK_DIR/system/system/etc/init/unica_fota.rc"
+on post-fs-data
+    mkdir /data/fota 0777 system system
+    chmod 0777 /data/fota
+EOF
+echo "/system/etc/init/unica_fota\.rc u:object_r:system_file:s0" >> "$WORK_DIR/configs/file_context-system" 2>/dev/null || true
+echo "system/etc/init/unica_fota.rc 0 0 644" >> "$WORK_DIR/configs/fs_config-system" 2>/dev/null || true
 LOG_STEP_OUT
 
 LOG_STEP_IN "- Installing fallback Yurikey keybox into system/etc/security/keybox.xml"

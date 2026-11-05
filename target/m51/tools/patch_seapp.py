@@ -46,6 +46,11 @@ def patch_seapp_contexts(seapp_path):
         "user=_app seinfo=media isPrivApp=true name=com.android.providers.media.module:* domain=mediaprovider_app type=privapp_data_file levelFrom=all",
         "user=_app isPrivApp=true name=com.android.providers.media.module domain=mediaprovider_app type=privapp_data_file levelFrom=all",
         "user=_app isPrivApp=true name=com.android.providers.media.module:* domain=mediaprovider_app type=privapp_data_file levelFrom=all",
+
+        # Samsung Device Health Manager Service (SDHMS) and system apps UID 1000 isolation fix
+        "user=system isPrivApp=true name=com.sec.android.sdhms domain=system_app type=system_app_data_file",
+        "user=system isPrivApp=true domain=system_app type=system_app_data_file",
+        "user=system domain=system_app type=system_app_data_file",
     ]
 
     filtered_lines.extend(media_rules)
