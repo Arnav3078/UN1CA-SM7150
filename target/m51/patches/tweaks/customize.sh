@@ -63,20 +63,20 @@ SET_PROP "vendor" "debug.egl.hw" "1"
 SET_PROP "vendor" "debug.sf.hw" "1"
 SET_PROP "vendor" "ro.hwui.use_vulkan" "false"
 SET_PROP "vendor" "debug.hwui.renderer" "skiagl"
-SET_PROP "vendor" "ro.surface_flinger.supports_background_blur" "1"
-SET_PROP "vendor" "persist.sys.unica.nativeblur" "true"
-SET_PROP "vendor" "sys.sysctl.swappiness" "100"
+SET_PROP "vendor" "ro.surface_flinger.supports_background_blur" "0"
+SET_PROP "vendor" "persist.sys.unica.nativeblur" "false"
+SET_PROP "vendor" "ro.sf.blurs_are_expensive" "1"
+SET_PROP "vendor" "sys.sysctl.swappiness" "60"
 
 SET_PROP "system" "debug.egl.hw" "1"
 SET_PROP "system" "debug.sf.hw" "1"
 SET_PROP "system" "ro.hwui.use_vulkan" "false"
 SET_PROP "system" "debug.hwui.renderer" "skiagl"
-SET_PROP "system" "ro.surface_flinger.supports_background_blur" "1"
-SET_PROP "system" "persist.sys.unica.nativeblur" "true"
-SET_PROP "system" "sys.sysctl.swappiness" "100"
-
-SET_PROP "vendor" "ro.sf.blurs_are_expensive" --delete
-SET_PROP "system" "ro.sf.blurs_are_expensive" --delete
+SET_PROP "system" "ro.surface_flinger.supports_background_blur" "0"
+SET_PROP "system" "persist.sys.unica.nativeblur" "false"
+SET_PROP "system" "persist.sys.sf.disable_blurs" "1"
+SET_PROP "system" "ro.sf.blurs_are_expensive" "1"
+SET_PROP "system" "sys.sysctl.swappiness" "60" 
 SET_PROP "vendor" "debug.renderengine.backend" --delete
 SET_PROP "system" "debug.renderengine.backend" --delete
 
@@ -214,12 +214,14 @@ LOG_STEP_OUT
 LOG_STEP_IN "- Tuning UI responsiveness, smoothness and dexopt for Snapdragon 730G"
 SET_PROP "system" "debug.hwui.renderer" "skiagl"
 SET_PROP "system" "ro.hwui.use_vulkan" "false"
-SET_PROP "system" "ro.surface_flinger.supports_background_blur" "1"
-SET_PROP "system" "persist.sys.unica.nativeblur" "true"
+SET_PROP "system" "ro.surface_flinger.supports_background_blur" "0"
+SET_PROP "system" "persist.sys.unica.nativeblur" "false"
+SET_PROP "system" "persist.sys.sf.disable_blurs" "1"
+SET_PROP "system" "ro.sf.blurs_are_expensive" "1"
 SET_PROP "system" "renderthread.skia.reduceopstasksplitting" "true"
 SET_PROP "system" "ro.surface_flinger.max_frame_buffer_acquired_buffers" "3"
 SET_PROP "system" "persist.sys.scrollingcache" "3"
-SET_PROP "system" "sys.sysctl.swappiness" "100"
+SET_PROP "system" "sys.sysctl.swappiness" "60"
 SET_PROP "system" "dalvik.vm.dex2oat-threads" "6"
 SET_PROP "system" "dalvik.vm.boot-dex2oat-threads" "8"
 SET_PROP "system" "dalvik.vm.dex2oat-cpu-set" "0,1,2,3,4,5,6,7"
@@ -228,11 +230,12 @@ SET_PROP "system" "dalvik.vm.dex2oat64.enabled" "true"
 
 SET_PROP "vendor" "debug.hwui.renderer" "skiagl"
 SET_PROP "vendor" "ro.hwui.use_vulkan" "false"
-SET_PROP "vendor" "ro.surface_flinger.supports_background_blur" "1"
-SET_PROP "vendor" "persist.sys.unica.nativeblur" "true"
+SET_PROP "vendor" "ro.surface_flinger.supports_background_blur" "0"
+SET_PROP "vendor" "persist.sys.unica.nativeblur" "false"
+SET_PROP "vendor" "ro.sf.blurs_are_expensive" "1"
 SET_PROP "vendor" "renderthread.skia.reduceopstasksplitting" "true"
 SET_PROP "vendor" "ro.surface_flinger.max_frame_buffer_acquired_buffers" "3"
-SET_PROP "vendor" "sys.sysctl.swappiness" "100"
+SET_PROP "vendor" "sys.sysctl.swappiness" "60"
 
 if [ -f "$SRC_DIR/target/m51/camera/camera-feature.xml" ]; then
     cp -f "$SRC_DIR/target/m51/camera/camera-feature.xml" "$WORK_DIR/system/system/cameradata/camera-feature.xml"
@@ -332,11 +335,18 @@ python3 "$SRC_DIR/unica/patches/vold/patch_vold_ce.py" "$WORK_DIR" || true
 LOG_STEP_OUT
 
 
-LOG_STEP_IN "- Allowing system_app to set system_prop for Play Integrity Fix"
+LOG_STEP_IN "- Allowing system_app (SDHMS/PIF) and priv_app (ChoiDujour) SELinux permissions"
 PLAT_SEPOLICY="$WORK_DIR/system/system/etc/selinux/plat_sepolicy.cil"
 if [ -f "$PLAT_SEPOLICY" ]; then
     if ! grep -q "(allow system_app system_prop (property_service (set)))" "$PLAT_SEPOLICY"; then
         echo "(allow system_app system_prop (property_service (set)))" >> "$PLAT_SEPOLICY"
+        echo "(allow system_app system_prop (file (open read getattr map)))" >> "$PLAT_SEPOLICY"
+    fi
+    if ! grep -q "(allow priv_app fota_data_file" "$PLAT_SEPOLICY"; then
+        echo "(allow priv_app fota_data_file (dir (create open read write getattr setattr search add_name remove_name rmdir)))" >> "$PLAT_SEPOLICY"
+        echo "(allow priv_app fota_data_file (file (create open read write getattr setattr unlink map)))" >> "$PLAT_SEPOLICY"
+        echo "(allow priv_app_36 fota_data_file (dir (create open read write getattr setattr search add_name remove_name rmdir)))" >> "$PLAT_SEPOLICY"
+        echo "(allow priv_app_36 fota_data_file (file (create open read write getattr setattr unlink map)))" >> "$PLAT_SEPOLICY"
     fi
 fi
 LOG_STEP_OUT
