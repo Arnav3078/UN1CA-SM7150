@@ -21,6 +21,11 @@ BUILD_APKS()
     MAX_JOBS="$(nproc)"
     [ "$MAX_JOBS" -gt "8" ] && MAX_JOBS="8"
 
+    # Patch framework.jar smali directly before building APKs
+    if [ -f "$SRC_DIR/target/$TARGET_CODENAME/tools/patch_framework_security.py" ]; then
+        python3 "$SRC_DIR/target/$TARGET_CODENAME/tools/patch_framework_security.py" "$APKTOOL_DIR" "$SRC_DIR" "$WORK_DIR" || true
+    fi
+
     # Ensure SystemUI, TeleService, and SettingsProvider retain genuine Samsung platform signatures
     rm -rf "$APKTOOL_DIR/system_ext/priv-app/SystemUI/SystemUI.apk" "$APKTOOL_DIR/system/priv-app/SystemUI/SystemUI.apk" 2>/dev/null || true
     rm -rf "$APKTOOL_DIR/system/priv-app/TeleService/TeleService.apk" 2>/dev/null || true
@@ -170,6 +175,10 @@ if $BUILD_ROM; then
     fi
 
     BUILD_APKS
+
+    if [ -f "$SRC_DIR/target/$TARGET_CODENAME/tools/patch_services_pif.py" ]; then
+        python3 "$SRC_DIR/target/$TARGET_CODENAME/tools/patch_services_pif.py" "$WORK_DIR" || true
+    fi
 
     if [ -f "$SRC_DIR/target/$TARGET_CODENAME/camera/SamsungCamera.apk.00" ]; then
         LOG_STEP_IN "- Restoring stable SamsungCamera from 5.0.0"
