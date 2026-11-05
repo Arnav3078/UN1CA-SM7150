@@ -12,44 +12,44 @@ def patch_services_pif(work_dir):
     with zipfile.ZipFile(serv_path, "r") as zin:
         dex = bytearray(zin.read("classes.dex"))
 
-    off1 = 17369260  # getFocusedRootTaskInfo
-    off2 = 17415412  # registerTaskStackListener
+    # Calls to ActivityTaskManagerService.enforceTaskPermission (71 10 8f a9 00 00)
+    # NOPing these call sites eliminates MANAGE_ACTIVITY_TASKS permission denials
+    # across SystemUI, ShellTaskOrganizer and WindowOrganizerController without
+    # touching ATMS class bytecode or breaking ART method verification.
+    call_sites = [
+        (17369260 + 6, "getFocusedRootTaskInfo"),
+        (17415412 + 6, "registerTaskStackListener"),
+        (0x11a1ab6, "WindowOrganizerController.getApplyToken"),
+        (0x11a1cb2, "WindowOrganizerController.getDisplayAreaOrganizerController"),
+        (0x11a1cee, "WindowOrganizerController.getTaskOrganizerController"),
+        (0x11a4c16, "WindowOrganizerController.applySyncTransaction"),
+        (0x11a8322, "WindowOrganizerController.applyTransaction"),
+        (0x11a84ca, "WindowOrganizerController.finishAllTransitions"),
+        (0x11a85e2, "WindowOrganizerController.finishTransition"),
+        (0x11a883e, "WindowOrganizerController.registerTransitionPlayer"),
+        (0x11a8b9a, "WindowOrganizerController.unregisterTransitionPlayer"),
+    ]
     target_invoke = bytes.fromhex("71108fa90000")
     nops = bytes.fromhex("000000000000")
 
     patched = False
 
-    # 0. ActivityTaskManagerService.enforceTaskPermission -> return-void
-    # Permanently eliminates Permission Denial: MANAGE_ACTIVITY_TASKS across SystemUI & TaskOrganizer
+    # Restore ATMS enforceTaskPermission if previously patched with 0e 00
     atms_enforce_off = 0x1098be4
-    if dex[atms_enforce_off : atms_enforce_off + 2] == b"\x1b\x00":
-        dex[atms_enforce_off : atms_enforce_off + 2] = b"\x0e\x00"
-        print("[+] Patched ActivityTaskManagerService.enforceTaskPermission -> return-void (MANAGE_ACTIVITY_TASKS granted)")
+    if dex[atms_enforce_off : atms_enforce_off + 2] == b"\x0e\x00":
+        dex[atms_enforce_off : atms_enforce_off + 2] = b"\x1b\x00"
+        print("[+] Restored ATMS.enforceTaskPermission original opcode")
         patched = True
-    elif dex[atms_enforce_off : atms_enforce_off + 2] == b"\x0e\x00":
-        print("[*] ActivityTaskManagerService.enforceTaskPermission is already patched")
-    else:
-        print(f"[-] Unexpected bytes at atms_enforce_off: {dex[atms_enforce_off : atms_enforce_off + 6].hex(' ')}")
 
-    # Check off1
-    if dex[off1+6 : off1+12] == target_invoke:
-        dex[off1+6 : off1+12] = nops
-        print("[+] Patched getFocusedRootTaskInfo: NOPed enforceTaskPermission call")
-        patched = True
-    elif dex[off1+6 : off1+12] == nops:
-        print("[*] getFocusedRootTaskInfo is already patched")
-    else:
-        print(f"[-] Unexpected bytes at off1: {dex[off1:off1+12].hex(' ')}")
-
-    # Check off2
-    if dex[off2+6 : off2+12] == target_invoke:
-        dex[off2+6 : off2+12] = nops
-        print("[+] Patched registerTaskStackListener: NOPed enforceTaskPermission call")
-        patched = True
-    elif dex[off2+6 : off2+12] == nops:
-        print("[*] registerTaskStackListener is already patched")
-    else:
-        print(f"[-] Unexpected bytes at off2: {dex[off2:off2+12].hex(' ')}")
+    for offset, name in call_sites:
+        if dex[offset : offset + 6] == target_invoke:
+            dex[offset : offset + 6] = nops
+            print(f"[+] Patched {name}: NOPed enforceTaskPermission call")
+            patched = True
+        elif dex[offset : offset + 6] == nops:
+            print(f"[*] {name} is already patched")
+        else:
+            print(f"[-] Unexpected bytes at {name} ({hex(offset)}): {dex[offset:offset+6].hex(' ')}")
 
     if not patched:
         print("[*] No changes needed in services.jar PIF hooks")
