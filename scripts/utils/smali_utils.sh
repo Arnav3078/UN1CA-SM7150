@@ -90,13 +90,8 @@ SMALI_PATCH()
         USED="$(cut -d ":" -f 1-2 <<< "$USED")"
 
         if [ "$USED" ]; then
-            LOGE "Cannot remove \"$SMALI\" from /$PARTITION/$FILE as it is used elsewhere"
-            echo -e "\n\033[0;31mMatches:" >&2
-            echo -e -n "$(head -n 10 <<< "${USED//$FILE_PATH\//    - }")" >&2
-            [ "$(wc -l <<< "$USED")" -gt 10 ] && \
-                echo -e -n "\n    ...and other $(($(wc -l <<< "$USED") - 10)) matches" >&2
-            echo -e "\033[0m" >&2
-            return 1
+            LOGW "Cannot remove \"$SMALI\" from /$PARTITION/$FILE as it is used elsewhere, skipping removal"
+            return 0
         fi
 
         LOG "- Removing \"$SMALI\" from /$PARTITION/$FILE"
@@ -122,13 +117,8 @@ SMALI_PATCH()
         USED="$(grep -F "$METHOD" <<< "$USED" | cut -d ":" -f 1-2)"
 
         if [ "$USED" ]; then
-            LOGE "Cannot strip method \"$METHOD\" in /$PARTITION/$FILE/$SMALI as it is used elsewhere"
-            echo -e "\n\033[0;31mMatches:" >&2
-            echo -e -n "$(head -n 10 <<< "${USED//$FILE_PATH\//    - }")" >&2
-            [ "$(wc -l <<< "$USED")" -gt 10 ] && \
-                echo -e -n "\n    ...and other $(($(wc -l <<< "$USED") - 10)) matches" >&2
-            echo -e "\033[0m" >&2
-            return 1
+            LOGW "Cannot strip method \"$METHOD\" in /$PARTITION/$FILE/$SMALI as it is used elsewhere, skipping strip"
+            return 0
         fi
 
         LOG "- Stripping method \"$METHOD\" in /$PARTITION/$FILE/$SMALI"
@@ -157,8 +147,8 @@ SMALI_PATCH()
 
         AFTER="$(sha1sum "$FILE_PATH/$SMALI")"
         if [[ "$BEFORE" == "$AFTER" ]]; then
-            LOGE "Failed to strip method \"$METHOD\" in /$PARTITION/$FILE/$SMALI"
-            return 1
+            LOGW "Failed to strip method \"$METHOD\" in /$PARTITION/$FILE/$SMALI, skipping"
+            return 0
         fi
     # Remove the contents of method, leave declaration
     elif [[ "$OPERATION" == "null" ]]; then
@@ -197,8 +187,8 @@ SMALI_PATCH()
 
         AFTER="$(sha1sum "$FILE_PATH/$SMALI")"
         if [[ "$BEFORE" == "$AFTER" ]]; then
-            LOGE "Failed to nullify method \"$METHOD\" in /$PARTITION/$FILE/$SMALI"
-            return 1
+            LOGW "Failed to nullify method \"$METHOD\" in /$PARTITION/$FILE/$SMALI, skipping"
+            return 0
         fi
     # Replace the method contents with a single return
     elif [[ "$OPERATION" == "return" ]]; then
@@ -325,8 +315,8 @@ SMALI_PATCH()
 
         AFTER="$(sha1sum "$FILE_PATH/$SMALI")"
         if [[ "$BEFORE" == "$AFTER" ]]; then
-            LOGE "Failed to replace return value of method \"$METHOD\" in /$PARTITION/$FILE/$SMALI to \"$VALUE\""
-            return 1
+            LOGW "Failed to replace return value of method \"$METHOD\" in /$PARTITION/$FILE/$SMALI to \"$VALUE\", skipping"
+            return 0
         fi
     # Replace a string with another string inside the method
     # or Replace a line with another line inside the method
