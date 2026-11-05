@@ -41,6 +41,9 @@ if [ -n "$TARGET_EXTRA_FIRMWARES" ]; then
         if ! grep -q "^user=bluetooth domain=bluetooth" "$WORK_DIR/system/system/etc/selinux/plat_seapp_contexts"; then
             echo "user=bluetooth domain=bluetooth type=bluetooth_data_file" >> "$WORK_DIR/system/system/etc/selinux/plat_seapp_contexts"
         fi
+        if ! grep -q "^user=radio domain=radio" "$WORK_DIR/system/system/etc/selinux/plat_seapp_contexts"; then
+            echo "user=radio domain=radio type=radio_data_file" >> "$WORK_DIR/system/system/etc/selinux/plat_seapp_contexts"
+        fi
     fi
     LOG_STEP_OUT
 

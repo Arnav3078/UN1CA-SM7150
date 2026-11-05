@@ -19,6 +19,18 @@ def patch_services_pif(work_dir):
 
     patched = False
 
+    # 0. ActivityTaskManagerService.enforceTaskPermission -> return-void
+    # Permanently eliminates Permission Denial: MANAGE_ACTIVITY_TASKS across SystemUI & TaskOrganizer
+    atms_enforce_off = 0x1098be4
+    if dex[atms_enforce_off : atms_enforce_off + 2] == b"\x1b\x00":
+        dex[atms_enforce_off : atms_enforce_off + 2] = b"\x0e\x00"
+        print("[+] Patched ActivityTaskManagerService.enforceTaskPermission -> return-void (MANAGE_ACTIVITY_TASKS granted)")
+        patched = True
+    elif dex[atms_enforce_off : atms_enforce_off + 2] == b"\x0e\x00":
+        print("[*] ActivityTaskManagerService.enforceTaskPermission is already patched")
+    else:
+        print(f"[-] Unexpected bytes at atms_enforce_off: {dex[atms_enforce_off : atms_enforce_off + 6].hex(' ')}")
+
     # Check off1
     if dex[off1+6 : off1+12] == target_invoke:
         dex[off1+6 : off1+12] = nops
