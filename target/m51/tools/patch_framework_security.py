@@ -16,9 +16,12 @@ def patch_framework_security(apktool_dir, src_dir=None, work_dir=None):
         print(f"[-] framework.jar directory still not found after decode: {fw_dir}")
         return False
 
+    # ==========================================
     # 1. ContextImpl.smali
     # - getDisplay() -> return getDisplayNoVerify()
     # - checkPermission() -> bypass ACCESS_TELEPHONY_SIMINFO_DB and MANAGE_ACTIVITY_TASKS
+    # - startServiceCommon() -> catch/suppress BackgroundServiceStartNotAllowedException
+    # ==========================================
     ctx_smali = os.path.join(fw_dir, "smali/android/app/ContextImpl.smali")
     if os.path.isfile(ctx_smali):
         with open(ctx_smali, "r", encoding="utf-8") as f:
@@ -83,11 +86,29 @@ def patch_framework_security(apktool_dir, src_dir=None, work_dir=None):
             content = content.replace(old_check_perm, new_check_perm)
             print("[+] Patched ContextImpl.checkPermission -> bypass ACCESS_TELEPHONY_SIMINFO_DB & MANAGE_ACTIVITY_TASKS")
 
+        # Patch startServiceCommon to suppress BackgroundServiceStartNotAllowedException
+        # Target:
+        #   invoke-static {v5, p0}, Landroid/app/ServiceStartNotAllowedException;->newInstance(ZLjava/lang/String;)Landroid/app/ServiceStartNotAllowedException;
+        #   move-result-object p0
+        #   throw p0
+        old_service_throw = re.search(r'(invoke-static\s+\{[^}]+\},\s+Landroid/app/ServiceStartNotAllowedException;->newInstance\(ZLjava/lang/String;\)Landroid/app/ServiceStartNotAllowedException;\s+move-result-object\s+\w+\s+throw\s+\w+)', content)
+        if old_service_throw:
+            new_service_throw = (
+                "const-string p1, \"ContextImpl\"\n"
+                "    invoke-static {p1, p0}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;)I\n"
+                "    const/4 p0, 0x0\n"
+                "    return-object p0"
+            )
+            content = content.replace(old_service_throw.group(1), new_service_throw)
+            print("[+] Patched ContextImpl.startServiceCommon -> safe log & return null instead of BackgroundServiceStartNotAllowedException")
+
         with open(ctx_smali, "w", encoding="utf-8") as f:
             f.write(content)
 
+    # ==========================================
     # 2. PermissionManager.smali
     # - checkPermission(Ljava/lang/String;III)I -> grant PHONE_UID (0x3e9) & bypass siminfo/tasks
+    # ==========================================
     pm_smali = os.path.join(fw_dir, "smali_classes3/android/permission/PermissionManager.smali")
     if os.path.isfile(pm_smali):
         with open(pm_smali, "r", encoding="utf-8") as f:
@@ -144,14 +165,16 @@ def patch_framework_security(apktool_dir, src_dir=None, work_dir=None):
 
     :cond_normal_check"""
 
-        if target_str in content:
+        if target_str in content and "cond_check_siminfo" not in content:
             content = content.replace(target_str, replacement_str)
             print("[+] Patched PermissionManager.checkPermission -> auto-grant PHONE_UID & SIMINFO/tasks")
 
         with open(pm_smali, "w", encoding="utf-8") as f:
             f.write(content)
 
+    # ==========================================
     # 3. ScreenDecorationsUtils.smali
+    # ==========================================
     sd_smali = os.path.join(fw_dir, "smali_classes5/com/android/internal/policy/ScreenDecorationsUtils.smali")
     if os.path.isfile(sd_smali):
         with open(sd_smali, "r", encoding="utf-8") as f:
@@ -238,7 +261,290 @@ def patch_framework_security(apktool_dir, src_dir=None, work_dir=None):
         with open(sd_smali, "w", encoding="utf-8") as f:
             f.write(content)
 
-    print("[+] All framework.jar security and display patches applied successfully!")
+    # ==========================================
+    # 4. LockPatternUtils.smali
+    # Re-add getLockoutAttemptDeadline(I)J for Android 14 BiometricSetting compatibility
+    # ==========================================
+    lp_smali = os.path.join(fw_dir, "smali_classes6/com/android/internal/widget/LockPatternUtils.smali")
+    if os.path.isfile(lp_smali):
+        with open(lp_smali, "r", encoding="utf-8") as f:
+            content = f.read()
+
+        if "getLockoutAttemptDeadline(I)J" not in content:
+            legacy_method = (
+                "\n.method public greylist getLockoutAttemptDeadline(I)J\n"
+                "    .locals 2\n"
+                "\n"
+                "    invoke-virtual {p0, p1}, Lcom/android/internal/widget/LockPatternUtils;->getLockoutEndTime(I)Ljava/time/Duration;\n"
+                "\n"
+                "    move-result-object p0\n"
+                "\n"
+                "    if-nez p0, :cond_deadlock_zero\n"
+                "\n"
+                "    const-wide/16 p0, 0x0\n"
+                "\n"
+                "    return-wide p0\n"
+                "\n"
+                "    :cond_deadlock_zero\n"
+                "    invoke-virtual {p0}, Ljava/time/Duration;->toMillis()J\n"
+                "\n"
+                "    move-result-wide p0\n"
+                "\n"
+                "    return-wide p0\n"
+                ".end method\n"
+            )
+            content += legacy_method
+            with open(lp_smali, "w", encoding="utf-8") as f:
+                f.write(content)
+            print("[+] Added LockPatternUtils.getLockoutAttemptDeadline(I)J backward-compat method")
+
+    # ==========================================
+    # 5. PlayIntegrityHooks.smali
+    # Fix IllegalAccessError writing to final Build$VERSION.DEVICE_INITIAL_SDK_INT
+    # ==========================================
+    pi_smali = os.path.join(fw_dir, "smali_classes6/io/mesalabs/unica/PlayIntegrityHooks.smali")
+    if os.path.isfile(pi_smali):
+        with open(pi_smali, "r", encoding="utf-8") as f:
+            content = f.read()
+
+        old_set_int = re.search(r'(\.method private static blacklist setVersionFieldInt\(Ljava/lang/String;I\)V[\s\S]*?\.end method)', content)
+        if old_set_int and "getDeclaredField" not in old_set_int.group(1):
+            new_set_int = (
+                ".method private static blacklist setVersionFieldInt(Ljava/lang/String;I)V\n"
+                "    .locals 2\n"
+                "\n"
+                "    :try_start_0\n"
+                "    const-class v0, Landroid/os/Build$VERSION;\n"
+                "\n"
+                "    invoke-virtual {v0, p0}, Ljava/lang/Class;->getDeclaredField(Ljava/lang/String;)Ljava/lang/reflect/Field;\n"
+                "\n"
+                "    move-result-object v0\n"
+                "\n"
+                "    const/4 v1, 0x1\n"
+                "\n"
+                "    invoke-virtual {v0, v1}, Ljava/lang/reflect/Field;->setAccessible(Z)\n"
+                "\n"
+                "    const/4 v1, 0x0\n"
+                "\n"
+                "    invoke-virtual {v0, v1, p1}, Ljava/lang/reflect/Field;->setInt(Ljava/lang/Object;I)\n"
+                "\n"
+                "    const/4 v1, 0x0\n"
+                "\n"
+                "    invoke-virtual {v0, v1, p1}, Ljava/lang/reflect/Field;->setAccessible(Z)\n"
+                "    :try_end_0\n"
+                "    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0\n"
+                "\n"
+                "    return-void\n"
+                "\n"
+                "    :catch_0\n"
+                "    move-exception p0\n"
+                "\n"
+                "    return-void\n"
+                ".end method"
+            )
+            content = content.replace(old_set_int.group(1), new_set_int)
+            with open(pi_smali, "w", encoding="utf-8") as f:
+                f.write(content)
+            print("[+] Patched PlayIntegrityHooks.setVersionFieldInt -> reflection with try-catch")
+
+    # ==========================================
+    # 6. Instrumentation.smali
+    # Suppress ActivityNotFoundException for BriefContentsSettingsActivity
+    # ==========================================
+    inst_smali = os.path.join(fw_dir, "smali/android/app/Instrumentation.smali")
+    if os.path.isfile(inst_smali):
+        with open(inst_smali, "r", encoding="utf-8") as f:
+            content = f.read()
+
+        target_inst = """:pswitch_4
+    instance-of p0, p1, Landroid/content/Intent;
+
+    if-eqz p0, :cond_1
+
+    move-object p0, p1
+
+    check-cast p0, Landroid/content/Intent;
+
+    invoke-virtual {p0}, Landroid/content/Intent;->getComponent()Landroid/content/ComponentName;
+
+    move-result-object v0
+
+    if-eqz v0, :cond_1"""
+
+        repl_inst = """:pswitch_4
+    instance-of p0, p1, Landroid/content/Intent;
+
+    if-eqz p0, :cond_1
+
+    move-object p0, p1
+
+    check-cast p0, Landroid/content/Intent;
+
+    invoke-virtual {p0}, Landroid/content/Intent;->getComponent()Landroid/content/ComponentName;
+
+    move-result-object v0
+
+    if-eqz v0, :cond_1
+
+    invoke-virtual {v0}, Landroid/content/ComponentName;->getClassName()Ljava/lang/String;
+
+    move-result-object v1
+
+    if-eqz v1, :cond_not_brief
+
+    const-string v2, "BriefContentsSettingsActivity"
+
+    invoke-virtual {v1, v2}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
+
+    move-result v1
+
+    if-eqz v1, :cond_not_brief
+
+    const-string p0, "Instrumentation"
+
+    const-string p1, "Suppressing ActivityNotFoundException for BriefContentsSettingsActivity"
+
+    invoke-static {p0, p1}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;)I
+
+    return-void
+
+    :cond_not_brief"""
+
+        if target_inst in content and "BriefContentsSettingsActivity" not in content:
+            content = content.replace(target_inst, repl_inst)
+            with open(inst_smali, "w", encoding="utf-8") as f:
+                f.write(content)
+            print("[+] Patched Instrumentation.checkStartActivityResult -> safe BriefContentsSettingsActivity handling")
+
+    # ==========================================
+    # 7. SystemServiceRegistry$198.smali & SemWifiManager.smali
+    # Make sem_wifi service fetch resilient
+    # ==========================================
+    reg_smali = os.path.join(fw_dir, "smali/android/app/SystemServiceRegistry$198.smali")
+    if os.path.isfile(reg_smali):
+        with open(reg_smali, "r", encoding="utf-8") as f:
+            content = f.read()
+
+        if "getServiceOrThrow" in content:
+            content = content.replace("getServiceOrThrow", "getService")
+            with open(reg_smali, "w", encoding="utf-8") as f:
+                f.write(content)
+            print("[+] Patched SystemServiceRegistry$198 -> getService instead of getServiceOrThrow")
+
+    sem_wifi_smali = os.path.join(fw_dir, "smali_classes7/com/samsung/android/wifi/SemWifiManager.smali")
+    if os.path.isfile(sem_wifi_smali):
+        with open(sem_wifi_smali, "r", encoding="utf-8") as f:
+            content = f.read()
+
+        old_airdrop = re.search(r'(\.method public blacklist isAirdropInterfaceActive\(\)Z[\s\S]*?\.end method)', content)
+        if old_airdrop and "if-nez v0" not in old_airdrop.group(1):
+            new_airdrop = (
+                ".method public blacklist isAirdropInterfaceActive()Z\n"
+                "    .locals 1\n"
+                "\n"
+                "    :try_start_0\n"
+                "    iget-object v0, p0, Lcom/samsung/android/wifi/SemWifiManager;->mService:Lcom/samsung/android/wifi/ISemWifiManager;\n"
+                "\n"
+                "    if-nez v0, :cond_airdrop_active\n"
+                "\n"
+                "    const/4 p0, 0x0\n"
+                "\n"
+                "    return p0\n"
+                "\n"
+                "    :cond_airdrop_active\n"
+                "    invoke-interface {v0}, Lcom/samsung/android/wifi/ISemWifiManager;->isAirdropInterfaceActive()Z\n"
+                "\n"
+                "    move-result p0\n"
+                "    :try_end_0\n"
+                "    .catchall {:try_start_0 .. :try_end_0} :catch_0\n"
+                "\n"
+                "    return p0\n"
+                "\n"
+                "    :catch_0\n"
+                "    const/4 p0, 0x0\n"
+                "\n"
+                "    return p0\n"
+                ".end method"
+            )
+            content = content.replace(old_airdrop.group(1), new_airdrop)
+            with open(sem_wifi_smali, "w", encoding="utf-8") as f:
+                f.write(content)
+            print("[+] Patched SemWifiManager.isAirdropInterfaceActive -> safe null check and try-catch")
+
+    # ==========================================
+    # 8. WifiSettings.smali in SecSettings.apk
+    # Null check mSemWifiManager before isAirdropInterfaceActive
+    # ==========================================
+    wifi_settings_smali = os.path.join(apktool_dir, "system/priv-app/SecSettings/SecSettings.apk/smali_classes4/com/samsung/android/settings/wifi/WifiSettings.smali")
+    if os.path.isfile(wifi_settings_smali):
+        with open(wifi_settings_smali, "r", encoding="utf-8") as f:
+            content = f.read()
+
+        target_wifi = """    invoke-static {v0, v3}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+
+    iget-object v3, p0, Lcom/samsung/android/settings/wifi/WifiSettings;->mSemWifiManager:Lcom/samsung/android/wifi/SemWifiManager;
+
+    invoke-virtual {v3}, Lcom/samsung/android/wifi/SemWifiManager;->isAirdropInterfaceActive()Z"""
+
+        repl_wifi = """    invoke-static {v0, v3}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+
+    iget-object v3, p0, Lcom/samsung/android/settings/wifi/WifiSettings;->mSemWifiManager:Lcom/samsung/android/wifi/SemWifiManager;
+
+    if-nez v3, :cond_airdrop_chk_1
+
+    iget-object p0, p0, Lcom/samsung/android/settings/wifi/WifiSettings;->mListController:Lcom/samsung/android/settings/wifi/WifiSettingsListController;
+
+    if-eqz p0, :cond_ret_airdrop_null
+
+    invoke-virtual {p0}, Lcom/samsung/android/settings/wifi/WifiSettingsListController;->destroyAutoHotspot()V
+
+    :cond_ret_airdrop_null
+    return-void
+
+    :cond_airdrop_chk_1
+    invoke-virtual {v3}, Lcom/samsung/android/wifi/SemWifiManager;->isAirdropInterfaceActive()Z"""
+
+        if target_wifi in content:
+            content = content.replace(target_wifi, repl_wifi)
+            with open(wifi_settings_smali, "w", encoding="utf-8") as f:
+                f.write(content)
+            print("[+] Patched SecSettings.WifiSettings -> safe null check for mSemWifiManager")
+
+    # ==========================================
+    # 9. UdfpsSensorWindow.smali in BiometricSetting.apk
+    # Return early if p1 is null (side-mounted fingerprint)
+    # ==========================================
+    udfps_smali = os.path.join(apktool_dir, "system/priv-app/BiometricSetting/BiometricSetting.apk/smali/com/samsung/android/biometrics/app/setting/fingerprint/UdfpsSensorWindow.smali")
+    if os.path.isfile(udfps_smali):
+        with open(udfps_smali, "r", encoding="utf-8") as f:
+            content = f.read()
+
+        old_udfps = re.search(r'(\.method public final initFromBaseWindow\(Lcom/samsung/android/biometrics/app/setting/fingerprint/UdfpsSensorWindow;\)V[\s\S]*?\.end method)', content)
+        if old_udfps and "IllegalArgumentException" in old_udfps.group(1):
+            new_udfps = (
+                ".method public final initFromBaseWindow(Lcom/samsung/android/biometrics/app/setting/fingerprint/UdfpsSensorWindow;)V\n"
+                "    .locals 1\n"
+                "\n"
+                "    if-eqz p1, :cond_0\n"
+                "\n"
+                "    const/4 v0, 0x1\n"
+                "\n"
+                "    iput-boolean v0, p0, Lcom/samsung/android/biometrics/app/setting/fingerprint/UdfpsSensorWindow;->mUseBaseWindow:Z\n"
+                "\n"
+                "    iget-object p1, p1, Lcom/samsung/android/biometrics/app/setting/fingerprint/UdfpsSensorWindow;->mFingerprintLayout:Landroid/widget/FrameLayout;\n"
+                "\n"
+                "    invoke-virtual {p0, p1}, Lcom/samsung/android/biometrics/app/setting/fingerprint/UdfpsSensorWindow;->initLayout(Landroid/widget/FrameLayout;)V\n"
+                "\n"
+                "    :cond_0\n"
+                "    return-void\n"
+                ".end method"
+            )
+            content = content.replace(old_udfps.group(1), new_udfps)
+            with open(udfps_smali, "w", encoding="utf-8") as f:
+                f.write(content)
+            print("[+] Patched BiometricSetting.UdfpsSensorWindow -> safe return on null base window")
+
+    print("[+] All framework, biometrics, settings, and runtime patches applied successfully!")
     return True
 
 if __name__ == "__main__":
