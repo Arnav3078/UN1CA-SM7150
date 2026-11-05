@@ -161,10 +161,10 @@ PREPARE_SCRIPT()
 
         MAX_THREADS="$(nproc)"
         [ -n "$GITHUB_ACTIONS" ] && MAX_THREADS="1"
-
-        # Avoid OpenJDK 25 / Apktool parallel worker futex deadlock
-        THREAD_COUNT="1"
     fi
+
+    # Unconditionally force THREAD_COUNT=1 to prevent OpenJDK 25 / Apktool worker pool futex deadlock
+    THREAD_COUNT="1"
 
     PARTITION="$1"
     if [ ! "$PARTITION" ]; then
