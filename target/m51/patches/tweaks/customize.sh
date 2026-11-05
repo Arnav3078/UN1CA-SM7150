@@ -63,9 +63,9 @@ SET_PROP "vendor" "debug.egl.hw" "1"
 SET_PROP "vendor" "debug.sf.hw" "1"
 SET_PROP "vendor" "ro.hwui.use_vulkan" "false"
 SET_PROP "vendor" "debug.hwui.renderer" "skiagl"
-SET_PROP "vendor" "ro.surface_flinger.supports_background_blur" "0"
-SET_PROP "vendor" "persist.sys.unica.nativeblur" "false"
-SET_PROP "vendor" "ro.sf.blurs_are_expensive" "1"
+SET_PROP "vendor" "ro.surface_flinger.supports_background_blur" "1"
+SET_PROP "vendor" "persist.sys.unica.nativeblur" "true"
+SET_PROP "vendor" "ro.sf.blurs_are_expensive" --delete
 SET_PROP "vendor" "sys.sysctl.swappiness" "60"
 SET_PROP "vendor" "ro.surface_flinger.max_frame_buffer_acquired_buffers" "3"
 SET_PROP "vendor" "sys.use_fifo_ui" "1"
@@ -74,10 +74,10 @@ SET_PROP "system" "debug.egl.hw" "1"
 SET_PROP "system" "debug.sf.hw" "1"
 SET_PROP "system" "ro.hwui.use_vulkan" "false"
 SET_PROP "system" "debug.hwui.renderer" "skiagl"
-SET_PROP "system" "ro.surface_flinger.supports_background_blur" "0"
-SET_PROP "system" "persist.sys.unica.nativeblur" "false"
-SET_PROP "system" "persist.sys.sf.disable_blurs" "1"
-SET_PROP "system" "ro.sf.blurs_are_expensive" "1"
+SET_PROP "system" "ro.surface_flinger.supports_background_blur" "1"
+SET_PROP "system" "persist.sys.unica.nativeblur" "true"
+SET_PROP "system" "persist.sys.sf.disable_blurs" --delete
+SET_PROP "system" "ro.sf.blurs_are_expensive" --delete
 SET_PROP "system" "sys.sysctl.swappiness" "60"
 SET_PROP "system" "ro.surface_flinger.max_frame_buffer_acquired_buffers" "3"
 SET_PROP "system" "sys.use_fifo_ui" "1"
@@ -220,10 +220,10 @@ LOG_STEP_OUT
 LOG_STEP_IN "- Tuning UI responsiveness, smoothness and dexopt for Snapdragon 730G"
 SET_PROP "system" "debug.hwui.renderer" "skiagl"
 SET_PROP "system" "ro.hwui.use_vulkan" "false"
-SET_PROP "system" "ro.surface_flinger.supports_background_blur" "0"
-SET_PROP "system" "persist.sys.unica.nativeblur" "false"
-SET_PROP "system" "persist.sys.sf.disable_blurs" "1"
-SET_PROP "system" "ro.sf.blurs_are_expensive" "1"
+SET_PROP "system" "ro.surface_flinger.supports_background_blur" "1"
+SET_PROP "system" "persist.sys.unica.nativeblur" "true"
+SET_PROP "system" "persist.sys.sf.disable_blurs" --delete
+SET_PROP "system" "ro.sf.blurs_are_expensive" --delete
 SET_PROP "system" "renderthread.skia.reduceopstasksplitting" "true"
 SET_PROP "system" "ro.surface_flinger.max_frame_buffer_acquired_buffers" "3"
 SET_PROP "system" "persist.sys.scrollingcache" "3"
@@ -236,12 +236,39 @@ SET_PROP "system" "dalvik.vm.dex2oat64.enabled" "true"
 
 SET_PROP "vendor" "debug.hwui.renderer" "skiagl"
 SET_PROP "vendor" "ro.hwui.use_vulkan" "false"
-SET_PROP "vendor" "ro.surface_flinger.supports_background_blur" "0"
-SET_PROP "vendor" "persist.sys.unica.nativeblur" "false"
-SET_PROP "vendor" "ro.sf.blurs_are_expensive" "1"
+SET_PROP "vendor" "ro.surface_flinger.supports_background_blur" "1"
+SET_PROP "vendor" "persist.sys.unica.nativeblur" "true"
+SET_PROP "vendor" "ro.sf.blurs_are_expensive" --delete
 SET_PROP "vendor" "renderthread.skia.reduceopstasksplitting" "true"
 SET_PROP "vendor" "ro.surface_flinger.max_frame_buffer_acquired_buffers" "3"
 SET_PROP "vendor" "sys.sysctl.swappiness" "60"
+LOG_STEP_OUT
+
+LOG_STEP_IN "- Installing A73 Brightness & Light HAL blobs"
+ADD_TO_WORK_DIR "a73xqxx" "vendor" "bin/hw/vendor.samsung.hardware.light-service" 0 2000 755 "u:object_r:hal_light_default_exec:s0"
+ADD_TO_WORK_DIR "a73xqxx" "vendor" "lib64/android.hardware.light-V1-ndk_platform.so" 0 0 644 "u:object_r:vendor_file:s0"
+ADD_TO_WORK_DIR "a73xqxx" "vendor" "lib64/vendor.samsung.hardware.light-V1-ndk_platform.so" 0 0 644 "u:object_r:vendor_file:s0"
+LOG_STEP_OUT
+
+LOG_STEP_IN "- Adding Now brief Moments app"
+ADD_TO_WORK_DIR "pa2qxxx" "system" "system/etc/default-permissions/default-permissions-com.samsung.android.app.moments.xml" 0 0 644 "u:object_r:system_file:s0"
+ADD_TO_WORK_DIR "pa2qxxx" "system" "system/etc/permissions/privapp-permissions-com.samsung.android.app.moments.xml" 0 0 644 "u:object_r:system_file:s0"
+ADD_TO_WORK_DIR "pa2qxxx" "system" "system/etc/sysconfig/moments.xml" 0 0 644 "u:object_r:system_file:s0"
+ADD_TO_WORK_DIR "pa2qxxx" "system" "system/priv-app/Moments/Moments.apk" 0 0 644 "u:object_r:system_file:s0"
+LOG_STEP_OUT
+
+LOG_STEP_IN "- Enabling S25/S26 Now Nudge, Now Brief, Fullscreen Wallpaper AOD & Extra Brightness"
+SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_LCD_CONFIG_AOD_FULLSCREEN" "1"
+SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_LCD_CONFIG_AOD_BRIGHTNESS_ANIMATION" "1"
+SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_LOCKSCREEN_CONFIG_SUBDISPLAY_POLICY" "VIRTUAL_DISPLAY,AOD"
+SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_FRAMEWORK_CONFIG_NOW_NUDGE_VERSION" "1"
+SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_COMMON_CONFIG_AI_VERSION" "20261"
+SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_FRAMEWORK_SUPPORT_PERSONALIZED_DATA_CORE" "TRUE"
+SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_SYSTEMUI_SUPPORT_BRIEF_NOTIFICATION" "TRUE"
+SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_FRAMEWORK_SUPPORT_AI_BRIEF_FOR_UT" "TRUE"
+SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_FRAMEWORK_SUPPORT_SMART_SUGGESTIONS_WIDGET" "TRUE"
+SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_LCD_SUPPORT_EXTRA_BRIGHTNESS" "TRUE"
+LOG_STEP_OUT
 
 if [ -f "$SRC_DIR/target/m51/camera/camera-feature.xml" ]; then
     cp -f "$SRC_DIR/target/m51/camera/camera-feature.xml" "$WORK_DIR/system/system/cameradata/camera-feature.xml"

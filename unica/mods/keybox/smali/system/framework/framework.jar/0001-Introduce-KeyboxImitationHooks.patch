@@ -418,7 +418,7 @@ new file mode 100644
 index 00000000..a705d18c
 --- /dev/null
 +++ b/smali_classes6/io/mesalabs/unica/KeyProviderManager$DefaultKeyboxProvider.smali
-@@ -0,0 +1,709 @@
+@@ -0,0 +1,740 @@
 +.class Lio/mesalabs/unica/KeyProviderManager$DefaultKeyboxProvider;
 +.super Ljava/lang/Object;
 +.source "KeyProviderManager.java"

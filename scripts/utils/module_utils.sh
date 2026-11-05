@@ -44,7 +44,7 @@ APPLY_PATCH()
     DECODE_APK "$PARTITION" "$FILE" || return 1
 
     LOG "- Applying \"$(grep "^Subject:" "$PATCH" | sed "s/.*PATCH] //")\" to /$PARTITION/$FILE"
-    if ! EVAL "LC_ALL=C git apply --directory=\"$APKTOOL_DIR/$PARTITION/${FILE//system\//}\" --verbose --unsafe-paths \"$PATCH\""; then
+    if ! EVAL "LC_ALL=C git apply --recount --directory=\"$APKTOOL_DIR/$PARTITION/${FILE//system\//}\" --verbose --unsafe-paths \"$PATCH\""; then
         LOG "\033[0;33m! Patch \"$(grep "^Subject:" "$PATCH" | sed "s/.*PATCH] //")\" failed to apply cleanly to /$PARTITION/$FILE, skipping legacy patch\033[0m"
         return 0
     fi
