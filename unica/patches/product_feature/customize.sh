@@ -341,22 +341,25 @@ if [[ "$SOURCE_FINGERPRINT_CONFIG_SENSOR" != "$TARGET_FINGERPRINT_CONFIG_SENSOR"
                     "smali_classes4/com/samsung/android/settings/biometrics/fingerprint/SuwFingerprintUsefulFeature\$\$ExternalSyntheticLambda9.smali" "remove"
                 SMALI_PATCH "system" "system/priv-app/SecSettings/SecSettings.apk" \
                     "smali_classes4/com/samsung/android/settings/biometrics/fingerprint/SuwFingerprintUsefulFeature\$1.smali" "remove"
-                APPLY_PATCH "system_ext" "priv-app/SystemUI/SystemUI.apk" \
-                    "$MODPATH/fingerprint/side_fp/SystemUI.apk/0001-Add-side-fingerprint-sensor-support.patch"
-                TARGET_KG_SMALI="$(find "$APKTOOL_DIR/system_ext/priv-app/SystemUI/SystemUI.apk" -name "*KeyguardSecUpdateMonitorImpl*ExternalSyntheticLambda28.smali" 2>/dev/null | head -n 1)"
-                if [ -n "$TARGET_KG_SMALI" ] && [ -f "$TARGET_KG_SMALI" ]; then
-                    sed -i "s/^\.implements.*/.implements Ljava\/util\/function\/Consumer;/g" "$TARGET_KG_SMALI" 2>/dev/null || true
+                if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "36" ]; then
+                    APPLY_PATCH "system_ext" "priv-app/SystemUI/SystemUI.apk" \
+                        "$MODPATH/fingerprint/side_fp/SystemUI.apk/0001-Add-side-fingerprint-sensor-support.patch"
+                    TARGET_KG_SMALI="$(find "$APKTOOL_DIR/system_ext/priv-app/SystemUI/SystemUI.apk" -name "*KeyguardSecUpdateMonitorImpl*ExternalSyntheticLambda28.smali" 2>/dev/null | head -n 1)"
+                    if [ -n "$TARGET_KG_SMALI" ] && [ -f "$TARGET_KG_SMALI" ]; then
+                        sed -i "s/^\.implements.*/.implements Ljava\/util\/function\/Consumer;/g" "$TARGET_KG_SMALI" 2>/dev/null || true
+                    fi
+                    SMALI_PATCH "system_ext" "priv-app/SystemUI/SystemUI.apk" \
+                        "smali/com/android/keyguard/KeyguardSecUpdateMonitorImpl\$\$ExternalSyntheticLambda24.smali" "remove"
+                    SMALI_PATCH "system_ext" "priv-app/SystemUI/SystemUI.apk" \
+                        "smali/com/android/keyguard/KeyguardSecUpdateMonitorImpl\$\$ExternalSyntheticLambda29.smali" "remove"
+                    SMALI_PATCH "system_ext" "priv-app/SystemUI/SystemUI.apk" \
+                        "smali/com/android/keyguard/KeyguardSecUpdateMonitorImpl\$\$ExternalSyntheticLambda33.smali" "remove"
+                    SMALI_PATCH "system_ext" "priv-app/SystemUI/SystemUI.apk" \
+                        "smali/com/android/keyguard/KeyguardSecUpdateMonitorImpl\$\$ExternalSyntheticLambda40.smali" "remove"
+                    SMALI_PATCH "system_ext" "priv-app/SystemUI/SystemUI.apk" \
+                        "smali/com/android/keyguard/KeyguardSecUpdateMonitorImpl\$\$ExternalSyntheticLambda42.smali" "remove"
                 fi
-                SMALI_PATCH "system_ext" "priv-app/SystemUI/SystemUI.apk" \
-                    "smali/com/android/keyguard/KeyguardSecUpdateMonitorImpl\$\$ExternalSyntheticLambda24.smali" "remove"
-                SMALI_PATCH "system_ext" "priv-app/SystemUI/SystemUI.apk" \
-                    "smali/com/android/keyguard/KeyguardSecUpdateMonitorImpl\$\$ExternalSyntheticLambda29.smali" "remove"
-                SMALI_PATCH "system_ext" "priv-app/SystemUI/SystemUI.apk" \
-                    "smali/com/android/keyguard/KeyguardSecUpdateMonitorImpl\$\$ExternalSyntheticLambda33.smali" "remove"
-                SMALI_PATCH "system_ext" "priv-app/SystemUI/SystemUI.apk" \
-                    "smali/com/android/keyguard/KeyguardSecUpdateMonitorImpl\$\$ExternalSyntheticLambda40.smali" "remove"
-                SMALI_PATCH "system_ext" "priv-app/SystemUI/SystemUI.apk" \
-                    "smali/com/android/keyguard/KeyguardSecUpdateMonitorImpl\$\$ExternalSyntheticLambda42.smali" "remove"
+                rm -rf "$APKTOOL_DIR/system_ext/priv-app/SystemUI/SystemUI.apk" 2>/dev/null || true
 
                 if [[ "$TARGET_FINGERPRINT_CONFIG_SENSOR" == *"navi=1"* ]]; then
                     LOG "- Enabling FP_FEATURE_GESTURE_MODE:Z in /system/system/framework/services.jar/smali/com/android/server/biometrics/SemBiometricFeature.smali"

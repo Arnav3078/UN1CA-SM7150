@@ -21,6 +21,9 @@ BUILD_APKS()
     MAX_JOBS="$(nproc)"
     [ "$MAX_JOBS" -gt "8" ] && MAX_JOBS="8"
 
+    # Ensure SystemUI retains genuine Samsung platform signature
+    rm -rf "$APKTOOL_DIR/system_ext/priv-app/SystemUI/SystemUI.apk" "$APKTOOL_DIR/system/priv-app/SystemUI/SystemUI.apk" 2>/dev/null || true
+
     if [ -d "$APKTOOL_DIR" ]; then
         LOG_STEP_IN true "Building APKs/JARs"
 

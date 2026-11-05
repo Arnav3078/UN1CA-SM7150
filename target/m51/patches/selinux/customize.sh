@@ -37,6 +37,11 @@ if [ -n "$TARGET_EXTRA_FIRMWARES" ]; then
         echo "(allow system_app logpersistd_logging_prop (property_service (set)))" >> "$WORK_DIR/system/system/etc/selinux/plat_sepolicy.cil"
         echo "(allow system_app logd_prop (property_service (set)))" >> "$WORK_DIR/system/system/etc/selinux/plat_sepolicy.cil"
     fi
+    if [ -f "$WORK_DIR/system/system/etc/selinux/plat_seapp_contexts" ]; then
+        if ! grep -q "^user=bluetooth domain=bluetooth" "$WORK_DIR/system/system/etc/selinux/plat_seapp_contexts"; then
+            echo "user=bluetooth domain=bluetooth type=bluetooth_data_file" >> "$WORK_DIR/system/system/etc/selinux/plat_seapp_contexts"
+        fi
+    fi
     LOG_STEP_OUT
 
     LOG_STEP_IN "- Adding GPU and ION device contexts to plat_file_contexts"

@@ -270,6 +270,17 @@ SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_FRAMEWORK_SUPPORT_SMART_SUGGES
 SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_LCD_SUPPORT_EXTRA_BRIGHTNESS" "TRUE"
 LOG_STEP_OUT
 
+LOG_STEP_IN "- Granting MANAGE_ACTIVITY_TASKS to SystemUI in privapp-permissions"
+for xml in "$WORK_DIR/system/system/system_ext/etc/permissions/com.android.systemui.xml" \
+           "$WORK_DIR/system/system/etc/permissions/com.android.systemui.xml"; do
+    if [ -f "$xml" ]; then
+        if ! grep -q "MANAGE_ACTIVITY_TASKS" "$xml"; then
+            sed -i '/<privapp-permissions package="com.android.systemui">/a \        <permission name="android.permission.MANAGE_ACTIVITY_TASKS"/>' "$xml"
+        fi
+    fi
+done
+LOG_STEP_OUT
+
 if [ -f "$SRC_DIR/target/m51/camera/camera-feature.xml" ]; then
     cp -f "$SRC_DIR/target/m51/camera/camera-feature.xml" "$WORK_DIR/system/system/cameradata/camera-feature.xml"
 fi
