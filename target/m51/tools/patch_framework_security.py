@@ -550,7 +550,14 @@ def patch_framework_security(apktool_dir, src_dir=None, work_dir=None):
         with open(wifi_settings_smali, "r", encoding="utf-8") as f:
             content = f.read()
 
-        # Inject helper method if not present
+        # Replace ALL isAirdropInterfaceActive calls with isSafeAirdropActive FIRST
+        content = re.sub(
+            r'invoke-virtual\s+\{([vp0-9]+)\},\s+Lcom/samsung/android/wifi/SemWifiManager;->isAirdropInterfaceActive\(\)Z',
+            r'invoke-static {\1}, Lcom/samsung/android/settings/wifi/WifiSettings;->isSafeAirdropActive(Lcom/samsung/android/wifi/SemWifiManager;)Z',
+            content
+        )
+
+        # Inject helper method if not present (AFTER replacement so it does not recurse)
         if "isSafeAirdropActive(Lcom/samsung/android/wifi/SemWifiManager;)Z" not in content:
             helper_method = """
 .method private static blacklist isSafeAirdropActive(Lcom/samsung/android/wifi/SemWifiManager;)Z
@@ -579,13 +586,6 @@ def patch_framework_security(apktool_dir, src_dir=None, work_dir=None):
 .end method
 """
             content += "\n" + helper_method
-
-        # Replace ALL isAirdropInterfaceActive calls with isSafeAirdropActive
-        content = re.sub(
-            r'invoke-virtual\s+\{([vp0-9]+)\},\s+Lcom/samsung/android/wifi/SemWifiManager;->isAirdropInterfaceActive\(\)Z',
-            r'invoke-static {\1}, Lcom/samsung/android/settings/wifi/WifiSettings;->isSafeAirdropActive(Lcom/samsung/android/wifi/SemWifiManager;)Z',
-            content
-        )
 
         # Ensure mSemWifiManager is instantiated in onCreate
         target_init = """    invoke-virtual {v1, v2}, Landroid/content/Context;->getSystemService(Ljava/lang/String;)Ljava/lang/Object;

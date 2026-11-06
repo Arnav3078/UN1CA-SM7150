@@ -65,7 +65,9 @@ SET_PROP "vendor" "ro.hwui.use_vulkan" "false"
 SET_PROP "vendor" "debug.hwui.renderer" "skiagl"
 SET_PROP "vendor" "ro.surface_flinger.supports_background_blur" "1"
 SET_PROP "vendor" "persist.sys.unica.nativeblur" "true"
-SET_PROP "vendor" "ro.sf.blurs_are_expensive" --delete
+SET_PROP "vendor" "ro.sf.blurs_are_expensive" "1"
+SET_PROP "vendor" "debug.sf.latch_unsignaled" "1"
+SET_PROP "vendor" "debug.sf.enable_gl_backpressure" "1"
 SET_PROP "vendor" "sys.sysctl.swappiness" "60"
 SET_PROP "vendor" "ro.surface_flinger.max_frame_buffer_acquired_buffers" "3"
 SET_PROP "vendor" "sys.use_fifo_ui" "1"
@@ -77,7 +79,9 @@ SET_PROP "system" "debug.hwui.renderer" "skiagl"
 SET_PROP "system" "ro.surface_flinger.supports_background_blur" "1"
 SET_PROP "system" "persist.sys.unica.nativeblur" "true"
 SET_PROP "system" "persist.sys.sf.disable_blurs" --delete
-SET_PROP "system" "ro.sf.blurs_are_expensive" --delete
+SET_PROP "system" "ro.sf.blurs_are_expensive" "1"
+SET_PROP "system" "debug.sf.latch_unsignaled" "1"
+SET_PROP "system" "debug.sf.enable_gl_backpressure" "1"
 SET_PROP "system" "sys.sysctl.swappiness" "60"
 SET_PROP "system" "ro.surface_flinger.max_frame_buffer_acquired_buffers" "3"
 SET_PROP "system" "sys.use_fifo_ui" "1"
@@ -85,6 +89,8 @@ SET_PROP "system" "ro.config.avoid_gfx_accel" "false"
 SET_PROP "system" "video.accelerate.hw" "1"
 SET_PROP "vendor" "debug.renderengine.backend" --delete
 SET_PROP "system" "debug.renderengine.backend" --delete
+SET_PROP "system" "persist.sys.unica.vulkan" "false"
+SET_PROP "vendor" "persist.sys.unica.vulkan" "false"
 
 if [ -f "$WORK_DIR/vendor/build.prop" ]; then
     sed -i 's/^ro\.hwui\.use_vulkan=.*/ro.hwui.use_vulkan=false/' "$WORK_DIR/vendor/build.prop"
@@ -334,9 +340,8 @@ if [ -f "$FW_S23_SRC/system/system/priv-app/KnoxGuard/KnoxGuard.apk" ]; then
 fi
 LOG_STEP_OUT
 
-LOG_STEP_IN "- Binary patching framework.jar and services.jar for custom platform signatures and Knox neutralization"
+LOG_STEP_IN "- Binary patching framework.jar for custom platform signatures and Knox neutralization"
 python3 "$SRC_DIR/unica/patches/signature/patch_signature.py" framework "$WORK_DIR" || true
-python3 "$SRC_DIR/unica/patches/signature/patch_signature.py" services "$WORK_DIR" || true
 LOG_STEP_OUT
 
 
@@ -373,9 +378,7 @@ if [ -f "$FW_S23_SRC/system/system/bin/vold" ]; then
 fi
 LOG_STEP_OUT
 
-LOG_STEP_IN "- Ensuring unlockCeStorage GateKeeper HAT bypass in services.jar"
-python3 "$SRC_DIR/unica/patches/vold/patch_vold_ce.py" "$WORK_DIR" || true
-LOG_STEP_OUT
+# Keeping stock Samsung services.jar and precompiled oat/odex/art intact
 
 
 LOG_STEP_IN "- Allowing system_app (SDHMS/PIF) and priv_app (ChoiDujour) SELinux permissions"
@@ -417,9 +420,7 @@ echo "/system/etc/security/keybox\.xml u:object_r:system_file:s0" >> "$WORK_DIR/
 echo "system/etc/security/keybox.xml 0 0 644" >> "$WORK_DIR/configs/fs_config-system" 2>/dev/null || true
 LOG_STEP_OUT
 
-LOG_STEP_IN "- Patching services.jar for Play Integrity task permission bypass"
-python3 "$SRC_DIR/target/m51/tools/patch_services_pif.py" "$WORK_DIR" || true
-LOG_STEP_OUT
+# services.jar remains official stock S23 multi-dex container
 
 LOG_STEP_IN "- Configuring native UN1CA Play Integrity and Yurikey keybox defaults"
 SET_PROP "system" "persist.sys.unica.pif" "true"
