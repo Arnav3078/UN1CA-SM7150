@@ -458,6 +458,9 @@ if [ -f "$WORK_DIR/system/system/etc/init/bootchecker.rc" ]; then
     sed -i 's/restart bootchecker/# restart bootchecker/g' "$WORK_DIR/system/system/etc/init/bootchecker.rc"
     sed -i 's/start bootchecker-bootc/# start bootchecker-bootc/g' "$WORK_DIR/system/system/etc/init/bootchecker.rc"
 fi
+if [ -f "$WORK_DIR/system/system/etc/init/vold.rc" ]; then
+    sed -i 's/reboot_on_failure reboot,vold-failed/# reboot_on_failure reboot,vold-failed/g' "$WORK_DIR/system/system/etc/init/vold.rc"
+fi
 LOG_STEP_OUT
 
 LOG_STEP_IN "- Installing ChoiDujour OTA application and privapp permissions"
