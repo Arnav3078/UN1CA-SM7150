@@ -30,6 +30,8 @@ BUILD_APKS()
     rm -rf "$APKTOOL_DIR/system_ext/priv-app/SystemUI/SystemUI.apk" "$APKTOOL_DIR/system/priv-app/SystemUI/SystemUI.apk" 2>/dev/null || true
     rm -rf "$APKTOOL_DIR/system/priv-app/TeleService/TeleService.apk" 2>/dev/null || true
     rm -rf "$APKTOOL_DIR/system/priv-app/SettingsProvider/SettingsProvider.apk" 2>/dev/null || true
+    # Enforce original S23 services.jar container integrity (apktool cannot assemble DEX 041 multi-dex container without dropping classes)
+    rm -rf "$APKTOOL_DIR/system/framework/services.jar" 2>/dev/null || true
 
     if [ -d "$APKTOOL_DIR" ]; then
         LOG_STEP_IN true "Building APKs/JARs"
@@ -176,8 +178,29 @@ if $BUILD_ROM; then
 
     BUILD_APKS
 
+    # Guarantee stock S23 multi-dex DEX 041 services.jar container integrity
+    FW_S23_SRC="${FW_DIR:-$SRC_DIR/out/fw}/SM-S911B_EUX"
+    if [ -f "$FW_S23_SRC/system/system/framework/services.jar" ]; then
+        LOG_STEP_IN "- Restoring genuine stock S23 multi-dex services.jar"
+        cp -af "$FW_S23_SRC/system/system/framework/services.jar" "$WORK_DIR/system/system/framework/services.jar"
+        LOG_STEP_OUT
+    fi
+
+    # Apply direct binary in-place DEX 041 patches to services.jar
+    if [ -f "$SRC_DIR/unica/patches/signature/patch_signature.py" ]; then
+        LOG_STEP_IN "- Binary patching services.jar for shared user 1000 reconciliation"
+        python3 "$SRC_DIR/unica/patches/signature/patch_signature.py" services "$WORK_DIR" || true
+        LOG_STEP_OUT
+    fi
+    if [ -f "$SRC_DIR/unica/patches/vold/patch_vold_ce.py" ]; then
+        LOG_STEP_IN "- Ensuring unlockCeStorage GateKeeper HAT bypass in services.jar"
+        python3 "$SRC_DIR/unica/patches/vold/patch_vold_ce.py" "$WORK_DIR" || true
+        LOG_STEP_OUT
+    fi
     if [ -f "$SRC_DIR/target/$TARGET_CODENAME/tools/patch_services_pif.py" ]; then
+        LOG_STEP_IN "- Patching services.jar for Play Integrity task permission bypass"
         python3 "$SRC_DIR/target/$TARGET_CODENAME/tools/patch_services_pif.py" "$WORK_DIR" || true
+        LOG_STEP_OUT
     fi
 
     if [ -f "$SRC_DIR/target/$TARGET_CODENAME/camera/SamsungCamera.apk.00" ]; then

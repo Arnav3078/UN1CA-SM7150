@@ -41,6 +41,11 @@ APPLY_PATCH()
         FILE="${FILE:1}"
     done
 
+    if [[ "$FILE" == *"services.jar"* ]]; then
+        LOG "! Skipping smali git patch on monolithic DEX 041 services.jar: $(basename "$PATCH")"
+        return 0
+    fi
+
     DECODE_APK "$PARTITION" "$FILE" || return 1
 
     LOG "- Applying \"$(grep "^Subject:" "$PATCH" | sed "s/.*PATCH] //")\" to /$PARTITION/$FILE"

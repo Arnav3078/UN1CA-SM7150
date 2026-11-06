@@ -540,40 +540,113 @@ def patch_framework_security(apktool_dir, src_dir=None, work_dir=None):
 
     # ==========================================
     # 8. WifiSettings.smali in SecSettings.apk
-    # Null check mSemWifiManager before isAirdropInterfaceActive and clearAutoHotspotLists
+    # - Inject isSafeAirdropActive static helper method
+    # - Replace all isAirdropInterfaceActive calls
+    # - Safe fallback instantiation for mSemWifiManager in onCreate
+    # - Guard getWifiApBleScanDetail and clearAutoHotspotLists
     # ==========================================
     wifi_settings_smali = os.path.join(apktool_dir, "system/priv-app/SecSettings/SecSettings.apk/smali_classes4/com/samsung/android/settings/wifi/WifiSettings.smali")
     if os.path.isfile(wifi_settings_smali):
         with open(wifi_settings_smali, "r", encoding="utf-8") as f:
             content = f.read()
 
-        target_wifi = """    invoke-static {v0, v3}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+        # Inject helper method if not present
+        if "isSafeAirdropActive(Lcom/samsung/android/wifi/SemWifiManager;)Z" not in content:
+            helper_method = """
+.method private static blacklist isSafeAirdropActive(Lcom/samsung/android/wifi/SemWifiManager;)Z
+    .locals 1
 
-    iget-object v3, p0, Lcom/samsung/android/settings/wifi/WifiSettings;->mSemWifiManager:Lcom/samsung/android/wifi/SemWifiManager;
+    if-nez p0, :cond_safe_airdrop
 
-    invoke-virtual {v3}, Lcom/samsung/android/wifi/SemWifiManager;->isAirdropInterfaceActive()Z"""
+    const/4 v0, 0x0
 
-        repl_wifi = """    invoke-static {v0, v3}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+    return v0
 
-    iget-object v3, p0, Lcom/samsung/android/settings/wifi/WifiSettings;->mSemWifiManager:Lcom/samsung/android/wifi/SemWifiManager;
+    :cond_safe_airdrop
+    :try_start_safe_airdrop
+    invoke-virtual {p0}, Lcom/samsung/android/wifi/SemWifiManager;->isAirdropInterfaceActive()Z
 
-    if-nez v3, :cond_airdrop_chk_1
+    move-result v0
+    :try_end_safe_airdrop
+    .catchall {:try_start_safe_airdrop .. :try_end_safe_airdrop} :catch_safe_airdrop
 
-    iget-object p0, p0, Lcom/samsung/android/settings/wifi/WifiSettings;->mListController:Lcom/samsung/android/settings/wifi/WifiSettingsListController;
+    return v0
 
-    if-eqz p0, :cond_ret_airdrop_null
+    :catch_safe_airdrop
+    const/4 v0, 0x0
 
-    invoke-virtual {p0}, Lcom/samsung/android/settings/wifi/WifiSettingsListController;->destroyAutoHotspot()V
+    return v0
+.end method
+"""
+            content += "\n" + helper_method
 
-    :cond_ret_airdrop_null
-    return-void
+        # Replace ALL isAirdropInterfaceActive calls with isSafeAirdropActive
+        content = re.sub(
+            r'invoke-virtual\s+\{([vp0-9]+)\},\s+Lcom/samsung/android/wifi/SemWifiManager;->isAirdropInterfaceActive\(\)Z',
+            r'invoke-static {\1}, Lcom/samsung/android/settings/wifi/WifiSettings;->isSafeAirdropActive(Lcom/samsung/android/wifi/SemWifiManager;)Z',
+            content
+        )
 
-    :cond_airdrop_chk_1
-    invoke-virtual {v3}, Lcom/samsung/android/wifi/SemWifiManager;->isAirdropInterfaceActive()Z"""
+        # Ensure mSemWifiManager is instantiated in onCreate
+        target_init = """    invoke-virtual {v1, v2}, Landroid/content/Context;->getSystemService(Ljava/lang/String;)Ljava/lang/Object;
 
-        if target_wifi in content:
-            content = content.replace(target_wifi, repl_wifi)
-            print("[+] Patched SecSettings.WifiSettings -> safe null check for isAirdropInterfaceActive")
+    move-result-object v1
+
+    check-cast v1, Lcom/samsung/android/wifi/SemWifiManager;
+
+    iput-object v1, v13, Lcom/samsung/android/settings/wifi/WifiSettings;->mSemWifiManager:Lcom/samsung/android/wifi/SemWifiManager;"""
+
+        repl_init = """    invoke-virtual {v1, v2}, Landroid/content/Context;->getSystemService(Ljava/lang/String;)Ljava/lang/Object;
+
+    move-result-object v1
+
+    check-cast v1, Lcom/samsung/android/wifi/SemWifiManager;
+
+    if-nez v1, :cond_has_sem_wifi_mgr
+
+    new-instance v1, Lcom/samsung/android/wifi/SemWifiManager;
+
+    iget-object v2, v13, Lcom/samsung/android/settings/wifi/WifiSettings;->mContext:Landroid/content/Context;
+
+    const/4 v4, 0x0
+
+    invoke-direct {v1, v2, v4, v4}, Lcom/samsung/android/wifi/SemWifiManager;-><init>(Landroid/content/Context;Lcom/samsung/android/wifi/ISemWifiManager;Landroid/os/Looper;)V
+
+    :cond_has_sem_wifi_mgr
+    iput-object v1, v13, Lcom/samsung/android/settings/wifi/WifiSettings;->mSemWifiManager:Lcom/samsung/android/wifi/SemWifiManager;"""
+
+        if target_init in content:
+            content = content.replace(target_init, repl_init)
+            print("[+] Patched SecSettings.WifiSettings -> guaranteed non-null mSemWifiManager in onCreate")
+
+        # Guard getWifiApBleScanDetail
+        target_ble = """    iget-object v4, p0, Lcom/samsung/android/settings/wifi/WifiSettings;->mSemWifiManager:Lcom/samsung/android/wifi/SemWifiManager;
+
+    invoke-virtual {v4}, Lcom/samsung/android/wifi/SemWifiManager;->getWifiApBleScanDetail()Ljava/util/List;
+
+    move-result-object v4
+
+    invoke-interface {v3, v4}, Ljava/util/List;->addAll(Ljava/util/Collection;)Z"""
+
+        repl_ble = """    iget-object v4, p0, Lcom/samsung/android/settings/wifi/WifiSettings;->mSemWifiManager:Lcom/samsung/android/wifi/SemWifiManager;
+
+    if-eqz v4, :cond_skip_ble_scan
+    :try_start_ble
+    invoke-virtual {v4}, Lcom/samsung/android/wifi/SemWifiManager;->getWifiApBleScanDetail()Ljava/util/List;
+
+    move-result-object v4
+
+    if-eqz v4, :cond_skip_ble_scan
+
+    invoke-interface {v3, v4}, Ljava/util/List;->addAll(Ljava/util/Collection;)Z
+    :try_end_ble
+    .catchall {:try_start_ble .. :try_end_ble} :catch_ble
+    :catch_ble
+    :cond_skip_ble_scan"""
+
+        if target_ble in content:
+            content = content.replace(target_ble, repl_ble)
+            print("[+] Patched SecSettings.WifiSettings -> safe getWifiApBleScanDetail")
 
         # Guard clearAutoHotspotLists call 1 (in onActivityCreated)
         target_clear_1 = """    iget-object p1, p0, Lcom/samsung/android/settings/wifi/WifiSettings;->mSemWifiManager:Lcom/samsung/android/wifi/SemWifiManager;
@@ -592,7 +665,6 @@ def patch_framework_security(apktool_dir, src_dir=None, work_dir=None):
 
         if target_clear_1 in content:
             content = content.replace(target_clear_1, repl_clear_1)
-            print("[+] Patched SecSettings.WifiSettings -> safe call for clearAutoHotspotLists in onActivityCreated")
 
         # Guard clearAutoHotspotLists call 2 (in onDestroyView)
         target_clear_2 = """    iget-object p0, p0, Lcom/samsung/android/settings/wifi/WifiSettings;->mSemWifiManager:Lcom/samsung/android/wifi/SemWifiManager;
@@ -615,10 +687,114 @@ def patch_framework_security(apktool_dir, src_dir=None, work_dir=None):
 
         if target_clear_2 in content:
             content = content.replace(target_clear_2, repl_clear_2)
-            print("[+] Patched SecSettings.WifiSettings -> safe call for clearAutoHotspotLists in onDestroyView")
 
         with open(wifi_settings_smali, "w", encoding="utf-8") as f:
             f.write(content)
+        print("[+] Patched SecSettings.WifiSettings completely with resilient airDrop and null-guards")
+
+    # ==========================================
+    # 8b. Software Update Intent in sec_top_level_settings.xml
+    # Point stock software update to ChoiDujour so it never crashes
+    # ==========================================
+    top_xml = os.path.join(apktool_dir, "system/priv-app/SecSettings/SecSettings.apk/res/xml/sec_top_level_settings.xml")
+    if os.path.isfile(top_xml):
+        with open(top_xml, "r", encoding="utf-8") as f:
+            top_c = f.read()
+        if "com.wssyncmldm" in top_c:
+            top_c = top_c.replace('android:targetPackage="com.wssyncmldm"', 'android:targetPackage="io.mesalabs.choidujour"')
+            top_c = top_c.replace('android:targetClass="com.idm.fotaagent.enabler.ui.userinit.UserInitEntryActivity"', 'android:targetClass="io.mesalabs.choidujour.activity.HomeActivity"')
+            with open(top_xml, "w", encoding="utf-8") as f:
+                f.write(top_c)
+            print("[+] Patched sec_top_level_settings.xml -> top_level_software_update routed to ChoiDujour")
+
+    # ==========================================
+    # 8c. SemFloatingFeature & FloatingFeatureHooks for UN1CA Settings
+    # ==========================================
+    sff_smali = os.path.join(fw_dir, "smali_classes6/com/samsung/android/feature/SemFloatingFeature.smali")
+    if os.path.isfile(sff_smali):
+        with open(sff_smali, "r", encoding="utf-8") as f:
+            sff_c = f.read()
+
+        if "FloatingFeatureHooks;->onGetBoolean" not in sff_c:
+            old_gb = re.search(r'(\.method public whitelist getBoolean\(Ljava/lang/String;\)Z[\s\S]*?if-nez p1, :cond_0[\s\S]*?:cond_0\n)', sff_c)
+            if old_gb:
+                hook_gb = old_gb.group(1) + """    invoke-static {p1}, Lio/mesalabs/unica/FloatingFeatureHooks;->onGetBoolean(Ljava/lang/String;)Ljava/lang/Boolean;
+
+    move-result-object v0
+
+    if-eqz v0, :cond_sff_orig_gb
+
+    invoke-virtual {v0}, Ljava/lang/Boolean;->booleanValue()Z
+
+    move-result p0
+
+    return p0
+
+    :cond_sff_orig_gb
+"""
+                sff_c = sff_c.replace(old_gb.group(1), hook_gb)
+                print("[+] Hooked SemFloatingFeature.getBoolean")
+
+        if "FloatingFeatureHooks;->onGetInt" not in sff_c:
+            old_gi = re.search(r'(\.method public whitelist getInt\(Ljava/lang/String;\)I[\s\S]*?if-nez p1, :cond_0[\s\S]*?:cond_0\n)', sff_c)
+            if old_gi:
+                hook_gi = old_gi.group(1) + """    invoke-static {p1}, Lio/mesalabs/unica/FloatingFeatureHooks;->onGetInt(Ljava/lang/String;)Ljava/lang/Integer;
+
+    move-result-object v0
+
+    if-eqz v0, :cond_sff_orig_gi
+
+    invoke-virtual {v0}, Ljava/lang/Integer;->intValue()I
+
+    move-result p0
+
+    return p0
+
+    :cond_sff_orig_gi
+"""
+                sff_c = sff_c.replace(old_gi.group(1), hook_gi)
+                print("[+] Hooked SemFloatingFeature.getInt")
+
+        if "FloatingFeatureHooks;->onGetString" not in sff_c:
+            old_gs = re.search(r'(\.method public whitelist getString\(Ljava/lang/String;\)Ljava/lang/String;[\s\S]*?if-nez p1, :cond_0[\s\S]*?:cond_0\n)', sff_c)
+            if old_gs:
+                hook_gs = old_gs.group(1) + """    invoke-static {p1}, Lio/mesalabs/unica/FloatingFeatureHooks;->onGetString(Ljava/lang/String;)Ljava/lang/String;
+
+    move-result-object v0
+
+    if-eqz v0, :cond_sff_orig_gs
+
+    return-object v0
+
+    :cond_sff_orig_gs
+"""
+                sff_c = sff_c.replace(old_gs.group(1), hook_gs)
+                print("[+] Hooked SemFloatingFeature.getString")
+
+        with open(sff_smali, "w", encoding="utf-8") as f:
+            f.write(sff_c)
+
+    ffh_dest = os.path.join(fw_dir, "smali_classes6/io/mesalabs/unica/FloatingFeatureHooks.smali")
+    if not os.path.isfile(ffh_dest):
+        ffh_src = os.path.join(src_dir or "/home/arnav/UN1CA-4.0-M51", "unica/mods/settings/smali/system/framework/framework.jar/0003-Introduce-FloatingFeatureHooks.patch")
+        if os.path.isfile(ffh_src):
+            with open(ffh_src, "r", encoding="utf-8") as f:
+                pcontent = f.read()
+            ffh_marker = "diff --git a/smali_classes6/io/mesalabs/unica/FloatingFeatureHooks.smali b/smali_classes6/io/mesalabs/unica/FloatingFeatureHooks.smali"
+            if ffh_marker in pcontent:
+                ffh_body = pcontent.split(ffh_marker)[1]
+                smali_lines = []
+                for line in ffh_body.split("\n"):
+                    if line.startswith("+++"):
+                        continue
+                    elif line.startswith("+"):
+                        smali_lines.append(line[1:])
+                    elif line.startswith("@@"):
+                        continue
+                os.makedirs(os.path.dirname(ffh_dest), exist_ok=True)
+                with open(ffh_dest, "w", encoding="utf-8") as f:
+                    f.write("\n".join(smali_lines))
+                print("[+] Installed FloatingFeatureHooks.smali into framework.jar")
 
     # ==========================================
     # 9. UdfpsSensorWindow.smali in BiometricSetting.apk

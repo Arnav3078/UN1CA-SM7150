@@ -36,6 +36,10 @@ SMALI_PATCH()
         FILE="${FILE:1}"
     done
 
+    if [[ "$FILE" == *"services.jar"* ]]; then
+        return 0
+    fi
+
     DECODE_APK "$PARTITION" "$FILE" || return 1
 
     if [[ "$OPERATION" != "null" ]] && [[ "$OPERATION" != "remove" ]] && \
