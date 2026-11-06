@@ -17,9 +17,24 @@
 .method public getAvailabilityStatus()I
     .locals 1
 
-    const/4 v0, 0x0
+    iget-object v0, p0, Lcom/android/settingslib/core/AbstractPreferenceController;->mContext:Landroid/content/Context;
 
-    return v0
+    const-string p0, "io.mesalabs.choidujour"
+
+    invoke-static {v0, p0}, Lcom/android/settings/Utils;->isPackageEnabled(Landroid/content/Context;Ljava/lang/String;)Z
+
+    move-result p0
+
+    if-nez p0, :cond_0
+
+    const/4 p0, 0x3
+
+    return p0
+
+    :cond_0
+    const/4 p0, 0x0
+
+    return p0
 .end method
 
 .method public bridge synthetic getBackgroundWorkerClass()Ljava/lang/Class;
@@ -48,120 +63,14 @@
     return-object p0
 .end method
 
-.method public getLaunchIntent()Landroid/content/Intent;
-    .locals 3
+.method public bridge synthetic getLaunchIntent()Landroid/content/Intent;
+    .locals 0
 
-    new-instance v0, Landroid/content/Intent;
+    invoke-super {p0}, Lcom/samsung/android/settings/homepage/TopLevelPreferenceController;->getLaunchIntent()Landroid/content/Intent;
 
-    const-string v1, "android.intent.action.MAIN"
+    move-result-object p0
 
-    invoke-direct {v0, v1}, Landroid/content/Intent;-><init>(Ljava/lang/String;)V
-
-    const-string v1, "io.mesalabs.choidujour"
-
-    const-string v2, "io.mesalabs.choidujour.LauncherActivity"
-
-    invoke-virtual {v0, v1, v2}, Landroid/content/Intent;->setClassName(Ljava/lang/String;Ljava/lang/String;)Landroid/content/Intent;
-
-    const-string v1, "from_settings"
-
-    const/4 v2, 0x1
-
-    invoke-virtual {v0, v1, v2}, Landroid/content/Intent;->putExtra(Ljava/lang/String;Z)Landroid/content/Intent;
-
-    const v1, 0x10000000
-
-    invoke-virtual {v0, v1}, Landroid/content/Intent;->addFlags(I)Landroid/content/Intent;
-
-    return-object v0
-.end method
-
-.method public handlePreferenceTreeClick(Landroidx/preference/Preference;)Z
-    .locals 3
-
-    invoke-virtual {p1}, Landroidx/preference/Preference;->getKey()Ljava/lang/String;
-
-    move-result-object v0
-
-    const-string v1, "top_level_choidujour"
-
-    invoke-static {v0, v1}, Landroid/text/TextUtils;->equals(Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Z
-
-    move-result v0
-
-    if-nez v0, :cond_0
-
-    invoke-super {p0, p1}, Lcom/android/settings/core/BasePreferenceController;->handlePreferenceTreeClick(Landroidx/preference/Preference;)Z
-
-    move-result p0
-
-    return p0
-
-    :cond_0
-    new-instance p1, Landroid/content/Intent;
-
-    const-string v0, "android.intent.action.MAIN"
-
-    invoke-direct {p1, v0}, Landroid/content/Intent;-><init>(Ljava/lang/String;)V
-
-    const-string v0, "io.mesalabs.choidujour"
-
-    const-string v1, "io.mesalabs.choidujour.LauncherActivity"
-
-    invoke-virtual {p1, v0, v1}, Landroid/content/Intent;->setClassName(Ljava/lang/String;Ljava/lang/String;)Landroid/content/Intent;
-
-    const-string v0, "from_settings"
-
-    const/4 v1, 0x1
-
-    invoke-virtual {p1, v0, v1}, Landroid/content/Intent;->putExtra(Ljava/lang/String;Z)Landroid/content/Intent;
-
-    const v0, 0x10000000
-
-    invoke-virtual {p1, v0}, Landroid/content/Intent;->addFlags(I)Landroid/content/Intent;
-
-    :try_start_0
-    iget-object v0, p0, Lcom/android/settingslib/core/AbstractPreferenceController;->mContext:Landroid/content/Context;
-
-    invoke-virtual {v0, p1}, Landroid/content/Context;->startActivity(Landroid/content/Intent;)V
-    :try_end_0
-    .catch Ljava/lang/Throwable; {:try_start_0 .. :try_end_0} :catch_0
-
-    const/4 p0, 0x1
-
-    return p0
-
-    :catch_0
-    move-exception p1
-
-    :try_start_1
-    iget-object p0, p0, Lcom/android/settingslib/core/AbstractPreferenceController;->mContext:Landroid/content/Context;
-
-    invoke-virtual {p0}, Landroid/content/Context;->getPackageManager()Landroid/content/pm/PackageManager;
-
-    move-result-object p1
-
-    const-string v0, "io.mesalabs.choidujour"
-
-    invoke-virtual {p1, v0}, Landroid/content/pm/PackageManager;->getLaunchIntentForPackage(Ljava/lang/String;)Landroid/content/Intent;
-
-    move-result-object p1
-
-    if-eqz p1, :cond_1
-
-    const/high16 v0, 0x10000000
-
-    invoke-virtual {p1, v0}, Landroid/content/Intent;->addFlags(I)Landroid/content/Intent;
-
-    invoke-virtual {p0, p1}, Landroid/content/Context;->startActivity(Landroid/content/Intent;)V
-    :try_end_1
-    .catch Ljava/lang/Throwable; {:try_start_1 .. :try_end_1} :catch_1
-
-    :cond_1
-    :catch_1
-    const/4 p0, 0x1
-
-    return p0
+    return-object p0
 .end method
 
 .method public bridge synthetic getSliceHighlightMenuRes()I
@@ -183,11 +92,37 @@
 .end method
 
 .method public getSummary()Ljava/lang/CharSequence;
-    .locals 1
+    .locals 3
 
-    const/4 v0, 0x0
+    new-instance v0, Ljava/util/ArrayList;
 
-    return-object v0
+    invoke-direct {v0}, Ljava/util/ArrayList;-><init>()V
+
+    iget-object v1, p0, Lcom/android/settingslib/core/AbstractPreferenceController;->mContext:Landroid/content/Context;
+
+    const v2, 0x7f142505
+
+    invoke-virtual {v1, v2}, Landroid/content/Context;->getString(I)Ljava/lang/String;
+
+    move-result-object v1
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    invoke-virtual {v0}, Ljava/util/ArrayList;->size()I
+
+    move-result v1
+
+    iget-object p0, p0, Lcom/android/settingslib/core/AbstractPreferenceController;->mContext:Landroid/content/Context;
+
+    invoke-static {p0}, Lcom/android/settings/Utils;->getTopLevelSummarySeparator(Landroid/content/Context;)Ljava/lang/String;
+
+    move-result-object p0
+
+    invoke-static {p0, v0, v1}, Lcom/android/settings/Utils;->buildSummaryString(Ljava/lang/String;Ljava/util/List;I)Ljava/lang/String;
+
+    move-result-object p0
+
+    return-object p0
 .end method
 
 .method public bridge synthetic getValue()Lcom/samsung/android/settings/cube/ControlValue;

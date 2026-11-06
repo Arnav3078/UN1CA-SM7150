@@ -23,7 +23,7 @@
 
 
 # virtual methods
-.method public final onMenuItemClick(Landroid/view/MenuItem;)Z
+.method public final onMenuItemClick(Landroid/view/MenuItem;)V
     .locals 2
 
     iget-object p0, p0, Lio/mesalabs/unica/settings/UnicaSettingsFragment$1;->this$0:Lio/mesalabs/unica/settings/UnicaSettingsFragment;
@@ -76,7 +76,5 @@
     :goto_0
     invoke-virtual {p0, p1}, Landroid/os/PowerManager;->reboot(Ljava/lang/String;)V
 
-    const/4 p0, 0x1
-
-    return p0
+    return-void
 .end method

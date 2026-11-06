@@ -1,57 +1,26 @@
 # shellcheck disable=SC2034
 SKIPUNZIP=1
 
-ADD_TO_WORK_DIR "$MODPATH" "system" "." 0 0 755 "u:object_r:system_file:s0"
-
-BUILDER="$(git -C "$SRC_DIR" config --get remote.origin.url | sed -nE \
-    's#^(https://github\.com/|git@github\.com:)([^/]+)/.*#\2#p')"
-BUILDER="${BUILDER:-Arnav3078}"
-
-LOG_STEP_IN "- Forcing ChoiDujour to fetch OTA metadata from @${BUILDER}'s UN1CA-M51-Updates repository"
-SMALI_PATCH "system" \
-	"system/priv-app/ChoiDujour/ChoiDujour.apk" \
-	"smali/t81.smali" \
-	"replace" \
-    "b(Z)V" \
-    "const-wide v4, 0x5c18d946d5d38297L" \
-    "    const-string v3, \"https://raw.githubusercontent.com/$BUILDER/UN1CA-M51-Updates/main/updates/manifest${BUILD_TYPE}.json\"\n
-    const-wide v4, 0x5c18d946d5d38297L"
-SMALI_PATCH "system" \
-    "system/priv-app/ChoiDujour/ChoiDujour.apk" \
-    "smali/io/mesalabs/choidujour/activity/WhatsNewActivity.smali" \
-    "replace" \
-    "onCreate(Landroid/os/Bundle;)V" \
-    "invoke-direct {v2, v9}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V" \
-    "    const-string v9, \"https://raw.githubusercontent.com/$BUILDER/UN1CA-M51-Updates/main/updates/\"\n
-    invoke-direct {v2, v9}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V"
-LOG_STEP_OUT
-
-LOG "- Enabling ChoiDujour LauncherActivity in AndroidManifest.xml"
-_CHOI_MANIFEST="$APKTOOL_DIR/system/priv-app/ChoiDujour/ChoiDujour.apk/AndroidManifest.xml"
-if [ -f "$_CHOI_MANIFEST" ]; then
-    sed -i 's/android:enabled="false" android:exported="true" android:name="io\.mesalabs\.choidujour\.LauncherActivity"/android:enabled="true" android:exported="true" android:name="io.mesalabs.choidujour.LauncherActivity"/g' "$_CHOI_MANIFEST"
-    sed -i 's/android:name="io\.mesalabs\.choidujour\.LauncherActivity" android:enabled="false"/android:name="io.mesalabs.choidujour.LauncherActivity" android:enabled="true"/g' "$_CHOI_MANIFEST"
+if ! $ROM_IS_OFFICIAL; then
+    LOG "\033[0;33m! Build is not official. Skipping\033[0m"
+    return 0
 fi
-unset _CHOI_MANIFEST
+
+ADD_TO_WORK_DIR "$MODPATH" "system" "." 0 0 755 "u:object_r:system_file:s0"
 
 LOG "- Patching /system/system/etc/security/otacerts.zip"
 EVAL "rm \"$WORK_DIR/system/system/etc/security/otacerts.zip\""
-EVAL "cd \"$SRC_DIR\"; zip -q \"$WORK_DIR/system/system/etc/security/otacerts.zip\" \"./security/aosp_testkey.x509.pem\""
+EVAL "cd \"$SRC_DIR\"; zip -q \"$WORK_DIR/system/system/etc/security/otacerts.zip\" \"./security/unica_ota.x509.pem\""
 
 DECODE_APK "system" "system/priv-app/SecSettings/SecSettings.apk"
 
-SETTINGS_DIR="$APKTOOL_DIR/system/priv-app/SecSettings/SecSettings.apk"
-if [ -f "$SETTINGS_DIR/smali_classes2/com/android/settings/Settings\$FOTASuggestionActivity.smali" ]; then
-    APPLY_PATCH "system" "system/priv-app/SecSettings/SecSettings.apk" \
-        "$MODPATH/suggestions/SecSettings.apk/0001-Launch-UN1CA-Updates-from-suggestions.patch"
-fi
+APPLY_PATCH "system" "system/priv-app/SecSettings/SecSettings.apk" \
+    "$MODPATH/suggestions/SecSettings.apk/0001-Launch-UN1CA-Updates-from-suggestions.patch"
 
 # Disable stock OTA references
-if grep -q "isOTAUpgradeAllowed(Landroid/content/Context;)Z" "$SETTINGS_DIR/smali_classes3/com/samsung/android/settings/softwareupdate/SoftwareUpdateUtils.smali" 2>/dev/null; then
-    SMALI_PATCH "system" "system/priv-app/SecSettings/SecSettings.apk" \
-        "smali_classes3/com/samsung/android/settings/softwareupdate/SoftwareUpdateUtils.smali" "return" \
-        "isOTAUpgradeAllowed(Landroid/content/Context;)Z" "false"
-fi
+SMALI_PATCH "system" "system/priv-app/SecSettings/SecSettings.apk" \
+    "smali_classes3/com/samsung/android/settings/softwareupdate/SoftwareUpdateUtils.smali" "return" \
+    "isOTAUpgradeAllowed(Landroid/content/Context;)Z" "false"
 
 # Dynamically patch SecSettings
 # - Add missing/non-xml files in place

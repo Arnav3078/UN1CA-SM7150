@@ -467,13 +467,80 @@ def patch_framework_security(apktool_dir, src_dir=None, work_dir=None):
                 ".end method"
             )
             content = content.replace(old_airdrop.group(1), new_airdrop)
-            with open(sem_wifi_smali, "w", encoding="utf-8") as f:
-                f.write(content)
             print("[+] Patched SemWifiManager.isAirdropInterfaceActive -> safe null check and try-catch")
+
+        old_clear = re.search(r'(\.method public blacklist clearAutoHotspotLists\(\)V[\s\S]*?\.end method)', content)
+        if old_clear and "cond_has_service" not in old_clear.group(1):
+            new_clear = (
+                ".method public blacklist clearAutoHotspotLists()V\n"
+                "    .locals 1\n"
+                "\n"
+                "    :try_start_0\n"
+                "    iget-object v0, p0, Lcom/samsung/android/wifi/SemWifiManager;->mService:Lcom/samsung/android/wifi/ISemWifiManager;\n"
+                "\n"
+                "    if-nez v0, :cond_has_service\n"
+                "\n"
+                "    const-string v0, \"sem_wifi\"\n"
+                "\n"
+                "    invoke-static {v0}, Landroid/os/ServiceManager;->getService(Ljava/lang/String;)Landroid/os/IBinder;\n"
+                "\n"
+                "    move-result-object v0\n"
+                "\n"
+                "    invoke-static {v0}, Lcom/samsung/android/wifi/ISemWifiManager$Stub;->asInterface(Landroid/os/IBinder;)Lcom/samsung/android/wifi/ISemWifiManager;\n"
+                "\n"
+                "    move-result-object v0\n"
+                "\n"
+                "    iput-object v0, p0, Lcom/samsung/android/wifi/SemWifiManager;->mService:Lcom/samsung/android/wifi/ISemWifiManager;\n"
+                "\n"
+                "    :cond_has_service\n"
+                "    iget-object p0, p0, Lcom/samsung/android/wifi/SemWifiManager;->mService:Lcom/samsung/android/wifi/ISemWifiManager;\n"
+                "\n"
+                "    if-eqz p0, :cond_ret\n"
+                "\n"
+                "    invoke-interface {p0}, Lcom/samsung/android/wifi/ISemWifiManager;->clearAutoHotspotLists()V\n"
+                "    :try_end_0\n"
+                "    .catchall {:try_start_0 .. :try_end_0} :catch_0\n"
+                "\n"
+                "    :cond_ret\n"
+                "    :catch_0\n"
+                "    return-void\n"
+                ".end method"
+            )
+            content = content.replace(old_clear.group(1), new_clear)
+            print("[+] Patched SemWifiManager.clearAutoHotspotLists -> safe binder lookup and try-catch")
+
+        with open(sem_wifi_smali, "w", encoding="utf-8") as f:
+            f.write(content)
+
+    # ==========================================
+    # 7b. WallpaperManager.smali backward compatibility bridge
+    # Fixes NoSuchMethodError: addOnSemColorsChangedListener(OnSemColorsChangedListener, Handler)
+    # Called by BiometricSetting.apk (com.samsung.android.biometrics.app.setting)
+    # ==========================================
+    wm_smali = os.path.join(fw_dir, "smali/android/app/WallpaperManager.smali")
+    if os.path.isfile(wm_smali):
+        with open(wm_smali, "r", encoding="utf-8") as f:
+            content = f.read()
+
+        bridge_method = """
+.method public blacklist addOnSemColorsChangedListener(Landroid/app/OnSemColorsChangedListener;Landroid/os/Handler;)V
+    .locals 0
+
+    invoke-virtual {p0, p2, p1}, Landroid/app/WallpaperManager;->addOnSemColorsChangedListener(Landroid/os/Handler;Landroid/app/OnSemColorsChangedListener;)V
+
+    return-void
+.end method
+"""
+        target_wm = ".method public blacklist addOnSemColorsChangedListener(Landroid/os/Handler;Landroid/app/OnSemColorsChangedListener;)V"
+        if target_wm in content and "addOnSemColorsChangedListener(Landroid/app/OnSemColorsChangedListener;Landroid/os/Handler;)V" not in content:
+            content = content.replace(target_wm, bridge_method.strip() + "\n\n" + target_wm)
+            with open(wm_smali, "w", encoding="utf-8") as f:
+                f.write(content)
+            print("[+] Patched WallpaperManager.smali -> added backward compatibility bridge for addOnSemColorsChangedListener(listener, handler)")
 
     # ==========================================
     # 8. WifiSettings.smali in SecSettings.apk
-    # Null check mSemWifiManager before isAirdropInterfaceActive
+    # Null check mSemWifiManager before isAirdropInterfaceActive and clearAutoHotspotLists
     # ==========================================
     wifi_settings_smali = os.path.join(apktool_dir, "system/priv-app/SecSettings/SecSettings.apk/smali_classes4/com/samsung/android/settings/wifi/WifiSettings.smali")
     if os.path.isfile(wifi_settings_smali):
@@ -506,9 +573,52 @@ def patch_framework_security(apktool_dir, src_dir=None, work_dir=None):
 
         if target_wifi in content:
             content = content.replace(target_wifi, repl_wifi)
-            with open(wifi_settings_smali, "w", encoding="utf-8") as f:
-                f.write(content)
-            print("[+] Patched SecSettings.WifiSettings -> safe null check for mSemWifiManager")
+            print("[+] Patched SecSettings.WifiSettings -> safe null check for isAirdropInterfaceActive")
+
+        # Guard clearAutoHotspotLists call 1 (in onActivityCreated)
+        target_clear_1 = """    iget-object p1, p0, Lcom/samsung/android/settings/wifi/WifiSettings;->mSemWifiManager:Lcom/samsung/android/wifi/SemWifiManager;
+
+    invoke-virtual {p1}, Lcom/samsung/android/wifi/SemWifiManager;->clearAutoHotspotLists()V"""
+
+        repl_clear_1 = """    iget-object p1, p0, Lcom/samsung/android/settings/wifi/WifiSettings;->mSemWifiManager:Lcom/samsung/android/wifi/SemWifiManager;
+
+    if-eqz p1, :cond_skip_clear_1
+    :try_start_clear_1
+    invoke-virtual {p1}, Lcom/samsung/android/wifi/SemWifiManager;->clearAutoHotspotLists()V
+    :try_end_clear_1
+    .catchall {:try_start_clear_1 .. :try_end_clear_1} :catch_clear_1
+    :catch_clear_1
+    :cond_skip_clear_1"""
+
+        if target_clear_1 in content:
+            content = content.replace(target_clear_1, repl_clear_1)
+            print("[+] Patched SecSettings.WifiSettings -> safe call for clearAutoHotspotLists in onActivityCreated")
+
+        # Guard clearAutoHotspotLists call 2 (in onDestroyView)
+        target_clear_2 = """    iget-object p0, p0, Lcom/samsung/android/settings/wifi/WifiSettings;->mSemWifiManager:Lcom/samsung/android/wifi/SemWifiManager;
+
+    invoke-virtual {p0}, Lcom/samsung/android/wifi/SemWifiManager;->clearAutoHotspotLists()V
+
+    return-void"""
+
+        repl_clear_2 = """    iget-object p0, p0, Lcom/samsung/android/settings/wifi/WifiSettings;->mSemWifiManager:Lcom/samsung/android/wifi/SemWifiManager;
+
+    if-eqz p0, :cond_skip_clear_2
+    :try_start_clear_2
+    invoke-virtual {p0}, Lcom/samsung/android/wifi/SemWifiManager;->clearAutoHotspotLists()V
+    :try_end_clear_2
+    .catchall {:try_start_clear_2 .. :try_end_clear_2} :catch_clear_2
+    :catch_clear_2
+    :cond_skip_clear_2
+
+    return-void"""
+
+        if target_clear_2 in content:
+            content = content.replace(target_clear_2, repl_clear_2)
+            print("[+] Patched SecSettings.WifiSettings -> safe call for clearAutoHotspotLists in onDestroyView")
+
+        with open(wifi_settings_smali, "w", encoding="utf-8") as f:
+            f.write(content)
 
     # ==========================================
     # 9. UdfpsSensorWindow.smali in BiometricSetting.apk
