@@ -65,9 +65,10 @@ SET_PROP "vendor" "ro.hwui.use_vulkan" "false"
 SET_PROP "vendor" "debug.hwui.renderer" "skiagl"
 SET_PROP "vendor" "ro.surface_flinger.supports_background_blur" "1"
 SET_PROP "vendor" "persist.sys.unica.nativeblur" "true"
-SET_PROP "vendor" "ro.sf.blurs_are_expensive" "1"
+SET_PROP "vendor" "ro.sf.blurs_are_expensive" --delete
 SET_PROP "vendor" "debug.sf.latch_unsignaled" "1"
-SET_PROP "vendor" "debug.sf.enable_gl_backpressure" "1"
+SET_PROP "vendor" "debug.sf.enable_gl_backpressure" --delete
+SET_PROP "vendor" "debug.sf.disable_backpressure" "1"
 SET_PROP "vendor" "sys.sysctl.swappiness" "60"
 SET_PROP "vendor" "ro.surface_flinger.max_frame_buffer_acquired_buffers" "3"
 SET_PROP "vendor" "sys.use_fifo_ui" "1"
@@ -79,9 +80,10 @@ SET_PROP "system" "debug.hwui.renderer" "skiagl"
 SET_PROP "system" "ro.surface_flinger.supports_background_blur" "1"
 SET_PROP "system" "persist.sys.unica.nativeblur" "true"
 SET_PROP "system" "persist.sys.sf.disable_blurs" --delete
-SET_PROP "system" "ro.sf.blurs_are_expensive" "1"
+SET_PROP "system" "ro.sf.blurs_are_expensive" --delete
 SET_PROP "system" "debug.sf.latch_unsignaled" "1"
-SET_PROP "system" "debug.sf.enable_gl_backpressure" "1"
+SET_PROP "system" "debug.sf.enable_gl_backpressure" --delete
+SET_PROP "system" "debug.sf.disable_backpressure" "1"
 SET_PROP "system" "sys.sysctl.swappiness" "60"
 SET_PROP "system" "ro.surface_flinger.max_frame_buffer_acquired_buffers" "3"
 SET_PROP "system" "sys.use_fifo_ui" "1"
@@ -91,6 +93,12 @@ SET_PROP "vendor" "debug.renderengine.backend" --delete
 SET_PROP "system" "debug.renderengine.backend" --delete
 SET_PROP "system" "persist.sys.unica.vulkan" "false"
 SET_PROP "vendor" "persist.sys.unica.vulkan" "false"
+SET_PROP "system" "persist.sys.unica.bootsound" "false"
+SET_PROP "system" "persist.device_config.configuration.disable_rescue_party_factory_reset" "true"
+SET_PROP "system" "persist.sys.rescue_level" "0"
+SET_PROP "system" "persist.device_config.attempted_boot_count" "0"
+SET_PROP "system" "persist.zygote.zygote_next.start_on_boot" "false"
+SET_PROP "vendor" "persist.zygote.zygote_next.start_on_boot" "false"
 
 if [ -f "$WORK_DIR/vendor/build.prop" ]; then
     sed -i 's/^ro\.hwui\.use_vulkan=.*/ro.hwui.use_vulkan=false/' "$WORK_DIR/vendor/build.prop"
@@ -266,8 +274,11 @@ LOG_STEP_OUT
 LOG_STEP_IN "- Enabling S25/S26 Now Nudge, Now Brief, Fullscreen Wallpaper AOD & Extra Brightness"
 SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_LCD_CONFIG_AOD_FULLSCREEN" "1"
 SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_FRAMEWORK_CONFIG_AGENT_WITH_PDE" "1"
-SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_FRAMEWORK_CONFIG_NOW_NUDGE_VERSION" "1"
+SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_FRAMEWORK_CONFIG_NOW_NUDGE_VERSION" "2"
+SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_FRAMEWORK_CONFIG_NOW_BRIEF_VERSION" "1"
 SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_COMMON_CONFIG_AI_VERSION" "20261"
+SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_COMMON_SUPPORT_STELLA" "TRUE"
+SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_COMMON_SUPPORT_UNPACK" "TRUE"
 SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_FRAMEWORK_SUPPORT_PERSONALIZED_DATA_CORE" "TRUE"
 SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_SYSTEMUI_SUPPORT_BRIEF_NOTIFICATION" "TRUE"
 SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_FRAMEWORK_SUPPORT_AI_BRIEF_FOR_UT" "TRUE"
@@ -400,6 +411,28 @@ if [ -f "$PLAT_SEPOLICY" ]; then
         echo "(allow priv_app_36 fota_data_file (dir (create open read write getattr setattr search add_name remove_name rmdir)))" >> "$PLAT_SEPOLICY"
         echo "(allow priv_app_36 fota_data_file (file (create open read write getattr setattr unlink map)))" >> "$PLAT_SEPOLICY"
     fi
+    for SUSPEND_RULE in \
+        "(allow system_suspend debugfs (dir (getattr search)))" \
+        "(allow system_suspend debugfs_wakeup_sources (dir (ioctl read getattr lock open watch watch_reads search)))" \
+        "(allow system_suspend debugfs_wakeup_sources (file (ioctl read getattr lock map open watch watch_reads)))" \
+        "(allow system_suspend debugfs_wakeup_sources (lnk_file (ioctl read getattr lock open watch watch_reads)))"; do
+        if ! grep -qF "$SUSPEND_RULE" "$PLAT_SEPOLICY"; then
+            echo "$SUSPEND_RULE" >> "$PLAT_SEPOLICY"
+        fi
+    done
+fi
+
+if [ -f "$WORK_DIR/vendor/etc/selinux/vendor_file_contexts" ]; then
+    if ! grep -qE '^[[:space:]]*/dev/ion[[:space:]]+u:object_r:ion_device:s0' "$WORK_DIR/vendor/etc/selinux/vendor_file_contexts"; then
+        sed -i -E '/^[[:space:]]*\/dev\/ion([[:space:]]|$)/d' "$WORK_DIR/vendor/etc/selinux/vendor_file_contexts"
+        echo '/dev/ion    u:object_r:ion_device:s0' >> "$WORK_DIR/vendor/etc/selinux/vendor_file_contexts"
+    fi
+fi
+if [ -f "$WORK_DIR/vendor/etc/selinux/vendor_sepolicy.cil" ]; then
+    if ! grep -q "allow hal_graphics_allocator ion_device" "$WORK_DIR/vendor/etc/selinux/vendor_sepolicy.cil"; then
+        CIL_NAME="$(cat "$WORK_DIR/vendor/etc/selinux/plat_sepolicy_vers.txt" 2>/dev/null || echo "33.0")"
+        echo "(allow hal_graphics_allocator ion_device_${CIL_NAME//./_} (chr_file (ioctl read write getattr lock append map open watch watch_reads)))" >> "$WORK_DIR/vendor/etc/selinux/vendor_sepolicy.cil"
+    fi
 fi
 
 mkdir -p "$WORK_DIR/system/system/etc/init"
@@ -410,6 +443,42 @@ on post-fs-data
 EOF
 echo "/system/etc/init/unica_fota\.rc u:object_r:system_file:s0" >> "$WORK_DIR/configs/file_context-system" 2>/dev/null || true
 echo "system/etc/init/unica_fota.rc 0 0 644" >> "$WORK_DIR/configs/fs_config-system" 2>/dev/null || true
+LOG_STEP_OUT
+
+LOG_STEP_IN "- Neutralizing bootchecker binary and service to prevent rescueparty bootloops"
+if [ -f "$WORK_DIR/system/system/bin/bootchecker" ]; then
+    cat << 'EOF' > "$WORK_DIR/system/system/bin/bootchecker"
+#!/system/bin/sh
+exit 0
+EOF
+    chmod 755 "$WORK_DIR/system/system/bin/bootchecker"
+fi
+if [ -f "$WORK_DIR/system/system/etc/init/bootchecker.rc" ]; then
+    sed -i 's/class late_start/disabled/g' "$WORK_DIR/system/system/etc/init/bootchecker.rc"
+    sed -i 's/restart bootchecker/# restart bootchecker/g' "$WORK_DIR/system/system/etc/init/bootchecker.rc"
+    sed -i 's/start bootchecker-bootc/# start bootchecker-bootc/g' "$WORK_DIR/system/system/etc/init/bootchecker.rc"
+fi
+LOG_STEP_OUT
+
+LOG_STEP_IN "- Installing ChoiDujour OTA application and privapp permissions"
+if [ -f "$SRC_DIR/unica/mods/choidujour/system/priv-app/ChoiDujour/ChoiDujour.apk" ]; then
+    mkdir -p "$WORK_DIR/system/system/priv-app/ChoiDujour"
+    cp -af "$SRC_DIR/unica/mods/choidujour/system/priv-app/ChoiDujour/ChoiDujour.apk" "$WORK_DIR/system/system/priv-app/ChoiDujour/"
+    chmod 644 "$WORK_DIR/system/system/priv-app/ChoiDujour/ChoiDujour.apk"
+    echo "/system/priv-app/ChoiDujour(/.*)? u:object_r:system_file:s0" >> "$WORK_DIR/configs/file_context-system" 2>/dev/null || true
+    echo "system/priv-app/ChoiDujour 0 0 755" >> "$WORK_DIR/configs/fs_config-system" 2>/dev/null || true
+    echo "system/priv-app/ChoiDujour/ChoiDujour.apk 0 0 644" >> "$WORK_DIR/configs/fs_config-system" 2>/dev/null || true
+
+    mkdir -p "$WORK_DIR/system/system/etc/default-permissions"
+    cp -af "$SRC_DIR/unica/mods/choidujour/system/etc/default-permissions/default-permissions-io.mesalabs.choidujour.xml" "$WORK_DIR/system/system/etc/default-permissions/"
+    chmod 644 "$WORK_DIR/system/system/etc/default-permissions/default-permissions-io.mesalabs.choidujour.xml"
+    echo "system/etc/default-permissions/default-permissions-io.mesalabs.choidujour.xml 0 0 644" >> "$WORK_DIR/configs/fs_config-system" 2>/dev/null || true
+
+    mkdir -p "$WORK_DIR/system/system/etc/permissions"
+    cp -af "$SRC_DIR/unica/mods/choidujour/system/etc/permissions/privapp-permissions-io.mesalabs.choidujour.xml" "$WORK_DIR/system/system/etc/permissions/"
+    chmod 644 "$WORK_DIR/system/system/etc/permissions/privapp-permissions-io.mesalabs.choidujour.xml"
+    echo "system/etc/permissions/privapp-permissions-io.mesalabs.choidujour.xml 0 0 644" >> "$WORK_DIR/configs/fs_config-system" 2>/dev/null || true
+fi
 LOG_STEP_OUT
 
 LOG_STEP_IN "- Installing fallback Yurikey keybox into system/etc/security/keybox.xml"

@@ -797,6 +797,33 @@ def patch_framework_security(apktool_dir, src_dir=None, work_dir=None):
                 print("[+] Installed FloatingFeatureHooks.smali into framework.jar")
 
     # ==========================================
+    # 8d. GamesPropsUtils.smali for framework.jar
+    # ==========================================
+    gpu_dest = os.path.join(fw_dir, "smali_classes6/io/mesalabs/unica/GamesPropsUtils.smali")
+    if not os.path.isfile(gpu_dest):
+        gpu_src = os.path.join(src_dir or "/home/arnav/UN1CA-4.0-M51", "unica/mods/gamesprops/smali/system/framework/framework.jar/0001-Introduce-GamesPropsUtils.patch")
+        if os.path.isfile(gpu_src):
+            with open(gpu_src, "r", encoding="utf-8") as f:
+                pcontent = f.read()
+            gpu_marker = "diff --git a/smali_classes6/io/mesalabs/unica/GamesPropsUtils.smali b/smali_classes6/io/mesalabs/unica/GamesPropsUtils.smali"
+            if gpu_marker not in pcontent:
+                gpu_marker = "diff --git a/smali_classes7/io/mesalabs/unica/GamesPropsUtils.smali b/smali_classes7/io/mesalabs/unica/GamesPropsUtils.smali"
+            if gpu_marker in pcontent:
+                gpu_body = pcontent.split(gpu_marker)[1]
+                smali_lines = []
+                for line in gpu_body.split("\n"):
+                    if line.startswith("+++"):
+                        continue
+                    elif line.startswith("+"):
+                        smali_lines.append(line[1:])
+                    elif line.startswith("@@"):
+                        continue
+                os.makedirs(os.path.dirname(gpu_dest), exist_ok=True)
+                with open(gpu_dest, "w", encoding="utf-8") as f:
+                    f.write("\n".join(smali_lines))
+                print("[+] Installed GamesPropsUtils.smali into framework.jar")
+
+    # ==========================================
     # 9. UdfpsSensorWindow.smali in BiometricSetting.apk
     # Return early if p1 is null (side-mounted fingerprint)
     # ==========================================
@@ -829,6 +856,75 @@ def patch_framework_security(apktool_dir, src_dir=None, work_dir=None):
             with open(udfps_smali, "w", encoding="utf-8") as f:
                 f.write(content)
             print("[+] Patched BiometricSetting.UdfpsSensorWindow -> safe return on null base window")
+
+    # ==========================================
+    # 9b. UdfpsKeyguardClient.smali in BiometricSetting.apk
+    # Wrap addOnSemColorsChangedListener and removeOnSemColorsChangedListener with try/catch
+    # ==========================================
+    udfps_kc = os.path.join(apktool_dir, "system/priv-app/BiometricSetting/BiometricSetting.apk/smali/com/samsung/android/biometrics/app/setting/fingerprint/UdfpsKeyguardClient.smali")
+    if os.path.isfile(udfps_kc):
+        with open(udfps_kc, "r", encoding="utf-8") as f:
+            kc_c = f.read()
+
+        old_add = "invoke-virtual {p1, p0, v0}, Landroid/app/WallpaperManager;->addOnSemColorsChangedListener(Landroid/app/OnSemColorsChangedListener;Landroid/os/Handler;)V\n\n    invoke-virtual {p0}, Lcom/samsung/android/biometrics/app/setting/fingerprint/UdfpsKeyguardClient;->updateWallpaperFontColor()V"
+        new_add = ":try_start_wm_add\n    invoke-virtual {p1, p0, v0}, Landroid/app/WallpaperManager;->addOnSemColorsChangedListener(Landroid/app/OnSemColorsChangedListener;Landroid/os/Handler;)V\n\n    invoke-virtual {p0}, Lcom/samsung/android/biometrics/app/setting/fingerprint/UdfpsKeyguardClient;->updateWallpaperFontColor()V\n    :try_end_wm_add\n    .catchall {:try_start_wm_add .. :try_end_wm_add} :catchall_wm_add\n    :catchall_wm_add"
+
+        if old_add in kc_c:
+            kc_c = kc_c.replace(old_add, new_add)
+            print("[+] Guarded UdfpsKeyguardClient.addOnSemColorsChangedListener with try/catch")
+
+        old_rem = "invoke-virtual {v0, p0}, Landroid/app/WallpaperManager;->removeOnSemColorsChangedListener(Landroid/app/OnSemColorsChangedListener;)V"
+        new_rem = ":try_start_wm_rem\n    invoke-virtual {v0, p0}, Landroid/app/WallpaperManager;->removeOnSemColorsChangedListener(Landroid/app/OnSemColorsChangedListener;)V\n    :try_end_wm_rem\n    .catchall {:try_start_wm_rem .. :try_end_wm_rem} :catchall_wm_rem\n    :catchall_wm_rem"
+
+        if old_rem in kc_c:
+            kc_c = kc_c.replace(old_rem, new_rem)
+            print("[+] Guarded UdfpsKeyguardClient.removeOnSemColorsChangedListener with try/catch")
+
+        with open(udfps_kc, "w", encoding="utf-8") as f:
+            f.write(kc_c)
+
+    # ==========================================
+    # 10. UN1CA PreferenceControllers in SecSettings.apk
+    # Ensure Vulkan, MaxRefreshRate, BootSound, and GamesProps options are always visible
+    # ==========================================
+    controllers_to_enable = [
+        "smali_classes4/io/mesalabs/unica/settings/ui/VulkanPreferenceController.smali",
+        "smali_classes4/io/mesalabs/unica/settings/ui/ForceMaxRefreshRatePreferenceController.smali",
+        "smali_classes4/io/mesalabs/unica/settings/ui/BootSoundPreferenceController.smali",
+        "smali_classes4/io/mesalabs/unica/settings/extra/GamesPropsPreferenceController.smali"
+    ]
+
+    avail_pattern = re.compile(r'(\.method public getAvailabilityStatus\(\)I[\s\S]*?\.end method)')
+    safe_avail = ".method public getAvailabilityStatus()I\n    .locals 1\n\n    const/4 v0, 0x0\n\n    return v0\n.end method"
+
+    for rel_path in controllers_to_enable:
+        ctrl_path = os.path.join(apktool_dir, "system/priv-app/SecSettings/SecSettings.apk", rel_path)
+        if os.path.isfile(ctrl_path):
+            with open(ctrl_path, "r", encoding="utf-8") as f:
+                ctrl_c = f.read()
+            match = avail_pattern.search(ctrl_c)
+            if match:
+                ctrl_c = ctrl_c.replace(match.group(1), safe_avail)
+                with open(ctrl_path, "w", encoding="utf-8") as f:
+                    f.write(ctrl_c)
+                print(f"[+] Patched {os.path.basename(ctrl_path)} -> getAvailabilityStatus() returns AVAILABLE (0)")
+
+    # ==========================================
+    # 11. SoftwareUpdateUtils.smali in SecSettings.apk
+    # Neutralize startFotaActivityOrBroadcast to prevent any stock FOTA crash
+    # ==========================================
+    fota_smali = os.path.join(apktool_dir, "system/priv-app/SecSettings/SecSettings.apk/smali_classes3/com/samsung/android/settings/softwareupdate/SoftwareUpdateUtils.smali")
+    if os.path.isfile(fota_smali):
+        with open(fota_smali, "r", encoding="utf-8") as f:
+            fota_c = f.read()
+
+        old_start_fota = re.search(r'(\.method public static startFotaActivityOrBroadcast\(Landroid/content/Context;Ljava/lang/String;\)V[\s\S]*?\.end method)', fota_c)
+        if old_start_fota:
+            new_start_fota = ".method public static startFotaActivityOrBroadcast(Landroid/content/Context;Ljava/lang/String;)V\n    .locals 0\n\n    return-void\n.end method"
+            fota_c = fota_c.replace(old_start_fota.group(1), new_start_fota)
+            with open(fota_smali, "w", encoding="utf-8") as f:
+                f.write(fota_c)
+            print("[+] Patched SoftwareUpdateUtils.startFotaActivityOrBroadcast -> safe no-op")
 
     print("[+] All framework, biometrics, settings, and runtime patches applied successfully!")
     return True
