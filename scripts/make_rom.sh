@@ -178,31 +178,32 @@ if $BUILD_ROM; then
 
     BUILD_APKS
 
-    # Guarantee stock S23 multi-dex DEX 041 services.jar and precompiled oat/odex/art container integrity
+    # Guarantee stock S23 multi-dex DEX 041 services.jar container integrity and apply essential in-place DEX patches
     FW_S23_SRC="${FW_DIR:-$SRC_DIR/out/fw}/SM-S911B_EUX"
     if [ -f "$FW_S23_SRC/system/system/framework/services.jar" ]; then
-        LOG_STEP_IN "- Restoring genuine stock S23 multi-dex services.jar and precompiled oat/odex/art"
+        LOG_STEP_IN "- Restoring genuine stock S23 multi-dex services.jar"
         cp -af "$FW_S23_SRC/system/system/framework/services.jar" "$WORK_DIR/system/system/framework/services.jar"
-        mkdir -p "$WORK_DIR/system/system/framework/oat/arm64"
-        cp -af "$FW_S23_SRC/system/system/framework/oat/arm64/services."* "$WORK_DIR/system/system/framework/oat/arm64/"
+        # Purge incompatible SM8550 precompiled oat/odex/art files to prevent ART boot aborts
+        rm -rf "$WORK_DIR/system/system/framework/oat" 2>/dev/null || true
+        sed -i '/framework\/oat/d' "$WORK_DIR/configs/fs_config-system" 2>/dev/null || true
+        sed -i '/framework\/oat/d' "$WORK_DIR/configs/file_context-system" 2>/dev/null || true
+        LOG_STEP_OUT
+    fi
 
-        for ext in art odex vdex; do
-            if ! grep -q "framework/oat/arm64/services\.$ext" "$WORK_DIR/configs/fs_config-system" 2>/dev/null; then
-                echo "system/framework/oat/arm64/services.$ext 0 0 644 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-system"
-            fi
-            if ! grep -q "framework/oat/arm64/services\\.$ext" "$WORK_DIR/configs/file_context-system" 2>/dev/null; then
-                echo "/system/framework/oat/arm64/services\.$ext u:object_r:system_file:s0" >> "$WORK_DIR/configs/file_context-system"
-            fi
-        done
-        if ! grep -q "^system/framework/oat " "$WORK_DIR/configs/fs_config-system" 2>/dev/null; then
-            echo "system/framework/oat 0 0 755 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-system"
-        fi
-        if ! grep -q "^system/framework/oat/arm64 " "$WORK_DIR/configs/fs_config-system" 2>/dev/null; then
-            echo "system/framework/oat/arm64 0 0 755 capabilities=0x0" >> "$WORK_DIR/configs/fs_config-system"
-        fi
-        if ! grep -q "framework/oat/arm64 " "$WORK_DIR/configs/file_context-system" 2>/dev/null; then
-            echo "/system/framework/oat/arm64 u:object_r:system_file:s0" >> "$WORK_DIR/configs/file_context-system"
-        fi
+    # Apply direct binary in-place DEX 041 patches to services.jar
+    if [ -f "$SRC_DIR/unica/patches/signature/patch_signature.py" ]; then
+        LOG_STEP_IN "- Binary patching services.jar for shared user 1000 reconciliation and KnoxGuard bypass"
+        python3 "$SRC_DIR/unica/patches/signature/patch_signature.py" services "$WORK_DIR" || true
+        LOG_STEP_OUT
+    fi
+    if [ -f "$SRC_DIR/unica/patches/vold/patch_vold_ce.py" ]; then
+        LOG_STEP_IN "- Ensuring unlockCeStorage GateKeeper HAT bypass in services.jar"
+        python3 "$SRC_DIR/unica/patches/vold/patch_vold_ce.py" "$WORK_DIR" || true
+        LOG_STEP_OUT
+    fi
+    if [ -f "$SRC_DIR/target/$TARGET_CODENAME/tools/patch_services_pif.py" ]; then
+        LOG_STEP_IN "- Patching services.jar for Play Integrity task permission bypass"
+        python3 "$SRC_DIR/target/$TARGET_CODENAME/tools/patch_services_pif.py" "$WORK_DIR" || true
         LOG_STEP_OUT
     fi
 
