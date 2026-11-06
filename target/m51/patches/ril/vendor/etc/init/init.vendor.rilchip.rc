@@ -23,21 +23,17 @@ service irsc_util_oem /vendor/bin/irsc_util "/vendor/etc/sec_config_oem"
     oneshot
 
 # Avoid running ril-daemon services on qualcomm model
-service vendor.ril-daemon /vendor/bin/hw/rild
+service vendor.ril-daemon /vendor/bin/hw/rild-dummy
     override
-    disabled
 
-service vendor.ril-daemon1 /vendor/bin/hw/rild
+service vendor.ril-daemon1 /vendor/bin/hw/rild-dummy
     override
-    disabled
 
-service vendor.ril-daemon2 /vendor/bin/hw/rild
+service vendor.ril-daemon2 /vendor/bin/hw/rild-dummy
     override
-    disabled
 
-service vendor.ril-daemon3 /vendor/bin/hw/rild
+service vendor.ril-daemon3 /vendor/bin/hw/rild-dummy
     override
-    disabled
 
 # Disable vendor.embmsslServer to fix VTS failure
 # as vendor.embmsslServer is not running even though it has interface

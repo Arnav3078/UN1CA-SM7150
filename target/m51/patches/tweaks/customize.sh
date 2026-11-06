@@ -94,11 +94,6 @@ SET_PROP "system" "debug.renderengine.backend" --delete
 SET_PROP "system" "persist.sys.unica.vulkan" "false"
 SET_PROP "vendor" "persist.sys.unica.vulkan" "false"
 SET_PROP "system" "persist.sys.unica.bootsound" "false"
-SET_PROP "system" "persist.device_config.configuration.disable_rescue_party_factory_reset" "true"
-SET_PROP "system" "persist.sys.rescue_level" "0"
-SET_PROP "system" "persist.device_config.attempted_boot_count" "0"
-SET_PROP "system" "persist.zygote.zygote_next.start_on_boot" "false"
-SET_PROP "vendor" "persist.zygote.zygote_next.start_on_boot" "false"
 
 if [ -f "$WORK_DIR/vendor/build.prop" ]; then
     sed -i 's/^ro\.hwui\.use_vulkan=.*/ro.hwui.use_vulkan=false/' "$WORK_DIR/vendor/build.prop"
@@ -445,23 +440,7 @@ echo "/system/etc/init/unica_fota\.rc u:object_r:system_file:s0" >> "$WORK_DIR/c
 echo "system/etc/init/unica_fota.rc 0 0 644" >> "$WORK_DIR/configs/fs_config-system" 2>/dev/null || true
 LOG_STEP_OUT
 
-LOG_STEP_IN "- Neutralizing bootchecker binary and service to prevent rescueparty bootloops"
-if [ -f "$WORK_DIR/system/system/bin/bootchecker" ]; then
-    cat << 'EOF' > "$WORK_DIR/system/system/bin/bootchecker"
-#!/system/bin/sh
-exit 0
-EOF
-    chmod 755 "$WORK_DIR/system/system/bin/bootchecker"
-fi
-if [ -f "$WORK_DIR/system/system/etc/init/bootchecker.rc" ]; then
-    sed -i 's/class late_start/disabled/g' "$WORK_DIR/system/system/etc/init/bootchecker.rc"
-    sed -i 's/restart bootchecker/# restart bootchecker/g' "$WORK_DIR/system/system/etc/init/bootchecker.rc"
-    sed -i 's/start bootchecker-bootc/# start bootchecker-bootc/g' "$WORK_DIR/system/system/etc/init/bootchecker.rc"
-fi
-if [ -f "$WORK_DIR/system/system/etc/init/vold.rc" ]; then
-    sed -i 's/reboot_on_failure reboot,vold-failed/# reboot_on_failure reboot,vold-failed/g' "$WORK_DIR/system/system/etc/init/vold.rc"
-fi
-LOG_STEP_OUT
+
 
 LOG_STEP_IN "- Installing ChoiDujour OTA application and privapp permissions"
 if [ -f "$SRC_DIR/unica/mods/choidujour/system/priv-app/ChoiDujour/ChoiDujour.apk" ]; then

@@ -715,61 +715,174 @@ def patch_framework_security(apktool_dir, src_dir=None, work_dir=None):
         with open(sff_smali, "r", encoding="utf-8") as f:
             sff_c = f.read()
 
-        if "FloatingFeatureHooks;->onGetBoolean" not in sff_c:
-            old_gb = re.search(r'(\.method public whitelist getBoolean\(Ljava/lang/String;\)Z[\s\S]*?if-nez p1, :cond_0[\s\S]*?:cond_0\n)', sff_c)
-            if old_gb:
-                hook_gb = old_gb.group(1) + """    invoke-static {p1}, Lio/mesalabs/unica/FloatingFeatureHooks;->onGetBoolean(Ljava/lang/String;)Ljava/lang/Boolean;
+        clean_gb = """
+.method public whitelist getBoolean(Ljava/lang/String;)Z
+    .locals 2
 
-    move-result-object v0
+    const/4 v0, 0x0
 
-    if-eqz v0, :cond_sff_orig_gb
+    if-nez p1, :cond_0
 
-    invoke-virtual {v0}, Ljava/lang/Boolean;->booleanValue()Z
+    const-string p0, "The first argument of getBoolean() cannot be null."
+
+    invoke-static {p0}, Lcom/samsung/android/feature/SemFloatingFeature;->loge(Ljava/lang/Object;)V
+
+    return v0
+
+    :cond_0
+    invoke-static {p1}, Lio/mesalabs/unica/FloatingFeatureHooks;->onGetBoolean(Ljava/lang/String;)Ljava/lang/Boolean;
+
+    move-result-object v1
+
+    if-eqz v1, :cond_sff_orig_gb
+
+    invoke-virtual {v1}, Ljava/lang/Boolean;->booleanValue()Z
 
     move-result p0
 
     return p0
 
     :cond_sff_orig_gb
+    iget-object p0, p0, Lcom/samsung/android/feature/SemFloatingFeature;->mFeatureList:Ljava/util/Hashtable;
+
+    invoke-virtual {p0, p1}, Ljava/util/Hashtable;->get(Ljava/lang/Object;)Ljava/lang/Object;
+
+    move-result-object p0
+
+    check-cast p0, Ljava/lang/String;
+
+    if-nez p0, :cond_1
+
+    return v0
+
+    :cond_1
+    invoke-static {p0}, Ljava/lang/Boolean;->parseBoolean(Ljava/lang/String;)Z
+
+    move-result p0
+
+    return p0
+.end method
 """
-                sff_c = sff_c.replace(old_gb.group(1), hook_gb)
-                print("[+] Hooked SemFloatingFeature.getBoolean")
+        clean_gi = """
+.method public whitelist getInt(Ljava/lang/String;)I
+    .locals 2
 
-        if "FloatingFeatureHooks;->onGetInt" not in sff_c:
-            old_gi = re.search(r'(\.method public whitelist getInt\(Ljava/lang/String;\)I[\s\S]*?if-nez p1, :cond_0[\s\S]*?:cond_0\n)', sff_c)
-            if old_gi:
-                hook_gi = old_gi.group(1) + """    invoke-static {p1}, Lio/mesalabs/unica/FloatingFeatureHooks;->onGetInt(Ljava/lang/String;)Ljava/lang/Integer;
+    const/4 v0, -0x1
 
-    move-result-object v0
+    if-nez p1, :cond_0
 
-    if-eqz v0, :cond_sff_orig_gi
+    const-string p0, "The first argument of getInt() cannot be null."
 
-    invoke-virtual {v0}, Ljava/lang/Integer;->intValue()I
+    invoke-static {p0}, Lcom/samsung/android/feature/SemFloatingFeature;->loge(Ljava/lang/Object;)V
+
+    return v0
+
+    :cond_0
+    invoke-static {p1}, Lio/mesalabs/unica/FloatingFeatureHooks;->onGetInt(Ljava/lang/String;)Ljava/lang/Integer;
+
+    move-result-object v1
+
+    if-eqz v1, :cond_sff_orig_gi
+
+    invoke-virtual {v1}, Ljava/lang/Integer;->intValue()I
 
     move-result p0
 
     return p0
 
     :cond_sff_orig_gi
+    iget-object p0, p0, Lcom/samsung/android/feature/SemFloatingFeature;->mFeatureList:Ljava/util/Hashtable;
+
+    invoke-virtual {p0, p1}, Ljava/util/Hashtable;->get(Ljava/lang/Object;)Ljava/lang/Object;
+
+    move-result-object p0
+
+    check-cast p0, Ljava/lang/String;
+
+    if-nez p0, :cond_1
+
+    return v0
+
+    :cond_1
+    :try_start_0
+    invoke-static {p0}, Ljava/lang/Integer;->parseInt(Ljava/lang/String;)I
+
+    move-result p0
+    :try_end_0
+    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
+
+    return p0
+
+    :catch_0
+    const-string p1, "[%s] cannot be parsed to Integer value"
+
+    filled-new-array {p0}, [Ljava/lang/Object;
+
+    move-result-object p0
+
+    invoke-static {p1, p0}, Ljava/lang/String;->format(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;
+
+    move-result-object p0
+
+    invoke-static {p0}, Lcom/samsung/android/feature/SemFloatingFeature;->loge(Ljava/lang/Object;)V
+
+    return v0
+.end method
 """
-                sff_c = sff_c.replace(old_gi.group(1), hook_gi)
-                print("[+] Hooked SemFloatingFeature.getInt")
+        clean_gs = """
+.method public whitelist getString(Ljava/lang/String;)Ljava/lang/String;
+    .locals 2
 
-        if "FloatingFeatureHooks;->onGetString" not in sff_c:
-            old_gs = re.search(r'(\.method public whitelist getString\(Ljava/lang/String;\)Ljava/lang/String;[\s\S]*?if-nez p1, :cond_0[\s\S]*?:cond_0\n)', sff_c)
-            if old_gs:
-                hook_gs = old_gs.group(1) + """    invoke-static {p1}, Lio/mesalabs/unica/FloatingFeatureHooks;->onGetString(Ljava/lang/String;)Ljava/lang/String;
+    const-string v0, ""
 
-    move-result-object v0
+    if-nez p1, :cond_0
 
-    if-eqz v0, :cond_sff_orig_gs
+    const-string p0, "The first argument of getString() cannot be null."
+
+    invoke-static {p0}, Lcom/samsung/android/feature/SemFloatingFeature;->loge(Ljava/lang/Object;)V
 
     return-object v0
 
+    :cond_0
+    invoke-static {p1}, Lio/mesalabs/unica/FloatingFeatureHooks;->onGetString(Ljava/lang/String;)Ljava/lang/String;
+
+    move-result-object v1
+
+    if-eqz v1, :cond_sff_orig_gs
+
+    return-object v1
+
     :cond_sff_orig_gs
+    iget-object p0, p0, Lcom/samsung/android/feature/SemFloatingFeature;->mFeatureList:Ljava/util/Hashtable;
+
+    invoke-virtual {p0, p1}, Ljava/util/Hashtable;->get(Ljava/lang/Object;)Ljava/lang/Object;
+
+    move-result-object p0
+
+    check-cast p0, Ljava/lang/String;
+
+    if-nez p0, :cond_1
+
+    return-object v0
+
+    :cond_1
+    return-object p0
+.end method
 """
-                sff_c = sff_c.replace(old_gs.group(1), hook_gs)
-                print("[+] Hooked SemFloatingFeature.getString")
+        pattern_gb = re.compile(r'\.method public whitelist getBoolean\(Ljava/lang/String;\)Z[\s\S]*?\.end method')
+        if pattern_gb.search(sff_c):
+            sff_c = pattern_gb.sub(clean_gb.strip(), sff_c)
+            print("[+] Hooked SemFloatingFeature.getBoolean (Dalvik verifier safe)")
+
+        pattern_gi = re.compile(r'\.method public whitelist getInt\(Ljava/lang/String;\)I[\s\S]*?\.end method')
+        if pattern_gi.search(sff_c):
+            sff_c = pattern_gi.sub(clean_gi.strip(), sff_c)
+            print("[+] Hooked SemFloatingFeature.getInt (Dalvik verifier safe)")
+
+        pattern_gs = re.compile(r'\.method public whitelist getString\(Ljava/lang/String;\)Ljava/lang/String;[\s\S]*?\.end method')
+        if pattern_gs.search(sff_c):
+            sff_c = pattern_gs.sub(clean_gs.strip(), sff_c)
+            print("[+] Hooked SemFloatingFeature.getString (Dalvik verifier safe)")
 
         with open(sff_smali, "w", encoding="utf-8") as f:
             f.write(sff_c)
