@@ -47,6 +47,23 @@ if [ -n "$TARGET_EXTRA_FIRMWARES" ]; then
     fi
     LOG_STEP_OUT
 
+    LOG_STEP_IN "- Adding SDHMS service SELinux permissions"
+    for F in "$WORK_DIR/system/system/system_ext/etc/selinux/system_ext_sepolicy.cil" \
+             "$WORK_DIR/system_ext/etc/selinux/system_ext_sepolicy.cil" \
+             "$WORK_DIR/system/system/etc/selinux/plat_sepolicy.cil"; do
+        if [ -f "$F" ]; then
+            if ! grep -q "allow system_app sdhms_service" "$F"; then
+                echo "(allow system_app sdhms_service (service_manager (add find)))" >> "$F"
+            fi
+        fi
+    done
+    if [ -f "$WORK_DIR/vendor/etc/selinux/vendor_sepolicy.cil" ]; then
+        if ! grep -q "allow system_app_30_0 sdhms_service_30_0" "$WORK_DIR/vendor/etc/selinux/vendor_sepolicy.cil"; then
+            echo "(allow system_app_30_0 sdhms_service_30_0 (service_manager (add find)))" >> "$WORK_DIR/vendor/etc/selinux/vendor_sepolicy.cil"
+        fi
+    fi
+    LOG_STEP_OUT
+
     LOG_STEP_IN "- Adding GPU and ION device contexts to plat_file_contexts"
     if [ -f "$WORK_DIR/system/system/etc/selinux/plat_file_contexts" ]; then
         if ! grep -q "/dev/kgsl-3d0" "$WORK_DIR/system/system/etc/selinux/plat_file_contexts"; then
