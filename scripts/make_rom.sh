@@ -23,7 +23,7 @@ BUILD_APKS()
 
     # Patch framework.jar smali directly before building APKs
     if [ -f "$SRC_DIR/target/$TARGET_CODENAME/tools/patch_framework_security.py" ]; then
-        python3 "$SRC_DIR/target/$TARGET_CODENAME/tools/patch_framework_security.py" "$APKTOOL_DIR" "$SRC_DIR" "$WORK_DIR" || true
+        python3 "$SRC_DIR/target/$TARGET_CODENAME/tools/patch_framework_security.py" "$APKTOOL_DIR" "$SRC_DIR" "$WORK_DIR" || exit 1
     fi
 
     # Ensure SystemUI, TeleService, and SettingsProvider retain genuine Samsung platform signatures
@@ -214,6 +214,11 @@ if $BUILD_ROM; then
         SET_METADATA "system" "system/priv-app/SamsungCamera/SamsungCamera.apk" 0 0 644 "u:object_r:system_file:s0"
         rm -f "$WORK_DIR/system/system/priv-app/SamsungCamera/SamsungCamera.apk.prof"
         LOG_STEP_OUT
+    fi
+
+    # Final verification and patching of runtime jars in work_dir
+    if [ -f "$SRC_DIR/target/$TARGET_CODENAME/tools/patch_framework_security.py" ]; then
+        python3 "$SRC_DIR/target/$TARGET_CODENAME/tools/patch_framework_security.py" "$APKTOOL_DIR" "$SRC_DIR" "$WORK_DIR" || exit 1
     fi
 
     echo -n "$(GET_WORK_DIR_HASH)" > "$WORK_DIR/.completed"

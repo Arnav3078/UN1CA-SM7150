@@ -1228,11 +1228,18 @@ def patch_framework_security(apktool_dir, src_dir=None, work_dir=None):
             print("[-] Could not find target addService('sdhms') in SDHMS MainApplication.smali")
 
     # ==========================================
+    # ==========================================
     # 18. SemWifiManager.smali in framework.jar
-    # Safe mService resolution, null-guarding and Throwable catch for:
-    # - isAutoWifiEnabled()Z
-    # - isMCfClientMHSDiscoveryGoingon()Z
-    # - getMcfScanDetail()Ljava/util/List;
+    # - Non-null fallback to ISemWifiManager$Default in <init>
+    # - Safe mService dynamic resolution with getSafeService()
+    # - Safe implementations of:
+    #   * registerWifiApSmartCallback
+    #   * unregisterWifiApSmartCallback
+    #   * wifiApBleClientRole
+    #   * wifiApBleD2DClientRole
+    #   * isAutoWifiEnabled
+    #   * isMCfClientMHSDiscoveryGoingon
+    #   * getMcfScanDetail
     # ==========================================
     for smali_root, _, files in os.walk(fw_dir):
         if "SemWifiManager.smali" in files:
@@ -1247,46 +1254,292 @@ def patch_framework_security(apktool_dir, src_dir=None, work_dir=None):
             )
 
             # 18.2 Inject getSafeService() helper method if not present
-            if ".method private blacklist getSafeService()Lcom/samsung/android/wifi/ISemWifiManager;" not in swm_c:
-                safe_svc_method = """.method private blacklist getSafeService()Lcom/samsung/android/wifi/ISemWifiManager;
-    .locals 1
+            safe_svc_method = """.method private blacklist getSafeService()Lcom/samsung/android/wifi/ISemWifiManager;
+    .locals 2
 
     iget-object v0, p0, Lcom/samsung/android/wifi/SemWifiManager;->mService:Lcom/samsung/android/wifi/ISemWifiManager;
 
-    if-nez v0, :cond_got_service
+    if-eqz v0, :cond_fetch
 
+    instance-of v1, v0, Lcom/samsung/android/wifi/ISemWifiManager$Default;
+
+    if-nez v1, :cond_fetch
+
+    return-object v0
+
+    :cond_fetch
     :try_start_safe_svc
-    const-string v0, "sem_wifi"
+    const-string/jumbo v1, "sem_wifi"
 
-    invoke-static {v0}, Landroid/os/ServiceManager;->getService(Ljava/lang/String;)Landroid/os/IBinder;
+    invoke-static {v1}, Landroid/os/ServiceManager;->getService(Ljava/lang/String;)Landroid/os/IBinder;
 
-    move-result-object v0
+    move-result-object v1
 
-    if-eqz v0, :cond_got_service
+    if-eqz v1, :cond_check_fallback
 
-    invoke-static {v0}, Lcom/samsung/android/wifi/ISemWifiManager$Stub;->asInterface(Landroid/os/IBinder;)Lcom/samsung/android/wifi/ISemWifiManager;
+    invoke-static {v1}, Lcom/samsung/android/wifi/ISemWifiManager$Stub;->asInterface(Landroid/os/IBinder;)Lcom/samsung/android/wifi/ISemWifiManager;
 
-    move-result-object v0
+    move-result-object v1
 
-    iput-object v0, p0, Lcom/samsung/android/wifi/SemWifiManager;->mService:Lcom/samsung/android/wifi/ISemWifiManager;
+    if-eqz v1, :cond_check_fallback
+
+    iput-object v1, p0, Lcom/samsung/android/wifi/SemWifiManager;->mService:Lcom/samsung/android/wifi/ISemWifiManager;
+
+    return-object v1
     :try_end_safe_svc
     .catch Ljava/lang/Throwable; {:try_start_safe_svc .. :try_end_safe_svc} :catch_safe_svc
 
     :catch_safe_svc
-    :cond_got_service
-    iget-object p0, p0, Lcom/samsung/android/wifi/SemWifiManager;->mService:Lcom/samsung/android/wifi/ISemWifiManager;
+    :cond_check_fallback
+    if-nez v0, :cond_got_service
 
-    return-object p0
+    new-instance v0, Lcom/samsung/android/wifi/ISemWifiManager$Default;
+
+    invoke-direct {v0}, Lcom/samsung/android/wifi/ISemWifiManager$Default;-><init>()V
+
+    iput-object v0, p0, Lcom/samsung/android/wifi/SemWifiManager;->mService:Lcom/samsung/android/wifi/ISemWifiManager;
+
+    :cond_got_service
+    return-object v0
 .end method
 
 """
-                # Insert right before constructor
+            if ".method private blacklist getSafeService()Lcom/samsung/android/wifi/ISemWifiManager;" in swm_c:
+                swm_c = re.sub(r"\.method private blacklist getSafeService\(\)Lcom/samsung/android/wifi/ISemWifiManager;[\s\S]*?\.end method\s*", safe_svc_method, swm_c)
+            else:
                 target_ctor = ".method public constructor blacklist <init>(Landroid/content/Context;Lcom/samsung/android/wifi/ISemWifiManager;Landroid/os/Looper;)V"
                 if target_ctor in swm_c:
                     swm_c = swm_c.replace(target_ctor, safe_svc_method + target_ctor)
-                    print("[+] Injected getSafeService() into SemWifiManager.smali")
+            print("[+] Injected/updated getSafeService() in SemWifiManager.smali")
 
-            # 18.3 Replace isAutoWifiEnabled()Z
+            # 18.3 Constructor: ensure mService is never null
+            ctor_pattern = re.search(r'(\.method public constructor blacklist <init>\(Landroid/content/Context;Lcom/samsung/android/wifi/ISemWifiManager;Landroid/os/Looper;\)V[\s\S]*?\.end method)', swm_c)
+            if ctor_pattern:
+                safe_ctor = """.method public constructor blacklist <init>(Landroid/content/Context;Lcom/samsung/android/wifi/ISemWifiManager;Landroid/os/Looper;)V
+    .locals 0
+
+    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
+
+    iput-object p1, p0, Lcom/samsung/android/wifi/SemWifiManager;->mContext:Landroid/content/Context;
+
+    if-nez p2, :cond_service_valid
+
+    new-instance p2, Lcom/samsung/android/wifi/ISemWifiManager$Default;
+
+    invoke-direct {p2}, Lcom/samsung/android/wifi/ISemWifiManager$Default;-><init>()V
+
+    :cond_service_valid
+    iput-object p2, p0, Lcom/samsung/android/wifi/SemWifiManager;->mService:Lcom/samsung/android/wifi/ISemWifiManager;
+
+    return-void
+.end method"""
+                swm_c = swm_c.replace(ctor_pattern.group(1), safe_ctor)
+                print("[+] Patched SemWifiManager.<init> -> safe fallback to ISemWifiManager$Default")
+
+            # 18.4 Replace registerWifiApSmartCallback
+            reg_smart_pat = re.search(r'(\.method public blacklist registerWifiApSmartCallback\(Lcom/samsung/android/wifi/SemWifiManager\$SemWifiApSmartCallback;Ljava/util/concurrent/Executor;\)V[\s\S]*?\.end method)', swm_c)
+            if reg_smart_pat:
+                safe_reg_smart = """.method public blacklist registerWifiApSmartCallback(Lcom/samsung/android/wifi/SemWifiManager$SemWifiApSmartCallback;Ljava/util/concurrent/Executor;)V
+    .locals 2
+
+    if-eqz p1, :cond_1
+
+    if-eqz p2, :cond_0
+
+    new-instance v0, Ljava/lang/StringBuilder;
+
+    const-string v1, "registerWifiApSmartCallback: callback="
+
+    invoke-direct {v0, v1}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
+
+    invoke-virtual {v0, p1}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
+
+    const-string v1, ", executor="
+
+    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    invoke-virtual {v0, p2}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
+
+    invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v0
+
+    const-string v1, "SemWifiManager"
+
+    invoke-static {v1, v0}, Landroid/util/Log;->v(Ljava/lang/String;Ljava/lang/String;)I
+
+    invoke-virtual {p1}, Lcom/samsung/android/wifi/SemWifiManager$SemWifiApSmartCallback;->getProxy()Lcom/samsung/android/wifi/SemWifiManager$SemWifiApSmartCallback$SemWifiApSmartCallbackProxy;
+
+    move-result-object v0
+
+    invoke-virtual {v0, p2, p1}, Lcom/samsung/android/wifi/SemWifiManager$SemWifiApSmartCallback$SemWifiApSmartCallbackProxy;->initProxy(Ljava/util/concurrent/Executor;Lcom/samsung/android/wifi/SemWifiManager$SemWifiApSmartCallback;)V
+
+    new-instance p2, Landroid/os/Binder;
+
+    invoke-direct {p2}, Landroid/os/Binder;-><init>()V
+
+    :try_start_reg_cb
+    invoke-direct {p0}, Lcom/samsung/android/wifi/SemWifiManager;->getSafeService()Lcom/samsung/android/wifi/ISemWifiManager;
+
+    move-result-object p0
+
+    if-eqz p0, :cond_exit_cb
+
+    invoke-virtual {p1}, Ljava/lang/Object;->hashCode()I
+
+    move-result p1
+
+    invoke-interface {p0, p2, v0, p1}, Lcom/samsung/android/wifi/ISemWifiManager;->registerWifiApSmartCallback(Landroid/os/IBinder;Lcom/samsung/android/wifi/ISemWifiApSmartCallback;I)V
+    :try_end_reg_cb
+    .catch Ljava/lang/Throwable; {:try_start_reg_cb .. :try_end_reg_cb} :catch_reg_cb
+
+    :cond_exit_cb
+    return-void
+
+    :catch_reg_cb
+    return-void
+
+    :cond_0
+    const-string p0, "executor cannot be null"
+
+    invoke-static {p0}, Landroid/os/Debug$$ExternalSyntheticBUOutline2;->m$3(Ljava/lang/String;)V
+
+    return-void
+
+    :cond_1
+    const-string p0, "callback cannot be null"
+
+    invoke-static {p0}, Landroid/os/Debug$$ExternalSyntheticBUOutline2;->m$3(Ljava/lang/String;)V
+
+    return-void
+.end method"""
+                swm_c = swm_c.replace(reg_smart_pat.group(1), safe_reg_smart)
+                print("[+] Patched SemWifiManager.registerWifiApSmartCallback -> safe service & catch Throwable")
+
+            # 18.5 Replace unregisterWifiApSmartCallback
+            unreg_smart_pat = re.search(r'(\.method public blacklist unregisterWifiApSmartCallback\(Lcom/samsung/android/wifi/SemWifiManager\$SemWifiApSmartCallback;\)V[\s\S]*?\.end method)', swm_c)
+            if unreg_smart_pat:
+                safe_unreg_smart = """.method public blacklist unregisterWifiApSmartCallback(Lcom/samsung/android/wifi/SemWifiManager$SemWifiApSmartCallback;)V
+    .locals 2
+
+    if-eqz p1, :cond_0
+
+    new-instance v0, Ljava/lang/StringBuilder;
+
+    const-string v1, "unregisterWifiApSmartCallback: callback="
+
+    invoke-direct {v0, v1}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
+
+    invoke-virtual {v0, p1}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
+
+    invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v0
+
+    const-string v1, "SemWifiManager"
+
+    invoke-static {v1, v0}, Landroid/util/Log;->v(Ljava/lang/String;Ljava/lang/String;)I
+
+    :try_start_unreg_cb
+    invoke-direct {p0}, Lcom/samsung/android/wifi/SemWifiManager;->getSafeService()Lcom/samsung/android/wifi/ISemWifiManager;
+
+    move-result-object p0
+
+    if-eqz p0, :cond_exit_unreg
+
+    invoke-virtual {p1}, Ljava/lang/Object;->hashCode()I
+
+    move-result p1
+
+    invoke-interface {p0, p1}, Lcom/samsung/android/wifi/ISemWifiManager;->unregisterWifiApSmartCallback(I)V
+    :try_end_unreg_cb
+    .catch Ljava/lang/Throwable; {:try_start_unreg_cb .. :try_end_unreg_cb} :catch_unreg_cb
+
+    :cond_exit_unreg
+    return-void
+
+    :catch_unreg_cb
+    return-void
+
+    :cond_0
+    const-string p0, "callback cannot be null"
+
+    invoke-static {p0}, Landroid/os/Debug$$ExternalSyntheticBUOutline2;->m$3(Ljava/lang/String;)V
+
+    return-void
+.end method"""
+                swm_c = swm_c.replace(unreg_smart_pat.group(1), safe_unreg_smart)
+                print("[+] Patched SemWifiManager.unregisterWifiApSmartCallback -> safe service & catch Throwable")
+
+            # 18.6 Replace wifiApBleClientRole(Z)Z
+            ble_pat = re.search(r'(\.method public blacklist wifiApBleClientRole\(Z\)Z[\s\S]*?\.end method)', swm_c)
+            if ble_pat:
+                safe_ble = """.method public blacklist wifiApBleClientRole(Z)Z
+    .locals 0
+
+    :try_start_ble
+    invoke-direct {p0}, Lcom/samsung/android/wifi/SemWifiManager;->getSafeService()Lcom/samsung/android/wifi/ISemWifiManager;
+
+    move-result-object p0
+
+    if-nez p0, :cond_call_ble
+
+    const/4 p0, 0x0
+
+    return p0
+
+    :cond_call_ble
+    invoke-interface {p0, p1}, Lcom/samsung/android/wifi/ISemWifiManager;->wifiApBleClientRole(Z)Z
+
+    move-result p0
+    :try_end_ble
+    .catch Ljava/lang/Throwable; {:try_start_ble .. :try_end_ble} :catch_ble
+
+    return p0
+
+    :catch_ble
+    const/4 p0, 0x0
+
+    return p0
+.end method"""
+                swm_c = swm_c.replace(ble_pat.group(1), safe_ble)
+                print("[+] Patched SemWifiManager.wifiApBleClientRole -> safe service & catch Throwable")
+
+            # 18.7 Replace wifiApBleD2DClientRole(Z)Z
+            d2d_pat = re.search(r'(\.method public blacklist wifiApBleD2DClientRole\(Z\)Z[\s\S]*?\.end method)', swm_c)
+            if d2d_pat:
+                safe_d2d = """.method public blacklist wifiApBleD2DClientRole(Z)Z
+    .locals 0
+
+    :try_start_d2d
+    invoke-direct {p0}, Lcom/samsung/android/wifi/SemWifiManager;->getSafeService()Lcom/samsung/android/wifi/ISemWifiManager;
+
+    move-result-object p0
+
+    if-nez p0, :cond_call_d2d
+
+    const/4 p0, 0x0
+
+    return p0
+
+    :cond_call_d2d
+    invoke-interface {p0, p1}, Lcom/samsung/android/wifi/ISemWifiManager;->wifiApBleD2DClientRole(Z)Z
+
+    move-result p0
+    :try_end_d2d
+    .catch Ljava/lang/Throwable; {:try_start_d2d .. :try_end_d2d} :catch_d2d
+
+    return p0
+
+    :catch_d2d
+    const/4 p0, 0x0
+
+    return p0
+.end method"""
+                swm_c = swm_c.replace(d2d_pat.group(1), safe_d2d)
+                print("[+] Patched SemWifiManager.wifiApBleD2DClientRole -> safe service & catch Throwable")
+
+            # 18.8 Replace isAutoWifiEnabled()Z
             target_autowifi = re.search(r'(\.method public blacklist isAutoWifiEnabled\(\)Z[\s\S]*?\.end method)', swm_c)
             if target_autowifi:
                 new_autowifi = """.method public blacklist isAutoWifiEnabled()Z
@@ -1320,7 +1573,7 @@ def patch_framework_security(apktool_dir, src_dir=None, work_dir=None):
                 swm_c = swm_c.replace(target_autowifi.group(1), new_autowifi)
                 print("[+] Patched SemWifiManager.isAutoWifiEnabled -> safe service fetch & return false on null")
 
-            # 18.4 Replace isMCfClientMHSDiscoveryGoingon()Z
+            # 18.9 Replace isMCfClientMHSDiscoveryGoingon()Z
             target_mcf = re.search(r'(\.method public blacklist isMCfClientMHSDiscoveryGoingon\(\)Z[\s\S]*?\.end method)', swm_c)
             if target_mcf:
                 new_mcf = """.method public blacklist isMCfClientMHSDiscoveryGoingon()Z
@@ -1354,7 +1607,7 @@ def patch_framework_security(apktool_dir, src_dir=None, work_dir=None):
                 swm_c = swm_c.replace(target_mcf.group(1), new_mcf)
                 print("[+] Patched SemWifiManager.isMCfClientMHSDiscoveryGoingon -> safe service fetch & return false on null")
 
-            # 18.5 Replace getMcfScanDetail()Ljava/util/List;
+            # 18.10 Replace getMcfScanDetail()Ljava/util/List;
             target_mcf_scan = re.search(r'(\.method public blacklist getMcfScanDetail\(\)Ljava/util/List;[\s\S]*?\.end method)', swm_c)
             if target_mcf_scan:
                 new_mcf_scan = """.method public blacklist getMcfScanDetail()Ljava/util/List;
@@ -1409,6 +1662,44 @@ def patch_framework_security(apktool_dir, src_dir=None, work_dir=None):
 
             with open(swm_path, "w", encoding="utf-8") as f:
                 f.write(swm_c)
+
+    # ==========================================
+    # 18.b SystemServiceRegistry$198.smali in framework.jar
+    # Ensure createService creates SemWifiManager with ISemWifiManager$Default if sem_wifi binder is null
+    # ==========================================
+    for smali_root, _, files in os.walk(fw_dir):
+        for f_name in files:
+            if f_name == "SystemServiceRegistry" + chr(36) + "198.smali":
+                ssr_path = os.path.join(smali_root, f_name)
+                with open(ssr_path, "r", encoding="utf-8") as f:
+                    ssr_c = f.read()
+
+                old_ssr = """    invoke-static {p0}, Lcom/samsung/android/wifi/ISemWifiManager$Stub;->asInterface(Landroid/os/IBinder;)Lcom/samsung/android/wifi/ISemWifiManager;
+
+    move-result-object p0
+
+    new-instance v0, Lcom/samsung/android/wifi/SemWifiManager;"""
+
+                new_ssr = """    invoke-static {p0}, Lcom/samsung/android/wifi/ISemWifiManager$Stub;->asInterface(Landroid/os/IBinder;)Lcom/samsung/android/wifi/ISemWifiManager;
+
+    move-result-object p0
+
+    if-nez p0, :cond_has_service
+
+    new-instance p0, Lcom/samsung/android/wifi/ISemWifiManager$Default;
+
+    invoke-direct {p0}, Lcom/samsung/android/wifi/ISemWifiManager$Default;-><init>()V
+
+    :cond_has_service
+    new-instance v0, Lcom/samsung/android/wifi/SemWifiManager;"""
+
+                if old_ssr in ssr_c:
+                    ssr_c = ssr_c.replace(old_ssr, new_ssr)
+                    with open(ssr_path, "w", encoding="utf-8") as f:
+                        f.write(ssr_c)
+                    print("[+] Patched SystemServiceRegistry$198.smali -> fallback to ISemWifiManager$Default on null binder")
+                elif ":cond_has_service" in ssr_c:
+                    print("[*] SystemServiceRegistry$198.smali already guarded with fallback")
 
     # ==========================================
     # 19. SemWifiUtils.smali in SecSettings.apk
@@ -1469,7 +1760,8 @@ def patch_framework_security(apktool_dir, src_dir=None, work_dir=None):
 
             # ==========================================
             # 20. WifiSettings.smali in SecSettings.apk
-            # Null-guard mSemWifiManager calls: isMCfClientMHSDiscoveryGoingon & getMcfScanDetail
+            # Null-guard mSemWifiManager calls: isMCfClientMHSDiscoveryGoingon, getMcfScanDetail,
+            # wifiApBleClientRole, registerWifiApSmartCallback, unregisterWifiApSmartCallback
             # ==========================================
             if "WifiSettings.smali" in files:
                 ws_path = os.path.join(root, "WifiSettings.smali")
@@ -1549,8 +1841,179 @@ def patch_framework_security(apktool_dir, src_dir=None, work_dir=None):
                     ws_c = ws_c.replace(old_ws_scan, new_ws_scan)
                     print("[+] Patched WifiSettings -> guarded getMcfScanDetail with null check & try-catch")
 
+                # Guard wifiApBleClientRole(Z)V
+                old_ble_role = re.search(r'(\.method public final wifiApBleClientRole\(Z\)V[\s\S]*?\.end method)', ws_c)
+                if old_ble_role:
+                    new_ble_role = """.method public final wifiApBleClientRole(Z)V
+    .locals 3
+
+    :try_start_ble_role
+    const-string v0, "wifiApBleClientRole() - isEnabled: "
+
+    const-string v1, " mAlreadyCalledAutoHotspotApi : "
+
+    invoke-static {v0, v1, p1}, Landroidx/slice/widget/RowView$$ExternalSyntheticOutline0;->m(Ljava/lang/String;Ljava/lang/String;Z)Ljava/lang/StringBuilder;
+
+    move-result-object v0
+
+    iget-boolean v1, p0, Lcom/samsung/android/settings/wifi/WifiSettings;->mAlreadyCalledAutoHotspotApi:Z
+
+    const-string v2, "WifiSettings.AutoHotspot"
+
+    invoke-static {v0, v1, v2}, Landroidx/appcompat/widget/ListPopupWindow$$ExternalSyntheticOutline0;->m(Ljava/lang/StringBuilder;ZLjava/lang/String;)V
+
+    sget-boolean v0, Lcom/android/settings/Utils;->SPF_SupportMobileApEnhanced:Z
+
+    if-nez v0, :cond_0
+
+    goto :goto_0
+
+    :cond_0
+    if-eqz p1, :cond_1
+
+    iget-boolean v0, p0, Lcom/samsung/android/settings/wifi/WifiSettings;->mAlreadyCalledAutoHotspotApi:Z
+
+    if-nez v0, :cond_1
+
+    iget-object p1, p0, Lcom/samsung/android/settings/wifi/WifiSettings;->mWifiManager:Landroid/net/wifi/WifiManager;
+
+    if-eqz p1, :cond_2
+
+    invoke-virtual {p1}, Landroid/net/wifi/WifiManager;->getWifiState()I
+
+    move-result p1
+
+    const/4 v0, 0x3
+
+    if-ne p1, v0, :cond_2
+
+    const-string p1, "Setting wifiApBleClientRole(true)"
+
+    invoke-static {v2, p1}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+
+    const/4 p1, 0x1
+
+    iput-boolean p1, p0, Lcom/samsung/android/settings/wifi/WifiSettings;->mAlreadyCalledAutoHotspotApi:Z
+
+    iget-object p0, p0, Lcom/samsung/android/settings/wifi/WifiSettings;->mSemWifiManager:Lcom/samsung/android/wifi/SemWifiManager;
+
+    if-eqz p0, :cond_2
+
+    invoke-virtual {p0, p1}, Lcom/samsung/android/wifi/SemWifiManager;->wifiApBleClientRole(Z)Z
+
+    return-void
+
+    :cond_1
+    if-nez p1, :cond_2
+
+    iget-boolean p1, p0, Lcom/samsung/android/settings/wifi/WifiSettings;->mAlreadyCalledAutoHotspotApi:Z
+
+    if-eqz p1, :cond_2
+
+    const/4 v0, 0x0
+
+    iput-boolean v0, p0, Lcom/samsung/android/settings/wifi/WifiSettings;->mAlreadyCalledAutoHotspotApi:Z
+
+    iget-object p0, p0, Lcom/samsung/android/settings/wifi/WifiSettings;->mSemWifiManager:Lcom/samsung/android/wifi/SemWifiManager;
+
+    if-eqz p0, :cond_2
+
+    invoke-virtual {p0, v0}, Lcom/samsung/android/wifi/SemWifiManager;->wifiApBleClientRole(Z)Z
+    :try_end_ble_role
+    .catch Ljava/lang/Throwable; {:try_start_ble_role .. :try_end_ble_role} :catch_ble_role
+
+    :catch_ble_role
+    :cond_2
+    :goto_0
+    return-void
+.end method"""
+                    ws_c = ws_c.replace(old_ble_role.group(1), new_ble_role)
+                    print("[+] Patched WifiSettings.wifiApBleClientRole -> guarded with null check & try-catch")
+
+                # Guard registerWifiApSmartCallback in onResume
+                old_reg_cb = """    invoke-virtual {v1, v2, v3}, Lcom/samsung/android/wifi/SemWifiManager;->registerWifiApSmartCallback(Lcom/samsung/android/wifi/SemWifiManager$SemWifiApSmartCallback;Ljava/util/concurrent/Executor;)V"""
+                new_reg_cb = """:try_start_reg_smart
+    if-eqz v1, :cond_4
+
+    invoke-virtual {v1, v2, v3}, Lcom/samsung/android/wifi/SemWifiManager;->registerWifiApSmartCallback(Lcom/samsung/android/wifi/SemWifiManager$SemWifiApSmartCallback;Ljava/util/concurrent/Executor;)V
+    :try_end_reg_smart
+    .catch Ljava/lang/Throwable; {:try_start_reg_smart .. :try_end_reg_smart} :catch_reg_smart
+
+    :catch_reg_smart"""
+                if old_reg_cb in ws_c:
+                    ws_c = ws_c.replace(old_reg_cb, new_reg_cb)
+                    print("[+] Patched WifiSettings.onResume -> guarded registerWifiApSmartCallback with null check & try-catch")
+
+                # Guard unregisterWifiApSmartCallback in onPause
+                old_unreg_cb = """    if-eqz v1, :cond_3
+
+    invoke-virtual {v0, v1}, Lcom/samsung/android/wifi/SemWifiManager;->unregisterWifiApSmartCallback(Lcom/samsung/android/wifi/SemWifiManager$SemWifiApSmartCallback;)V"""
+                new_unreg_cb = """:try_start_unreg_smart
+    if-eqz v0, :cond_3
+
+    if-eqz v1, :cond_3
+
+    invoke-virtual {v0, v1}, Lcom/samsung/android/wifi/SemWifiManager;->unregisterWifiApSmartCallback(Lcom/samsung/android/wifi/SemWifiManager$SemWifiApSmartCallback;)V
+    :try_end_unreg_smart
+    .catch Ljava/lang/Throwable; {:try_start_unreg_smart .. :try_end_unreg_smart} :catch_unreg_smart
+
+    :catch_unreg_smart"""
+                if old_unreg_cb in ws_c:
+                    ws_c = ws_c.replace(old_unreg_cb, new_unreg_cb)
+                    print("[+] Patched WifiSettings.onPause -> guarded unregisterWifiApSmartCallback with null check & try-catch")
+
                 with open(ws_path, "w", encoding="utf-8") as f:
                     f.write(ws_c)
+
+    # ==========================================
+    # 21. motionrecognitionservice.jar in work_dir
+    # Disassemble and neutralize MotionRecognitionSAR$1.smali onReceive to eliminate SARDEVICE_CP ANR
+    # ==========================================
+    if work_dir and os.path.isdir(work_dir):
+        for candidate_path in [
+            os.path.join(work_dir, "system/system/framework/motionrecognitionservice.jar"),
+            os.path.join(work_dir, "system/framework/motionrecognitionservice.jar"),
+        ]:
+            if os.path.isfile(candidate_path):
+                import subprocess, tempfile, zipfile, shutil
+                m_tmp = tempfile.mkdtemp(prefix="motion_sar_")
+                try:
+                    smali_out = os.path.join(m_tmp, "smali")
+                    res = subprocess.run(["baksmali", "d", candidate_path, "-o", smali_out], capture_output=True, text=True)
+                    if res.returncode == 0:
+                        sar_1_name = "MotionRecognitionSAR" + chr(36) + "1.smali"
+                        for mroot, _, mfiles in os.walk(smali_out):
+                            if sar_1_name in mfiles:
+                                sar1_p = os.path.join(mroot, sar_1_name)
+                                with open(sar1_p, "r", encoding="utf-8") as f:
+                                    sar1_c = f.read()
+                                new_sar1_rcv = """.method public onReceive(Landroid/content/Context;Landroid/content/Intent;)V
+    .locals 0
+
+    return-void
+.end method"""
+                                sar1_c = re.sub(r'\.method public onReceive\(Landroid/content/Context;Landroid/content/Intent;\)V[\s\S]*?\.end method', new_sar1_rcv, sar1_c)
+                                with open(sar1_p, "w", encoding="utf-8") as f:
+                                    f.write(sar1_c)
+                                print("[+] Patched MotionRecognitionSAR$1.onReceive -> no-op to prevent SARDEVICE_CP ANR")
+
+                        dex_out = os.path.join(m_tmp, "classes.dex")
+                        res2 = subprocess.run(["smali", "a", smali_out, "-o", dex_out], capture_output=True, text=True)
+                        if res2.returncode == 0 and os.path.isfile(dex_out):
+                            jar_tmp = candidate_path + ".tmp"
+                            with zipfile.ZipFile(candidate_path, "r") as zin:
+                                with zipfile.ZipFile(jar_tmp, "w", compression=zipfile.ZIP_DEFLATED) as zout:
+                                    for item in zin.infolist():
+                                        if item.filename == "classes.dex":
+                                            zout.write(dex_out, "classes.dex")
+                                        else:
+                                            zout.writestr(item, zin.read(item.filename))
+                            os.replace(jar_tmp, candidate_path)
+                            print("[+] Successfully updated " + candidate_path + " with safe no-op MotionRecognitionSAR$1!")
+                except Exception as e:
+                    print("[-] Error patching motionrecognitionservice.jar: " + str(e))
+                finally:
+                    shutil.rmtree(m_tmp, ignore_errors=True)
 
     print("[+] All framework, biometrics, settings, and runtime patches applied successfully!")
     return True
