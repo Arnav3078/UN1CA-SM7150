@@ -1049,8 +1049,9 @@ def patch_framework_security(apktool_dir, src_dir=None, work_dir=None):
         with open(sdhms_siop, "r", encoding="utf-8") as f:
             siop_c = f.read()
 
-        target_call = "invoke-static {p2}, Lcom/sec/android/sdhms/thermal/overheatcontrol/overheatcomplex/OverheatComplexType;->valueOf(Ljava/lang/String;)Lcom/sec/android/sdhms/thermal/overheatcontrol/overheatcomplex/OverheatComplexType;\n\n    move-result-object v1"
-        repl_call = """:try_start_ovt
+        if ":try_start_ovt" not in siop_c:
+            target_call = "invoke-static {p2}, Lcom/sec/android/sdhms/thermal/overheatcontrol/overheatcomplex/OverheatComplexType;->valueOf(Ljava/lang/String;)Lcom/sec/android/sdhms/thermal/overheatcontrol/overheatcomplex/OverheatComplexType;\n\n    move-result-object v1"
+            repl_call = """:try_start_ovt
     invoke-static {p2}, Lcom/sec/android/sdhms/thermal/overheatcontrol/overheatcomplex/OverheatComplexType;->valueOf(Ljava/lang/String;)Lcom/sec/android/sdhms/thermal/overheatcontrol/overheatcomplex/OverheatComplexType;
 
     move-result-object v1
@@ -1063,11 +1064,100 @@ def patch_framework_security(apktool_dir, src_dir=None, work_dir=None):
 
     :goto_ovt_ok"""
 
-        if target_call in siop_c:
-            siop_c = siop_c.replace(target_call, repl_call)
-            with open(sdhms_siop, "w", encoding="utf-8") as f:
-                f.write(siop_c)
-            print("[+] Patched SDHMS SiopExpression.M -> guarded OverheatComplexType.valueOf with try-catch")
+            if target_call in siop_c:
+                siop_c = siop_c.replace(target_call, repl_call)
+                with open(sdhms_siop, "w", encoding="utf-8") as f:
+                    f.write(siop_c)
+                print("[+] Patched SDHMS SiopExpression.M -> guarded OverheatComplexType.valueOf with try-catch")
+
+    # ==========================================
+    # 13. SystemProperties.smali in framework.jar
+    # Guard native_set against SELinux property denial RuntimeExceptions
+    # (e.g. persist.sys.setupwizard.jig_on_wifisetup, dev.ssrm.gamelevel)
+    # ==========================================
+    for smali_root, _, files in os.walk(fw_dir):
+        if "SystemProperties.smali" in files:
+            sp_path = os.path.join(smali_root, "SystemProperties.smali")
+            with open(sp_path, "r", encoding="utf-8") as f:
+                sp_c = f.read()
+
+            target_set = ":cond_1\n    :goto_0\n    invoke-static {p0, p1}, Landroid/os/SystemProperties;->native_set(Ljava/lang/String;Ljava/lang/String;)V\n\n    return-void"
+            safe_set = """:cond_1
+    :goto_0
+    :try_start_sp_set
+    invoke-static {p0, p1}, Landroid/os/SystemProperties;->native_set(Ljava/lang/String;Ljava/lang/String;)V
+    :try_end_sp_set
+    .catch Ljava/lang/Throwable; {:try_start_sp_set .. :try_end_sp_set} :catch_sp_set
+
+    return-void
+
+    :catch_sp_set
+    move-exception v0
+
+    return-void"""
+
+            if ":try_start_sp_set" not in sp_c and target_set in sp_c:
+                sp_c = sp_c.replace(target_set, safe_set)
+                with open(sp_path, "w", encoding="utf-8") as f:
+                    f.write(sp_c)
+                print("[+] Patched SystemProperties.set -> guarded native_set with try-catch")
+            elif ":catch_sp_set" in sp_c:
+                print("[*] SystemProperties.smali already patched")
+            else:
+                print("[-] Could not find target native_set block in SystemProperties.smali")
+
+    # ==========================================
+    # 14. WifiSetupWizardActivity.smali in SecSettings.apk
+    # Neutralize persist.sys.setupwizard.jig_on_wifisetup property sets
+    # ==========================================
+    sec_settings_dir = os.path.join(apktool_dir, "system/priv-app/SecSettings/SecSettings.apk")
+    if os.path.isdir(sec_settings_dir):
+        for root, _, files in os.walk(sec_settings_dir):
+            if "WifiSetupWizardActivity.smali" in files:
+                wsw_path = os.path.join(root, "WifiSetupWizardActivity.smali")
+                with open(wsw_path, "r", encoding="utf-8") as f:
+                    wsw_c = f.read()
+
+                modified = False
+                call1 = "invoke-static {v8, v6}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V"
+                if call1 in wsw_c:
+                    wsw_c = wsw_c.replace(call1, f"# {call1}")
+                    modified = True
+
+                call2 = "invoke-static {v1, v6}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V"
+                if call2 in wsw_c:
+                    wsw_c = wsw_c.replace(call2, f"# {call2}")
+                    modified = True
+
+                if modified:
+                    with open(wsw_path, "w", encoding="utf-8") as f:
+                        f.write(wsw_c)
+                    print("[+] Patched WifiSetupWizardActivity -> neutralized jig_on_wifisetup property sets")
+
+    # ==========================================
+    # 15. SiopExpression.smali in SDHMS
+    # Guard dev.ssrm.gamelevel property set
+    # ==========================================
+    if os.path.isfile(sdhms_siop):
+        with open(sdhms_siop, "r", encoding="utf-8") as f:
+            siop_c = f.read()
+
+        if ":try_start_gamelevel" not in siop_c:
+            t_gamelevel = 'const-string v1, "dev.ssrm.gamelevel"\n\n    invoke-static {v1, v0}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V'
+            r_gamelevel = """const-string v1, "dev.ssrm.gamelevel"
+
+    :try_start_gamelevel
+    invoke-static {v1, v0}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
+    :try_end_gamelevel
+    .catch Ljava/lang/Throwable; {:try_start_gamelevel .. :try_end_gamelevel} :catch_gamelevel
+
+    :catch_gamelevel"""
+
+            if t_gamelevel in siop_c:
+                siop_c = siop_c.replace(t_gamelevel, r_gamelevel)
+                with open(sdhms_siop, "w", encoding="utf-8") as f:
+                    f.write(siop_c)
+                print("[+] Patched SDHMS SiopExpression -> guarded dev.ssrm.gamelevel with try-catch")
 
     print("[+] All framework, biometrics, settings, and runtime patches applied successfully!")
     return True
