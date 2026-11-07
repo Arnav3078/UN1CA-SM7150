@@ -3,7 +3,7 @@
 </h1>
 <p align="center">
   <a href="https://github.com/Arnav3078/UN1CA-SM7150/blob/un1ca-5.0/LICENSE"><img loading="lazy" src="https://img.shields.io/github/license/Arnav3078/UN1CA-SM7150?style=for-the-badge&amp;logo=github"/></a>
-  <a href="https://github.com/Arnav3078/UN1CA-SM7150/commits/un1ca-5.0"><img loading="lazy" src="https://img.shields.io/github/last-commit/Arnav3078/UN1CA-SM7150/un1ca-5.0?style=for-the-badge"/></a>
+  <a href="https://github.com/Arnav3078/UN1CA-SM7150/commits/un1ca-5.2.0"><img loading="lazy" src="https://img.shields.io/github/last-commit/Arnav3078/UN1CA-SM7150/un1ca-5.0?style=for-the-badge"/></a>
   <a href="https://github.com/Arnav3078/UN1CA-SM7150/stargazers"><img loading="lazy" src="https://img.shields.io/github/stars/Arnav3078/UN1CA-SM7150?style=for-the-badge"/></a>
 </p>
 <p align="center"><b>UN1CA 5.2 (Mind Blowing)</b> — One UI 9.0 Custom Firmware for <b>Samsung Galaxy M51 (SM-M515F / m51)</b></p>
