@@ -1660,6 +1660,201 @@ def patch_framework_security(apktool_dir, src_dir=None, work_dir=None):
                 swm_c = swm_c.replace(target_mcf_scan.group(1), new_mcf_scan)
                 print("[+] Patched SemWifiManager.getMcfScanDetail -> safe service fetch & return empty list on null")
 
+
+            # 18.11 Replace getEasySetupScanSettings()Ljava/util/Map;
+            target_easysetup = re.search(r'(\.method public blacklist getEasySetupScanSettings\(\)Ljava/util/Map;[\s\S]*?\.end method)', swm_c)
+            if target_easysetup:
+                new_easysetup = """.method public blacklist getEasySetupScanSettings()Ljava/util/Map;
+    .locals 1
+    .annotation system Ldalvik/annotation/Signature;
+        value = {
+            "()",
+            "Ljava/util/Map<",
+            "Ljava/lang/String;",
+            "Lcom/samsung/android/wifi/SemEasySetupWifiScanSettings;",
+            ">;"
+        }
+    .end annotation
+
+    :try_start_easysetup
+    invoke-direct {p0}, Lcom/samsung/android/wifi/SemWifiManager;->getSafeService()Lcom/samsung/android/wifi/ISemWifiManager;
+
+    move-result-object p0
+
+    if-nez p0, :cond_call_easysetup
+
+    new-instance p0, Ljava/util/HashMap;
+
+    invoke-direct {p0}, Ljava/util/HashMap;-><init>()V
+
+    return-object p0
+
+    :cond_call_easysetup
+    invoke-interface {p0}, Lcom/samsung/android/wifi/ISemWifiManager;->getEasySetupScanSettings()Ljava/util/Map;
+
+    move-result-object p0
+
+    if-nez p0, :cond_ret_easysetup
+
+    new-instance p0, Ljava/util/HashMap;
+
+    invoke-direct {p0}, Ljava/util/HashMap;-><init>()V
+
+    :cond_ret_easysetup
+    return-object p0
+    :try_end_easysetup
+    .catch Ljava/lang/Throwable; {:try_start_easysetup .. :try_end_easysetup} :catch_easysetup
+
+    :catch_easysetup
+    new-instance p0, Ljava/util/HashMap;
+
+    invoke-direct {p0}, Ljava/util/HashMap;-><init>()V
+
+    return-object p0
+.end method"""
+                swm_c = swm_c.replace(target_easysetup.group(1), new_easysetup)
+                print("[+] Patched SemWifiManager.getEasySetupScanSettings -> return non-null HashMap")
+
+            # 18.12 Replace getWifiApBleScanDetail()Ljava/util/List;
+            target_ble_scan = re.search(r'(\.method public blacklist getWifiApBleScanDetail\(\)Ljava/util/List;[\s\S]*?\.end method)', swm_c)
+            if target_ble_scan:
+                new_ble_scan = """.method public blacklist getWifiApBleScanDetail()Ljava/util/List;
+    .locals 1
+    .annotation system Ldalvik/annotation/Signature;
+        value = {
+            "()",
+            "Ljava/util/List<",
+            "Lcom/samsung/android/wifi/SemWifiApBleScanResult;",
+            ">;"
+        }
+    .end annotation
+
+    :try_start_ble_scan
+    invoke-direct {p0}, Lcom/samsung/android/wifi/SemWifiManager;->getSafeService()Lcom/samsung/android/wifi/ISemWifiManager;
+
+    move-result-object p0
+
+    if-nez p0, :cond_call_ble_scan
+
+    new-instance p0, Ljava/util/ArrayList;
+
+    invoke-direct {p0}, Ljava/util/ArrayList;-><init>()V
+
+    return-object p0
+
+    :cond_call_ble_scan
+    invoke-interface {p0}, Lcom/samsung/android/wifi/ISemWifiManager;->getWifiApBleScanDetail()Ljava/util/List;
+
+    move-result-object p0
+
+    if-nez p0, :cond_ret_ble_scan
+
+    new-instance p0, Ljava/util/ArrayList;
+
+    invoke-direct {p0}, Ljava/util/ArrayList;-><init>()V
+
+    :cond_ret_ble_scan
+    return-object p0
+    :try_end_ble_scan
+    .catch Ljava/lang/Throwable; {:try_start_ble_scan .. :try_end_ble_scan} :catch_ble_scan
+
+    :catch_ble_scan
+    new-instance p0, Ljava/util/ArrayList;
+
+    invoke-direct {p0}, Ljava/util/ArrayList;-><init>()V
+
+    return-object p0
+.end method"""
+                swm_c = swm_c.replace(target_ble_scan.group(1), new_ble_scan)
+                print("[+] Patched SemWifiManager.getWifiApBleScanDetail -> return non-null ArrayList")
+
+            # 18.13 Replace getWifiApBleD2DScanDetail()Ljava/util/List;
+            target_d2d_scan = re.search(r'(\.method public blacklist getWifiApBleD2DScanDetail\(\)Ljava/util/List;[\s\S]*?\.end method)', swm_c)
+            if target_d2d_scan:
+                new_d2d_scan = """.method public blacklist getWifiApBleD2DScanDetail()Ljava/util/List;
+    .locals 1
+    .annotation system Ldalvik/annotation/Signature;
+        value = {
+            "()",
+            "Ljava/util/List<",
+            "Lcom/samsung/android/wifi/SemWifiApBleScanResult;",
+            ">;"
+        }
+    .end annotation
+
+    :try_start_d2d_scan
+    invoke-direct {p0}, Lcom/samsung/android/wifi/SemWifiManager;->getSafeService()Lcom/samsung/android/wifi/ISemWifiManager;
+
+    move-result-object p0
+
+    if-nez p0, :cond_call_d2d_scan
+
+    new-instance p0, Ljava/util/ArrayList;
+
+    invoke-direct {p0}, Ljava/util/ArrayList;-><init>()V
+
+    return-object p0
+
+    :cond_call_d2d_scan
+    invoke-interface {p0}, Lcom/samsung/android/wifi/ISemWifiManager;->getWifiApBleD2DScanDetail()Ljava/util/List;
+
+    move-result-object p0
+
+    if-nez p0, :cond_ret_d2d_scan
+
+    new-instance p0, Ljava/util/ArrayList;
+
+    invoke-direct {p0}, Ljava/util/ArrayList;-><init>()V
+
+    :cond_ret_d2d_scan
+    return-object p0
+    :try_end_d2d_scan
+    .catch Ljava/lang/Throwable; {:try_start_d2d_scan .. :try_end_d2d_scan} :catch_d2d_scan
+
+    :catch_d2d_scan
+    new-instance p0, Ljava/util/ArrayList;
+
+    invoke-direct {p0}, Ljava/util/ArrayList;-><init>()V
+
+    return-object p0
+.end method"""
+                swm_c = swm_c.replace(target_d2d_scan.group(1), new_d2d_scan)
+                print("[+] Patched SemWifiManager.getWifiApBleD2DScanDetail -> return non-null ArrayList")
+
+            # 18.14 Replace isAirdropInterfaceActive()Z
+            target_airdrop = re.search(r'(\.method public blacklist isAirdropInterfaceActive\(\)Z[\s\S]*?\.end method)', swm_c)
+            if target_airdrop:
+                new_airdrop = """.method public blacklist isAirdropInterfaceActive()Z
+    .locals 1
+
+    :try_start_airdrop_active
+    invoke-direct {p0}, Lcom/samsung/android/wifi/SemWifiManager;->getSafeService()Lcom/samsung/android/wifi/ISemWifiManager;
+
+    move-result-object p0
+
+    if-nez p0, :cond_call_airdrop_active
+
+    const/4 p0, 0x0
+
+    return p0
+
+    :cond_call_airdrop_active
+    invoke-interface {p0}, Lcom/samsung/android/wifi/ISemWifiManager;->isAirdropInterfaceActive()Z
+
+    move-result p0
+
+    return p0
+    :try_end_airdrop_active
+    .catch Ljava/lang/Throwable; {:try_start_airdrop_active .. :try_end_airdrop_active} :catch_airdrop_active
+
+    :catch_airdrop_active
+    const/4 p0, 0x0
+
+    return p0
+.end method"""
+                swm_c = swm_c.replace(target_airdrop.group(1), new_airdrop)
+                print("[+] Patched SemWifiManager.isAirdropInterfaceActive -> return false on error/null")
+
             with open(swm_path, "w", encoding="utf-8") as f:
                 f.write(swm_c)
 
@@ -1700,6 +1895,32 @@ def patch_framework_security(apktool_dir, src_dir=None, work_dir=None):
                     print("[+] Patched SystemServiceRegistry$198.smali -> fallback to ISemWifiManager$Default on null binder")
                 elif ":cond_has_service" in ssr_c:
                     print("[*] SystemServiceRegistry$198.smali already guarded with fallback")
+
+
+    # ==========================================
+    # 18.c ISemWifiManager$Default.smali in framework.jar
+    # Ensure all List/Map returning methods return empty collections instead of null
+    # ==========================================
+    for smali_root, _, files in os.walk(fw_dir):
+        default_name = "ISemWifiManager" + chr(36) + "Default.smali"
+        if default_name in files:
+            d_path = os.path.join(smali_root, default_name)
+            with open(d_path, "r", encoding="utf-8") as f:
+                d_c = f.read()
+
+            list_pat = re.compile(r'(\.method public (?:blacklist )?[a-zA-Z0-9_]+\(.*?\))Ljava/util/List;([\s\S]*?)const/4 p0, 0x0(\s+return-object p0\s+\.end method)')
+            def rep_list(m):
+                return m.group(1) + "Ljava/util/List;" + m.group(2) + "new-instance p0, Ljava/util/ArrayList;\n\n    invoke-direct {p0}, Ljava/util/ArrayList;-><init>()V" + m.group(3)
+            d_c = list_pat.sub(rep_list, d_c)
+
+            map_pat = re.compile(r'(\.method public (?:blacklist )?[a-zA-Z0-9_]+\(.*?\))Ljava/util/Map;([\s\S]*?)const/4 p0, 0x0(\s+return-object p0\s+\.end method)')
+            def rep_map(m):
+                return m.group(1) + "Ljava/util/Map;" + m.group(2) + "new-instance p0, Ljava/util/HashMap;\n\n    invoke-direct {p0}, Ljava/util/HashMap;-><init>()V" + m.group(3)
+            d_c = map_pat.sub(rep_map, d_c)
+
+            with open(d_path, "w", encoding="utf-8") as f:
+                f.write(d_c)
+            print("[+] Patched ISemWifiManager$Default.smali -> all List/Map methods return empty collections")
 
     # ==========================================
     # 19. SemWifiUtils.smali in SecSettings.apk
@@ -1964,6 +2185,111 @@ def patch_framework_security(apktool_dir, src_dir=None, work_dir=None):
 
                 with open(ws_path, "w", encoding="utf-8") as f:
                     f.write(ws_c)
+
+
+            # ==========================================
+            # 20.b WifiPickerTracker.smali in SecSettings.apk
+            # Guard getEasySetupScanSettings(), getConfiguredNetworks(),
+            # and wrap initializeState() & handleOnStart() in try/catch Throwable
+            # ==========================================
+            if "WifiPickerTracker.smali" in files:
+                wpt_path = os.path.join(root, "WifiPickerTracker.smali")
+                with open(wpt_path, "r", encoding="utf-8") as f:
+                    wpt_c = f.read()
+
+                # Guard getEasySetupScanSettings()
+                target_wpt_es = """    invoke-virtual {v1}, Lcom/samsung/android/wifi/SemWifiManager;->getEasySetupScanSettings()Ljava/util/Map;
+
+    move-result-object v1
+
+    invoke-interface {v1}, Ljava/util/Map;->size()I"""
+
+                safe_wpt_es = """    invoke-virtual {v1}, Lcom/samsung/android/wifi/SemWifiManager;->getEasySetupScanSettings()Ljava/util/Map;
+
+    move-result-object v1
+
+    if-nez v1, :cond_skip_es_null
+
+    goto :cond_4
+
+    :cond_skip_es_null
+    invoke-interface {v1}, Ljava/util/Map;->size()I"""
+
+                if target_wpt_es in wpt_c:
+                    wpt_c = wpt_c.replace(target_wpt_es, safe_wpt_es)
+                    print("[+] Patched WifiPickerTracker.initializeState -> guarded getEasySetupScanSettings with null-check")
+
+                # Guard getConfiguredNetworks()
+                target_wpt_cn = """    iget-object v1, p0, Lcom/android/wifitrackerlib/BaseWifiTracker;->mSemWifiManager:Lcom/samsung/android/wifi/SemWifiManager;
+
+    invoke-virtual {v1}, Lcom/samsung/android/wifi/SemWifiManager;->getConfiguredNetworks()Ljava/util/List;
+
+    move-result-object v1
+
+    invoke-interface {v1}, Ljava/util/List;->iterator()Ljava/util/Iterator;"""
+
+                safe_wpt_cn = """    iget-object v1, p0, Lcom/android/wifitrackerlib/BaseWifiTracker;->mSemWifiManager:Lcom/samsung/android/wifi/SemWifiManager;
+
+    if-eqz v1, :cond_skip_cn_mgr
+
+    invoke-virtual {v1}, Lcom/samsung/android/wifi/SemWifiManager;->getConfiguredNetworks()Ljava/util/List;
+
+    move-result-object v1
+
+    goto :goto_cn_chk
+
+    :cond_skip_cn_mgr
+    const/4 v1, 0x0
+
+    :goto_cn_chk
+    if-nez v1, :cond_skip_cn_null
+
+    new-instance v1, Ljava/util/ArrayList;
+
+    invoke-direct {v1}, Ljava/util/ArrayList;-><init>()V
+
+    :cond_skip_cn_null
+    invoke-interface {v1}, Ljava/util/List;->iterator()Ljava/util/Iterator;"""
+
+                if target_wpt_cn in wpt_c:
+                    wpt_c = wpt_c.replace(target_wpt_cn, safe_wpt_cn)
+                    print("[+] Patched WifiPickerTracker.initializeState -> guarded getConfiguredNetworks with null-check")
+
+                # Wrap handleOnStart in try/catch Throwable
+                target_wpt_hos = """.method public final handleOnStart()V
+    .locals 0
+
+    invoke-virtual {p0}, Lcom/android/wifitrackerlib/WifiPickerTracker;->initializeState()V
+
+    return-void
+.end method"""
+
+                safe_wpt_hos = """.method public final handleOnStart()V
+    .locals 0
+
+    :try_start_hos
+    invoke-virtual {p0}, Lcom/android/wifitrackerlib/WifiPickerTracker;->initializeState()V
+    :try_end_hos
+    .catch Ljava/lang/Throwable; {:try_start_hos .. :try_end_hos} :catch_hos
+
+    :catch_hos
+    return-void
+.end method"""
+
+                if target_wpt_hos in wpt_c:
+                    wpt_c = wpt_c.replace(target_wpt_hos, safe_wpt_hos)
+                    print("[+] Patched WifiPickerTracker.handleOnStart -> wrapped with try/catch Throwable")
+
+                # Wrap initializeState entirely in try/catch Throwable
+                pat_init = re.compile(r'(\.method public final initializeState\(\)V\s+\.locals \d+)\s+([\s\S]*?)(    :cond_a\s+return-void\s+\.end method)')
+                m_init = pat_init.search(wpt_c)
+                if m_init and ":try_start_init_state" not in wpt_c:
+                    wrapped_init = m_init.group(1) + "\n\n    :try_start_init_state\n" + m_init.group(2) + "    :cond_a\n    :try_end_init_state\n    .catch Ljava/lang/Throwable; {:try_start_init_state .. :try_end_init_state} :catch_init_state\n\n    :catch_init_state\n    return-void\n.end method"
+                    wpt_c = wpt_c.replace(m_init.group(0), wrapped_init)
+                    print("[+] Patched WifiPickerTracker.initializeState -> wrapped with try/catch Throwable")
+
+                with open(wpt_path, "w", encoding="utf-8") as f:
+                    f.write(wpt_c)
 
     # ==========================================
     # 21. motionrecognitionservice.jar in work_dir
