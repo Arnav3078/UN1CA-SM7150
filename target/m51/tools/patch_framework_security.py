@@ -558,7 +558,7 @@ def patch_framework_security(apktool_dir, src_dir=None, work_dir=None):
         )
 
         # Inject helper method if not present (AFTER replacement so it does not recurse)
-        if "isSafeAirdropActive(Lcom/samsung/android/wifi/SemWifiManager;)Z" not in content:
+        if ".method private static blacklist isSafeAirdropActive" not in content:
             helper_method = """
 .method private static blacklist isSafeAirdropActive(Lcom/samsung/android/wifi/SemWifiManager;)Z
     .locals 1
@@ -586,6 +586,7 @@ def patch_framework_security(apktool_dir, src_dir=None, work_dir=None):
 .end method
 """
             content += "\n" + helper_method
+            print("[+] Injected isSafeAirdropActive helper method into WifiSettings.smali")
 
         # Ensure mSemWifiManager is instantiated in onCreate
         target_init = """    invoke-virtual {v1, v2}, Landroid/content/Context;->getSystemService(Ljava/lang/String;)Ljava/lang/Object;
@@ -1038,6 +1039,35 @@ def patch_framework_security(apktool_dir, src_dir=None, work_dir=None):
             with open(fota_smali, "w", encoding="utf-8") as f:
                 f.write(fota_c)
             print("[+] Patched SoftwareUpdateUtils.startFotaActivityOrBroadcast -> safe no-op")
+
+    # ==========================================
+    # 12. SamsungDeviceHealthManagerService (SDHMS) OverheatComplexType safety
+    # Guard OverheatComplexType.valueOf against unknown thermal tags (e.g. DEX, MW)
+    # ==========================================
+    sdhms_siop = os.path.join(apktool_dir, "system/priv-app/SamsungDeviceHealthManagerService/SamsungDeviceHealthManagerService.apk/smali/com/sec/android/sdhms/settings/SiopExpression.smali")
+    if os.path.isfile(sdhms_siop):
+        with open(sdhms_siop, "r", encoding="utf-8") as f:
+            siop_c = f.read()
+
+        target_call = "invoke-static {p2}, Lcom/sec/android/sdhms/thermal/overheatcontrol/overheatcomplex/OverheatComplexType;->valueOf(Ljava/lang/String;)Lcom/sec/android/sdhms/thermal/overheatcontrol/overheatcomplex/OverheatComplexType;\n\n    move-result-object v1"
+        repl_call = """:try_start_ovt
+    invoke-static {p2}, Lcom/sec/android/sdhms/thermal/overheatcontrol/overheatcomplex/OverheatComplexType;->valueOf(Ljava/lang/String;)Lcom/sec/android/sdhms/thermal/overheatcontrol/overheatcomplex/OverheatComplexType;
+
+    move-result-object v1
+    :try_end_ovt
+    .catch Ljava/lang/Exception; {:try_start_ovt .. :try_end_ovt} :catch_ovt
+    goto :goto_ovt_ok
+
+    :catch_ovt
+    goto :goto_0
+
+    :goto_ovt_ok"""
+
+        if target_call in siop_c:
+            siop_c = siop_c.replace(target_call, repl_call)
+            with open(sdhms_siop, "w", encoding="utf-8") as f:
+                f.write(siop_c)
+            print("[+] Patched SDHMS SiopExpression.M -> guarded OverheatComplexType.valueOf with try-catch")
 
     print("[+] All framework, biometrics, settings, and runtime patches applied successfully!")
     return True
