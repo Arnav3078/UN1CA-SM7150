@@ -631,10 +631,9 @@ if [[ "$SOURCE_RIL_FEATURES" != "$TARGET_RIL_FEATURES" ]]; then
             "$SOURCE_RIL_FEATURES" \
             "${TARGET_RIL_FEATURES//none/}"
         SMALI_PATCH "system" "system/framework/telephony-common.jar" \
-            "smali/com/android/internal/telephony/TelephonyLogger.smali" "replace" \
-            "dump(Ljava/io/FileDescriptor;Ljava/io/PrintWriter;[Ljava/lang/String;)V" \
-            "${SOURCE_RIL_FEATURES//\"/}" \
-            "${TARGET_RIL_FEATURES//none/}"
+            "smali/com/android/internal/telephony/TelephonyLogger.smali" "replaceall" \
+            "Feature=SecProductFeatures: (${SOURCE_RIL_FEATURES//\"/})" \
+            "Feature=SecProductFeatures: (${TARGET_RIL_FEATURES//none/})"
         SMALI_PATCH "system" "system/priv-app/TeleService/TeleService.apk" \
             "smali/com/samsung/telephony/model/feature/SamsungFeatureSatellite.smali" "replaceall" \
             "$SOURCE_RIL_FEATURES" \
