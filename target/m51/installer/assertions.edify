@@ -1,0 +1,1 @@
+is_substring("M515FXX", getprop("ro.boot.bootloader")) && verify_no_downgrade(getprop("ro.boot.bootloader"), "M515FXXS6DXE3") && abort("E3003: This package requires the \"M515FXXS6DXE3\" firmware installed on your device; you have \"" + getprop("ro.boot.bootloader") + "\".");
