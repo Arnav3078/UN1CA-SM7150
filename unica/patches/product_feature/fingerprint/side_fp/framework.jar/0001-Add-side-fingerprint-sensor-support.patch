@@ -84,23 +84,22 @@ diff --git a/smali_classes6/com/samsung/android/rune/InputRune.smali b/smali_cla
 index c080ce4b..7fece207 100644
 --- a/smali_classes6/com/samsung/android/rune/InputRune.smali
 +++ b/smali_classes6/com/samsung/android/rune/InputRune.smali
-@@ -649,7 +649,7 @@
+@@ -690,7 +690,7 @@
+     move-result v3
  
-     sput-boolean v1, Lcom/samsung/android/rune/InputRune;->PWM_SKT_PHONE_RELAX_MODE:Z
+     sput-boolean v3, Lcom/samsung/android/rune/InputRune;->PWM_SKT_PHONE_RELAX_MODE:Z
  
--    sput-boolean v0, Lcom/samsung/android/rune/InputRune;->PWM_FINGERPRINT_SIDE_TOUCH:Z
-+    sput-boolean v4, Lcom/samsung/android/rune/InputRune;->PWM_FINGERPRINT_SIDE_TOUCH:Z
+-    sput-boolean v2, Lcom/samsung/android/rune/InputRune;->PWM_FINGERPRINT_SIDE_TOUCH:Z
++    sput-boolean v6, Lcom/samsung/android/rune/InputRune;->PWM_FINGERPRINT_SIDE_TOUCH:Z
  
      invoke-static {}, Lcom/samsung/android/feature/SemFloatingFeature;->getInstance()Lcom/samsung/android/feature/SemFloatingFeature;
+@@ -818,5 +818,5 @@
+     sput-boolean v0, Lcom/samsung/android/rune/InputRune;->PWM_QUICK_LAUNCH_CAMERA:Z
  
-@@ -773,7 +773,7 @@
+-    sput-boolean v2, Lcom/samsung/android/rune/InputRune;->PWM_SKIP_TOO_FAST_DOUBLE_PRESS:Z
++    sput-boolean v6, Lcom/samsung/android/rune/InputRune;->PWM_SKIP_TOO_FAST_DOUBLE_PRESS:Z
  
-     sput-boolean v1, Lcom/samsung/android/rune/InputRune;->PWM_QUICK_LAUNCH_CAMERA:Z
- 
--    sput-boolean v0, Lcom/samsung/android/rune/InputRune;->PWM_SKIP_TOO_FAST_DOUBLE_PRESS:Z
-+    sput-boolean v4, Lcom/samsung/android/rune/InputRune;->PWM_SKIP_TOO_FAST_DOUBLE_PRESS:Z
- 
-     sput-boolean v0, Lcom/samsung/android/rune/InputRune;->KNOX_CAPTURE_XCOVER_OR_TOP_KEY:Z
+     sput-boolean v1, Lcom/samsung/android/rune/InputRune;->SYSPERF_INPUT_CMD_SUPPORT:Z
  
 -- 
 2.51.0
