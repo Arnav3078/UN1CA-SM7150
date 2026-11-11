@@ -71,10 +71,10 @@ index 80753521..217b4e3c 100644
  
      return-object v0
  .end method
-diff --git a/smali_classes3/android/system/keystore2/IKeystoreSecurityLevel$Stub$Proxy.smali b/smali_classes3/android/system/keystore2/IKeystoreSecurityLevel$Stub$Proxy.smali
+diff --git a/smali_classes4/android/system/keystore2/IKeystoreSecurityLevel$Stub$Proxy.smali b/smali_classes4/android/system/keystore2/IKeystoreSecurityLevel$Stub$Proxy.smali
 index 3f9a0c3e..09d89d0b 100644
---- a/smali_classes3/android/system/keystore2/IKeystoreSecurityLevel$Stub$Proxy.smali
-+++ b/smali_classes3/android/system/keystore2/IKeystoreSecurityLevel$Stub$Proxy.smali
+--- a/smali_classes4/android/system/keystore2/IKeystoreSecurityLevel$Stub$Proxy.smali
++++ b/smali_classes4/android/system/keystore2/IKeystoreSecurityLevel$Stub$Proxy.smali
 @@ -145,6 +145,15 @@
          }
      .end annotation
@@ -211,10 +211,10 @@ index 3f9a0c3e..09d89d0b 100644
      :try_start_1
      new-instance p0, Landroid/os/RemoteException;
  
-diff --git a/smali_classes3/android/system/keystore2/IKeystoreService$Stub$Proxy.smali b/smali_classes3/android/system/keystore2/IKeystoreService$Stub$Proxy.smali
+diff --git a/smali_classes4/android/system/keystore2/IKeystoreService$Stub$Proxy.smali b/smali_classes4/android/system/keystore2/IKeystoreService$Stub$Proxy.smali
 index 2bf02c02..0526df77 100644
---- a/smali_classes3/android/system/keystore2/IKeystoreService$Stub$Proxy.smali
-+++ b/smali_classes3/android/system/keystore2/IKeystoreService$Stub$Proxy.smali
+--- a/smali_classes4/android/system/keystore2/IKeystoreService$Stub$Proxy.smali
++++ b/smali_classes4/android/system/keystore2/IKeystoreService$Stub$Proxy.smali
 @@ -62,6 +62,15 @@
          }
      .end annotation
