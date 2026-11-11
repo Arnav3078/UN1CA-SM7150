@@ -62,3 +62,6 @@ ui_print("Flashing firmwares...");
   delete_recursive("/data/dalvik-cache");
   delete_recursive("/data/system/package_cache");
   delete("/data/property/persistent_properties");
+  delete_recursive("/metadata/bootstat");
+  delete("/data/log/power_off_reset_reason.txt");
+  delete("/data/log/prev_dump.log");
