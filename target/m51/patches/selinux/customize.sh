@@ -105,6 +105,11 @@ if [ -f "$WORK_DIR/vendor/etc/selinux/vendor_sepolicy.cil" ]; then
     echo "(allow surfaceflinger vendor_sysfs_kgsl (dir (ioctl read getattr lock open watch watch_reads search)))" >> "$WORK_DIR/vendor/etc/selinux/vendor_sepolicy.cil"
     echo "(allow surfaceflinger vendor_sysfs_kgsl (file (ioctl read write getattr lock map open watch watch_reads)))" >> "$WORK_DIR/vendor/etc/selinux/vendor_sepolicy.cil"
     echo "(allow surfaceflinger vendor_sysfs_kgsl (lnk_file (ioctl read getattr lock map open watch watch_reads)))" >> "$WORK_DIR/vendor/etc/selinux/vendor_sepolicy.cil"
+    echo "(allow hal_camera_default kgsl_device (chr_file (ioctl read write getattr lock append map open watch watch_reads)))" >> "$WORK_DIR/vendor/etc/selinux/vendor_sepolicy.cil"
+    echo "(allow hal_camera_default gpu_device (chr_file (ioctl read write getattr lock append map open watch watch_reads)))" >> "$WORK_DIR/vendor/etc/selinux/vendor_sepolicy.cil"
+    echo "(allow hal_camera_default ion_device (chr_file (ioctl read write getattr lock append map open watch watch_reads)))" >> "$WORK_DIR/vendor/etc/selinux/vendor_sepolicy.cil"
+    echo "(allow hal_camera_default vendor_sysfs_kgsl (dir (ioctl read getattr lock open watch watch_reads search)))" >> "$WORK_DIR/vendor/etc/selinux/vendor_sepolicy.cil"
+    echo "(allow hal_camera_default vendor_sysfs_kgsl (file (ioctl read write getattr lock map open watch watch_reads)))" >> "$WORK_DIR/vendor/etc/selinux/vendor_sepolicy.cil"
     echo "(allow system_app_30_0 logpersistd_logging_prop_30_0 (property_service (set)))" >> "$WORK_DIR/vendor/etc/selinux/vendor_sepolicy.cil"
     echo "(allow system_app_30_0 logd_prop_30_0 (property_service (set)))" >> "$WORK_DIR/vendor/etc/selinux/vendor_sepolicy.cil"
 fi

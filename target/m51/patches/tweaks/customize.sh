@@ -44,3 +44,15 @@ DELETE_FROM_WORK_DIR "system_ext" "etc/init/vendor.qti.hardware.qccsyshal@1.2-se
 DELETE_FROM_WORK_DIR "system_ext" "etc/init/vendor.qti.qccsyshal_aidl-service.rc" || true
 DELETE_FROM_WORK_DIR "system_ext" "etc/permissions/com.qti.qcc.vendor_qcc.xml" || true
 LOG_STEP_OUT
+
+LOG_STEP_IN "- Disabling RescueParty and crash-induced recovery boot"
+SET_PROP "system" "persist.sys.disable_rescue" "true"
+SET_PROP "system" "persist.device_config.configuration.disable_rescue_party" "true"
+SET_PROP "system" "persist.device_config.configuration.disable_rescue_party_factory_reset" "true"
+SET_PROP "vendor" "persist.sys.disable_rescue" "true"
+SET_PROP "system" "ro.hardware.egl" "adreno"
+SET_PROP "vendor" "ro.hardware.egl" "adreno"
+if [ -f "$WORK_DIR/system/system/etc/init/flags_health_check.rc" ]; then
+    sed -i '/on property:sys.init.updatable_crashing=1/,+3d' "$WORK_DIR/system/system/etc/init/flags_health_check.rc"
+fi
+LOG_STEP_OUT
