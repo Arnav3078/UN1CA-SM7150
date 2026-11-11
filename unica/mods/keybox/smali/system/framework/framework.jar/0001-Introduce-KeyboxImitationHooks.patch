@@ -212,10 +212,15 @@ index 3f9a0c3e..09d89d0b 100644
      new-instance p0, Landroid/os/RemoteException;
  
 diff --git a/smali_classes4/android/system/keystore2/IKeystoreService$Stub$Proxy.smali b/smali_classes4/android/system/keystore2/IKeystoreService$Stub$Proxy.smali
-index 2bf02c02..0526df77 100644
+index bf76de8..b4e5521 100644
 --- a/smali_classes4/android/system/keystore2/IKeystoreService$Stub$Proxy.smali
 +++ b/smali_classes4/android/system/keystore2/IKeystoreService$Stub$Proxy.smali
-@@ -62,6 +62,15 @@
+@@ -57,16 +57,25 @@
+ .method public blacklist deleteKey(Landroid/system/keystore2/KeyDescriptor;)V
+     .locals 3
+     .annotation system Ldalvik/annotation/Throws;
+         value = {
+             Landroid/os/RemoteException;
          }
      .end annotation
  
@@ -231,7 +236,17 @@ index 2bf02c02..0526df77 100644
      invoke-virtual {p0}, Landroid/system/keystore2/IKeystoreService$Stub$Proxy;->asBinder()Landroid/os/IBinder;
  
      move-result-object v0
-@@ -91,7 +100,7 @@
+ 
+     invoke-static {v0}, Landroid/os/Parcel;->obtain(Landroid/os/IBinder;)Landroid/os/Parcel;
+ 
+     move-result-object v0
+ 
+@@ -86,29 +95,29 @@
+     iget-object p0, p0, Landroid/system/keystore2/IKeystoreService$Stub$Proxy;->mRemote:Landroid/os/IBinder;
+ 
+     const/4 p1, 0x5
+ 
+     invoke-interface {p0, p1, v0, v1, v2}, Landroid/os/IBinder;->transact(ILandroid/os/Parcel;Landroid/os/Parcel;I)Z
  
      move-result p0
  
@@ -240,7 +255,11 @@ index 2bf02c02..0526df77 100644
  
      invoke-virtual {v1}, Landroid/os/Parcel;->readException()V
      :try_end_0
-@@ -103,7 +112,7 @@
+     .catchall {:try_start_0 .. :try_end_0} :catchall_0
+ 
+     invoke-virtual {v1}, Landroid/os/Parcel;->recycle()V
+ 
+     invoke-virtual {v0}, Landroid/os/Parcel;->recycle()V
  
      return-void
  
@@ -249,7 +268,17 @@ index 2bf02c02..0526df77 100644
      :try_start_1
      new-instance p0, Landroid/os/RemoteException;
  
-@@ -307,6 +316,15 @@
+     const-string p1, "Unimplemented"
+ 
+     invoke-direct {p0, p1}, Landroid/os/RemoteException;-><init>(Ljava/lang/String;)V
+ 
+     throw p0
+@@ -302,16 +311,25 @@
+ .method public blacklist getKeyEntry(Landroid/system/keystore2/KeyDescriptor;)Landroid/system/keystore2/KeyEntryResponse;
+     .locals 3
+     .annotation system Ldalvik/annotation/Throws;
+         value = {
+             Landroid/os/RemoteException;
          }
      .end annotation
  
@@ -265,7 +294,17 @@ index 2bf02c02..0526df77 100644
      invoke-virtual {p0}, Landroid/system/keystore2/IKeystoreService$Stub$Proxy;->asBinder()Landroid/os/IBinder;
  
      move-result-object v0
-@@ -336,7 +354,7 @@
+ 
+     invoke-static {v0}, Landroid/os/Parcel;->obtain(Landroid/os/IBinder;)Landroid/os/Parcel;
+ 
+     move-result-object v0
+ 
+@@ -331,17 +349,17 @@
+     iget-object p0, p0, Landroid/system/keystore2/IKeystoreService$Stub$Proxy;->mRemote:Landroid/os/IBinder;
+ 
+     const/4 p1, 0x2
+ 
+     invoke-interface {p0, p1, v0, v1, v2}, Landroid/os/IBinder;->transact(ILandroid/os/Parcel;Landroid/os/Parcel;I)Z
  
      move-result p0
  
@@ -274,7 +313,17 @@ index 2bf02c02..0526df77 100644
  
      invoke-virtual {v1}, Landroid/os/Parcel;->readException()V
  
-@@ -356,7 +374,7 @@
+     sget-object p0, Landroid/system/keystore2/KeyEntryResponse;->CREATOR:Landroid/os/Parcelable$Creator;
+ 
+     invoke-virtual {v1, p0}, Landroid/os/Parcel;->readTypedObject(Landroid/os/Parcelable$Creator;)Ljava/lang/Object;
+ 
+     move-result-object p0
+@@ -351,17 +369,17 @@
+     .catchall {:try_start_0 .. :try_end_0} :catchall_0
+ 
+     invoke-virtual {v1}, Landroid/os/Parcel;->recycle()V
+ 
+     invoke-virtual {v0}, Landroid/os/Parcel;->recycle()V
  
      return-object p0
  
@@ -283,7 +332,17 @@ index 2bf02c02..0526df77 100644
      :try_start_1
      new-instance p0, Landroid/os/RemoteException;
  
-@@ -386,6 +404,19 @@
+     const-string p1, "Unimplemented"
+ 
+     invoke-direct {p0, p1}, Landroid/os/RemoteException;-><init>(Ljava/lang/String;)V
+ 
+     throw p0
+@@ -381,16 +399,29 @@
+ .method public blacklist getNumberOfEntries(IJ)I
+     .locals 3
+     .annotation system Ldalvik/annotation/Throws;
+         value = {
+             Landroid/os/RemoteException;
          }
      .end annotation
  
@@ -303,7 +362,17 @@ index 2bf02c02..0526df77 100644
      invoke-virtual {p0}, Landroid/system/keystore2/IKeystoreService$Stub$Proxy;->asBinder()Landroid/os/IBinder;
  
      move-result-object v0
-@@ -417,7 +448,7 @@
+ 
+     invoke-static {v0}, Landroid/os/Parcel;->obtain(Landroid/os/IBinder;)Landroid/os/Parcel;
+ 
+     move-result-object v0
+ 
+@@ -412,33 +443,33 @@
+     const/16 p1, 0x8
+ 
+     const/4 p2, 0x0
+ 
+     invoke-interface {p0, p1, v0, v1, p2}, Landroid/os/IBinder;->transact(ILandroid/os/Parcel;Landroid/os/Parcel;I)Z
  
      move-result p0
  
@@ -312,7 +381,15 @@ index 2bf02c02..0526df77 100644
  
      invoke-virtual {v1}, Landroid/os/Parcel;->readException()V
  
-@@ -433,7 +464,7 @@
+     invoke-virtual {v1}, Landroid/os/Parcel;->readInt()I
+ 
+     move-result p0
+     :try_end_0
+     .catchall {:try_start_0 .. :try_end_0} :catchall_0
+ 
+     invoke-virtual {v1}, Landroid/os/Parcel;->recycle()V
+ 
+     invoke-virtual {v0}, Landroid/os/Parcel;->recycle()V
  
      return p0
  
@@ -321,7 +398,17 @@ index 2bf02c02..0526df77 100644
      :try_start_1
      new-instance p0, Landroid/os/RemoteException;
  
-@@ -617,6 +648,15 @@
+     const-string p1, "Unimplemented"
+ 
+     invoke-direct {p0, p1}, Landroid/os/RemoteException;-><init>(Ljava/lang/String;)V
+ 
+     throw p0
+@@ -612,16 +643,25 @@
+ .method public blacklist grant(Landroid/system/keystore2/KeyDescriptor;II)Landroid/system/keystore2/KeyDescriptor;
+     .locals 3
+     .annotation system Ldalvik/annotation/Throws;
+         value = {
+             Landroid/os/RemoteException;
          }
      .end annotation
  
@@ -337,7 +424,17 @@ index 2bf02c02..0526df77 100644
      invoke-virtual {p0}, Landroid/system/keystore2/IKeystoreService$Stub$Proxy;->asBinder()Landroid/os/IBinder;
  
      move-result-object v0
-@@ -650,7 +690,7 @@
+ 
+     invoke-static {v0}, Landroid/os/Parcel;->obtain(Landroid/os/IBinder;)Landroid/os/Parcel;
+ 
+     move-result-object v0
+ 
+@@ -645,17 +685,17 @@
+     iget-object p0, p0, Landroid/system/keystore2/IKeystoreService$Stub$Proxy;->mRemote:Landroid/os/IBinder;
+ 
+     const/4 p1, 0x6
+ 
+     invoke-interface {p0, p1, v0, v1, v2}, Landroid/os/IBinder;->transact(ILandroid/os/Parcel;Landroid/os/Parcel;I)Z
  
      move-result p0
  
@@ -346,7 +443,17 @@ index 2bf02c02..0526df77 100644
  
      invoke-virtual {v1}, Landroid/os/Parcel;->readException()V
  
-@@ -670,7 +710,7 @@
+     sget-object p0, Landroid/system/keystore2/KeyDescriptor;->CREATOR:Landroid/os/Parcelable$Creator;
+ 
+     invoke-virtual {v1, p0}, Landroid/os/Parcel;->readTypedObject(Landroid/os/Parcelable$Creator;)Ljava/lang/Object;
+ 
+     move-result-object p0
+@@ -665,17 +705,17 @@
+     .catchall {:try_start_0 .. :try_end_0} :catchall_0
+ 
+     invoke-virtual {v1}, Landroid/os/Parcel;->recycle()V
+ 
+     invoke-virtual {v0}, Landroid/os/Parcel;->recycle()V
  
      return-object p0
  
@@ -355,8 +462,18 @@ index 2bf02c02..0526df77 100644
      :try_start_1
      new-instance p0, Landroid/os/RemoteException;
  
-@@ -700,6 +740,15 @@
+     const-string p1, "Unimplemented"
+ 
+     invoke-direct {p0, p1}, Landroid/os/RemoteException;-><init>(Ljava/lang/String;)V
+ 
+     throw p0
+@@ -698,16 +738,25 @@
+         value = {
+             Landroid/os/RemoteException;
          }
+     .end annotation
+ 
+     .annotation runtime Ljava/lang/Deprecated;
      .end annotation
  
 +    invoke-static {p1}, Lio/mesalabs/unica/KeyboxImitationHooks;->onListEntries(I)[Landroid/system/keystore2/KeyDescriptor;
@@ -371,7 +488,17 @@ index 2bf02c02..0526df77 100644
      invoke-virtual {p0}, Landroid/system/keystore2/IKeystoreService$Stub$Proxy;->asBinder()Landroid/os/IBinder;
  
      move-result-object v0
-@@ -731,7 +780,7 @@
+ 
+     invoke-static {v0}, Landroid/os/Parcel;->obtain(Landroid/os/IBinder;)Landroid/os/Parcel;
+ 
+     move-result-object v0
+ 
+@@ -729,17 +778,17 @@
+     const/4 p1, 0x4
+ 
+     const/4 p2, 0x0
+ 
+     invoke-interface {p0, p1, v0, v1, p2}, Landroid/os/IBinder;->transact(ILandroid/os/Parcel;Landroid/os/Parcel;I)Z
  
      move-result p0
  
@@ -380,7 +507,17 @@ index 2bf02c02..0526df77 100644
  
      invoke-virtual {v1}, Landroid/os/Parcel;->readException()V
  
-@@ -751,7 +800,7 @@
+     sget-object p0, Landroid/system/keystore2/KeyDescriptor;->CREATOR:Landroid/os/Parcelable$Creator;
+ 
+     invoke-virtual {v1, p0}, Landroid/os/Parcel;->createTypedArray(Landroid/os/Parcelable$Creator;)[Ljava/lang/Object;
+ 
+     move-result-object p0
+@@ -749,17 +798,17 @@
+     .catchall {:try_start_0 .. :try_end_0} :catchall_0
+ 
+     invoke-virtual {v1}, Landroid/os/Parcel;->recycle()V
+ 
+     invoke-virtual {v0}, Landroid/os/Parcel;->recycle()V
  
      return-object p0
  
@@ -389,7 +526,17 @@ index 2bf02c02..0526df77 100644
      :try_start_1
      new-instance p0, Landroid/os/RemoteException;
  
-@@ -781,6 +830,15 @@
+     const-string p1, "Unimplemented"
+ 
+     invoke-direct {p0, p1}, Landroid/os/RemoteException;-><init>(Ljava/lang/String;)V
+ 
+     throw p0
+@@ -779,16 +828,25 @@
+ .method public blacklist listEntriesBatched(IJLjava/lang/String;)[Landroid/system/keystore2/KeyDescriptor;
+     .locals 3
+     .annotation system Ldalvik/annotation/Throws;
+         value = {
+             Landroid/os/RemoteException;
          }
      .end annotation
  
@@ -405,7 +552,17 @@ index 2bf02c02..0526df77 100644
      invoke-virtual {p0}, Landroid/system/keystore2/IKeystoreService$Stub$Proxy;->asBinder()Landroid/os/IBinder;
  
      move-result-object v0
-@@ -814,7 +872,7 @@
+ 
+     invoke-static {v0}, Landroid/os/Parcel;->obtain(Landroid/os/IBinder;)Landroid/os/Parcel;
+ 
+     move-result-object v0
+ 
+@@ -812,17 +870,17 @@
+     const/16 p1, 0x9
+ 
+     const/4 p2, 0x0
+ 
+     invoke-interface {p0, p1, v0, v1, p2}, Landroid/os/IBinder;->transact(ILandroid/os/Parcel;Landroid/os/Parcel;I)Z
  
      move-result p0
  
@@ -414,7 +571,17 @@ index 2bf02c02..0526df77 100644
  
      invoke-virtual {v1}, Landroid/os/Parcel;->readException()V
  
-@@ -834,7 +892,7 @@
+     sget-object p0, Landroid/system/keystore2/KeyDescriptor;->CREATOR:Landroid/os/Parcelable$Creator;
+ 
+     invoke-virtual {v1, p0}, Landroid/os/Parcel;->createTypedArray(Landroid/os/Parcelable$Creator;)[Ljava/lang/Object;
+ 
+     move-result-object p0
+@@ -832,17 +890,17 @@
+     .catchall {:try_start_0 .. :try_end_0} :catchall_0
+ 
+     invoke-virtual {v1}, Landroid/os/Parcel;->recycle()V
+ 
+     invoke-virtual {v0}, Landroid/os/Parcel;->recycle()V
  
      return-object p0
  
@@ -423,7 +590,17 @@ index 2bf02c02..0526df77 100644
      :try_start_1
      new-instance p0, Landroid/os/RemoteException;
  
-@@ -864,6 +922,15 @@
+     const-string p1, "Unimplemented"
+ 
+     invoke-direct {p0, p1}, Landroid/os/RemoteException;-><init>(Ljava/lang/String;)V
+ 
+     throw p0
+@@ -862,16 +920,25 @@
+ .method public blacklist ungrant(Landroid/system/keystore2/KeyDescriptor;I)V
+     .locals 3
+     .annotation system Ldalvik/annotation/Throws;
+         value = {
+             Landroid/os/RemoteException;
          }
      .end annotation
  
@@ -439,7 +616,17 @@ index 2bf02c02..0526df77 100644
      invoke-virtual {p0}, Landroid/system/keystore2/IKeystoreService$Stub$Proxy;->asBinder()Landroid/os/IBinder;
  
      move-result-object v0
-@@ -895,7 +962,7 @@
+ 
+     invoke-static {v0}, Landroid/os/Parcel;->obtain(Landroid/os/IBinder;)Landroid/os/Parcel;
+ 
+     move-result-object v0
+ 
+@@ -893,29 +960,29 @@
+     iget-object p0, p0, Landroid/system/keystore2/IKeystoreService$Stub$Proxy;->mRemote:Landroid/os/IBinder;
+ 
+     const/4 p1, 0x7
+ 
+     invoke-interface {p0, p1, v0, v1, v2}, Landroid/os/IBinder;->transact(ILandroid/os/Parcel;Landroid/os/Parcel;I)Z
  
      move-result p0
  
@@ -448,7 +635,11 @@ index 2bf02c02..0526df77 100644
  
      invoke-virtual {v1}, Landroid/os/Parcel;->readException()V
      :try_end_0
-@@ -907,7 +974,7 @@
+     .catchall {:try_start_0 .. :try_end_0} :catchall_0
+ 
+     invoke-virtual {v1}, Landroid/os/Parcel;->recycle()V
+ 
+     invoke-virtual {v0}, Landroid/os/Parcel;->recycle()V
  
      return-void
  
@@ -457,7 +648,17 @@ index 2bf02c02..0526df77 100644
      :try_start_1
      new-instance p0, Landroid/os/RemoteException;
  
-@@ -937,6 +1004,15 @@
+     const-string p1, "Unimplemented"
+ 
+     invoke-direct {p0, p1}, Landroid/os/RemoteException;-><init>(Ljava/lang/String;)V
+ 
+     throw p0
+@@ -935,16 +1002,25 @@
+ .method public blacklist updateSubcomponent(Landroid/system/keystore2/KeyDescriptor;[B[B)V
+     .locals 3
+     .annotation system Ldalvik/annotation/Throws;
+         value = {
+             Landroid/os/RemoteException;
          }
      .end annotation
  
@@ -473,7 +674,17 @@ index 2bf02c02..0526df77 100644
      invoke-virtual {p0}, Landroid/system/keystore2/IKeystoreService$Stub$Proxy;->asBinder()Landroid/os/IBinder;
  
      move-result-object v0
-@@ -970,7 +1046,7 @@
+ 
+     invoke-static {v0}, Landroid/os/Parcel;->obtain(Landroid/os/IBinder;)Landroid/os/Parcel;
+ 
+     move-result-object v0
+ 
+@@ -968,29 +1044,29 @@
+     iget-object p0, p0, Landroid/system/keystore2/IKeystoreService$Stub$Proxy;->mRemote:Landroid/os/IBinder;
+ 
+     const/4 p1, 0x3
+ 
+     invoke-interface {p0, p1, v0, v1, v2}, Landroid/os/IBinder;->transact(ILandroid/os/Parcel;Landroid/os/Parcel;I)Z
  
      move-result p0
  
@@ -482,7 +693,11 @@ index 2bf02c02..0526df77 100644
  
      invoke-virtual {v1}, Landroid/os/Parcel;->readException()V
      :try_end_0
-@@ -982,7 +1058,7 @@
+     .catchall {:try_start_0 .. :try_end_0} :catchall_0
+ 
+     invoke-virtual {v1}, Landroid/os/Parcel;->recycle()V
+ 
+     invoke-virtual {v0}, Landroid/os/Parcel;->recycle()V
  
      return-void
  
@@ -491,6 +706,11 @@ index 2bf02c02..0526df77 100644
      :try_start_1
      new-instance p0, Landroid/os/RemoteException;
  
+     const-string p1, "Unimplemented"
+ 
+     invoke-direct {p0, p1}, Landroid/os/RemoteException;-><init>(Ljava/lang/String;)V
+ 
+     throw p0
 diff --git a/smali_classes5/com/android/internal/org/bouncycastle/jcajce/provider/asymmetric/EC$Mappings.smali b/smali_classes5/com/android/internal/org/bouncycastle/jcajce/provider/asymmetric/EC$Mappings.smali
 index 7da5e848..581668b7 100644
 --- a/smali_classes5/com/android/internal/org/bouncycastle/jcajce/provider/asymmetric/EC$Mappings.smali
