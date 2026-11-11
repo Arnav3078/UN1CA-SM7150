@@ -4,6 +4,15 @@ SKIPUNZIP=1
 ADD_TO_WORK_DIR "$MODPATH" "system" "." 0 0 755 "u:object_r:system_file:s0"
 
 # ChoiDujour.apk is prebuilt & patched for Arnav3078/UN1CA-M51-Updates
+if [ -n "$BUILD_TYPE" ]; then
+    SMALI_PATCH "system" \
+        "system/priv-app/ChoiDujour/ChoiDujour.apk" \
+        "smali/t81.smali" \
+        "replace" \
+        "b(Z)V" \
+        "https://raw.githubusercontent.com/Arnav3078/UN1CA-M51-Updates/main/updates/manifest.json" \
+        "https://raw.githubusercontent.com/Arnav3078/UN1CA-M51-Updates/main/updates/manifest${BUILD_TYPE}.json"
+fi
 
 LOG "- Patching /system/system/etc/security/otacerts.zip"
 EVAL "rm \"$WORK_DIR/system/system/etc/security/otacerts.zip\""
