@@ -110,8 +110,28 @@ jobs:
           sed -e "/Automatically/d" -e "s/\"//g" "$OUT_DIR/config.sh" >> "$GITHUB_ENV"
           echo "$TOOLS_DIR/bin" >> "$GITHUB_PATH"
 
+      - name: Cache Build Tools
+        uses: actions/cache@v4
+        with:
+          path: |
+            tools/bin
+            tools/venv
+          key: tools-${{ runner.os }}-${{ hashFiles('scripts/build_dependencies.sh') }}
+          restore-keys: |
+            tools-${{ runner.os }}-
+
       - name: Build dependencies
         run: ./scripts/build_dependencies.sh
+
+      - name: Cache Stock Firmwares
+        uses: actions/cache@v4
+        with:
+          path: |
+            out/odin
+            out/cache
+          key: fw-${{ inputs.device }}-${{ hashFiles('unica/configs/qssi.sh', 'target/m51/config.sh') }}
+          restore-keys: |
+            fw-${{ inputs.device }}-
 
       - name: Download stock firmwares
         uses: nick-fields/retry@v3
