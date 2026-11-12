@@ -15,12 +15,7 @@ GET_FINGERPRINT_SENSOR_TYPE()
 LOG_MISSING_PATCHES()
 {
     local MESSAGE="Missing SPF patches for condition ($1: [${!1}], $2: [${!2}])"
-
-    if $DEBUG; then
-        LOGW "$MESSAGE"
-    else
-        ABORT "${MESSAGE}. Aborting"
-    fi
+    LOGW "$MESSAGE"
 }
 # ]
 
