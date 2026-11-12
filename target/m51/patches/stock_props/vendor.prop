@@ -1,2 +1,0 @@
-# Force 64-bit zygote for 64-bit only QSSI system
-ro.zygote=zygote64

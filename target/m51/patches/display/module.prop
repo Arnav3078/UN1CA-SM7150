@@ -1,0 +1,4 @@
+id=display
+name=Display patch for Galaxy M51
+author=pascua28, mehedihjoy0
+description=SurfaceFlinger stability and compositor settings for SM7150
