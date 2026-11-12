@@ -149,12 +149,6 @@ if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "35" ]; then
     fi
 fi
 
-# Android 17 defaults to AIDL gnss. Remove to use HIDL one.
-if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "34" ]; then
-    DELETE_FROM_WORK_DIR "system_ext" "etc/init/loc_sys_service.rc"
-    DELETE_FROM_WORK_DIR "system_ext" "bin/loc_sys_service"
-fi
-
 # Ensure config_num_physical_slots is configured (pre-API 36)
 # https://android.googlesource.com/platform/frameworks/opt/telephony/+/42e37234cee15c9f3fcfac0532110abfc8843b99%5E%21/#F0
 if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "36" ]; then
@@ -190,15 +184,12 @@ if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "35" ]; then
 fi
 
 # Ensure IMAGE_CODEC_SAMSUNG support (pre-API 35)
-if [ "$(GET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_CAMERA_CONFIG_VENDOR_LIB_INFO")" ]; then
-    if [[ "$(GET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_CAMERA_CONFIG_VENDOR_LIB_INFO")" == *"image_codec.samsung.v1"* ]]; then
+if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "35" ]; then
+    if [ "$(GET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_CAMERA_CONFIG_VENDOR_LIB_INFO")" ] && \
+            [[ "$(GET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_CAMERA_CONFIG_VENDOR_LIB_INFO")" != *"image_codec.samsung"* ]]; then
         PATCHED=true
         SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_CAMERA_CONFIG_VENDOR_LIB_INFO" \
-            "$(GET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_CAMERA_CONFIG_VENDOR_LIB_INFO" | sed 's/image_codec\.samsung\.v1/image_codec.samsung.v2/')"
-    elif [[ "$(GET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_CAMERA_CONFIG_VENDOR_LIB_INFO")" != *"image_codec.samsung"* ]]; then
-        PATCHED=true
-        SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_CAMERA_CONFIG_VENDOR_LIB_INFO" \
-            "$(GET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_CAMERA_CONFIG_VENDOR_LIB_INFO"),image_codec.samsung.v2"
+            "$(GET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_CAMERA_CONFIG_VENDOR_LIB_INFO"),image_codec.samsung.v1"
     fi
 fi
 
@@ -669,14 +660,6 @@ if $VBOOT_MISSING; then
 fi
 
 unset VBOOT_MISSING
-
-if ! grep -qF 'mremap: arg3 == 3 || arg3 == MREMAP_MAYMOVE' \
-    "$WORK_DIR/vendor/etc/seccomp_policy/samsung.software.media.c2-base-policy"; then
-    PATCHED=true
-    LOG "- Patching /vendor/etc/seccomp_policy/samsung.software.media.c2-base-policy"
-    EVAL "sed -i 's/mremap: arg3 == 3/mremap: arg3 == 3 || arg3 == MREMAP_MAYMOVE/g' \
-        \"$WORK_DIR/vendor/etc/seccomp_policy/samsung.software.media.c2-base-policy\""
-fi
 
 if ! $PATCHED; then
     LOG "\033[0;33m! Nothing to do\033[0m"

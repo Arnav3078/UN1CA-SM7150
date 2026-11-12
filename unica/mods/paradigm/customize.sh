@@ -44,16 +44,12 @@ APPLY_PATCH "system" "system/priv-app/SecSoundPicker/SecSoundPicker.apk" \
     "$MODPATH/brandsound/SecSoundPicker.apk/0001-Enable-SUPPORT_SAMSUNG_BRAND_SOUND_ONEUI_7.patch"
 LOG_STEP_OUT
 
-# TODO: Port Adaptive colour tone (ead) patches to One UI 9
-: <<'EOF'
 # Adaptive colour tone
 LOG_STEP_IN "- Adding Adaptive colour tone feature"
 ADD_TO_WORK_DIR "pa2qxxx" "system" \
     "system/etc/permissions/privapp-permissions-com.samsung.android.sead.xml" 0 0 644 "u:object_r:system_file:s0"
 ADD_TO_WORK_DIR "pa2qxxx" "system" \
     "system/priv-app/EnvironmentAdaptiveDisplay/EnvironmentAdaptiveDisplay.apk" 0 0 644 "u:object_r:system_file:s0"
-APPLY_PATCH "system" "system/priv-app/EnvironmentAdaptiveDisplay/EnvironmentAdaptiveDisplay.apk" \
-    "$MODPATH/ead/EnvironmentAdaptiveDisplay.apk/0001-Fix-resource-IDs-mismatch.patch"
 if $TARGET_LCD_SUPPORT_MDNIE_HW; then
     APPLY_PATCH "system" "system/framework/services.jar" \
         "$MODPATH/ead/services.jar/0001-Add-Adaptive-color-tone-feature.patch"
@@ -78,7 +74,6 @@ APPLY_PATCH "system" "system/priv-app/SettingsProvider/SettingsProvider.apk" \
 APPLY_PATCH "system_ext" "priv-app/SystemUI/SystemUI.apk" \
     "$MODPATH/ead/SystemUI.apk/0001-Add-Adaptive-color-tone-toggle.patch"
 LOG_STEP_OUT
-EOF
 
 # Set AI Version to 20253 (latest)
 SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_COMMON_CONFIG_AI_VERSION" "20253"
@@ -176,12 +171,9 @@ SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_MSCH_SUPPORT_NLSEARCH" "TRUE"
 LOG_STEP_OUT
 
 # Game Booster
-if [ "$(GET_PROP "system" "ro.build.version.sdk")" -le "36" ] || \
-        [ ! -f "$WORK_DIR/system/system/priv-app/GameTools_Dream/GameTools_Dream.apk" ]; then
-    LOG "- Downloading latest Game Booster app"
-    DOWNLOAD_FILE "$(GET_GALAXY_STORE_DOWNLOAD_URL "com.samsung.android.game.gametools")" \
-        "$WORK_DIR/system/system/priv-app/GameTools_Dream/GameTools_Dream.apk"
-fi
+LOG "- Downloading latest Game Booster app"
+DOWNLOAD_FILE "$(GET_GALAXY_STORE_DOWNLOAD_URL "com.samsung.android.game.gametools")" \
+    "$WORK_DIR/system/system/priv-app/GameTools_Dream/GameTools_Dream.apk"
 
 # Pet Detector in Galaxy AI
 LOG_STEP_IN "- Adding Pet Detector support in Galaxy AI features"

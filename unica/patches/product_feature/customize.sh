@@ -16,7 +16,11 @@ LOG_MISSING_PATCHES()
 {
     local MESSAGE="Missing SPF patches for condition ($1: [${!1}], $2: [${!2}])"
 
-    LOGW "$MESSAGE"
+    if $DEBUG; then
+        LOGW "$MESSAGE"
+    else
+        ABORT "${MESSAGE}. Aborting"
+    fi
 }
 # ]
 
@@ -266,9 +270,8 @@ if [[ "$SOURCE_FINGERPRINT_CONFIG_SENSOR" != "$TARGET_FINGERPRINT_CONFIG_SENSOR"
             if [[ "$(GET_FINGERPRINT_SENSOR_TYPE "$TARGET_FINGERPRINT_CONFIG_SENSOR")" == "optical" ]]; then
                 SOURCE_FINGERPRINT_CONFIG_SENSOR="google_touch_display_optical,settings=3"
 
-: <<'EOF'
                 if [[ "$TARGET_OS_SINGLE_SYSTEM_IMAGE" == "qssi" ]]; then
-                    ADD_TO_WORK_DIR "r9qxxx" "system" "system/bin/surfaceflinger" 0 2000 755 "u:object_r:surfaceflinger_exec:s0"
+                    ADD_TO_WORK_DIR "a36xqnaxx" "system" "system/bin/surfaceflinger" 0 2000 755 "u:object_r:surfaceflinger_exec:s0"
                     # Ensure IQtiComposer support (pre-API 36)
                     # Check unica/patches/legacy/customize.sh for more info.
                     if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "36" ]; then
@@ -277,10 +280,9 @@ if [[ "$SOURCE_FINGERPRINT_CONFIG_SENSOR" != "$TARGET_FINGERPRINT_CONFIG_SENSOR"
                             HEX_PATCH "$WORK_DIR/system/system/bin/surfaceflinger" "9f8a00710b02005401d9ff90" "9f8a00711f2003d500068052"
                         fi
                     fi
-                    ADD_TO_WORK_DIR "r9qxxx" "system" "system/lib/libgui.so" 0 0 644 "u:object_r:system_lib_file:s0"
-                    ADD_TO_WORK_DIR "r9qxxx" "system" "system/lib/libui.so" 0 0 644 "u:object_r:system_lib_file:s0"
-                    ADD_TO_WORK_DIR "r9qxxx" "system" "system/lib64/libgui.so" 0 0 644 "u:object_r:system_lib_file:s0"
-                    ADD_TO_WORK_DIR "r9qxxx" "system" "system/lib64/libui.so" 0 0 644 "u:object_r:system_lib_file:s0"
+                    ADD_TO_WORK_DIR "a36xqnaxx" "system" "system/lib64/libandroid_runtime.so" 0 0 644 "u:object_r:system_lib_file:s0"
+                    ADD_TO_WORK_DIR "a36xqnaxx" "system" "system/lib64/libgui.so" 0 0 644 "u:object_r:system_lib_file:s0"
+                    ADD_TO_WORK_DIR "a36xqnaxx" "system" "system/lib64/libui.so" 0 0 644 "u:object_r:system_lib_file:s0"
                 elif [[ "$TARGET_OS_SINGLE_SYSTEM_IMAGE" == "essi" ]]; then
                     ADD_TO_WORK_DIR "r9sxxx" "system" "system/bin/surfaceflinger" 0 2000 755 "u:object_r:surfaceflinger_exec:s0"
                     ADD_TO_WORK_DIR "r9sxxx" "system" "system/lib/libgui.so" 0 0 644 "u:object_r:system_lib_file:s0"
@@ -291,15 +293,16 @@ if [[ "$SOURCE_FINGERPRINT_CONFIG_SENSOR" != "$TARGET_FINGERPRINT_CONFIG_SENSOR"
                     ABORT "Unknown SSI: $TARGET_OS_SINGLE_SYSTEM_IMAGE"
                 fi
 
-                ADD_TO_WORK_DIR "r9qxxx" "system" "system/priv-app/BiometricSetting/BiometricSetting.apk" 0 0 644 "u:object_r:system_file:s0"
+                ADD_TO_WORK_DIR "a36xqnaxx" "system" "system/priv-app/BiometricSetting/BiometricSetting.apk" 0 0 644 "u:object_r:system_file:s0"
+                ADD_TO_WORK_DIR "a36xqnaxx" "system_ext" "priv-app/SystemUI/SystemUI.apk" 0 0 644 "u:object_r:system_file:s0"
+                DECODE_APK "system_ext" "priv-app/SystemUI/SystemUI.apk"
+
                 APPLY_PATCH "system" "system/framework/framework.jar" \
                     "$MODPATH/fingerprint/optical_fod/framework.jar/0001-Add-optical-FOD-support.patch"
                 APPLY_PATCH "system" "system/framework/services.jar" \
                     "$MODPATH/fingerprint/optical_fod/services.jar/0001-Add-optical-FOD-support.patch"
-                APPLY_PATCH "system" "system/priv-app/SecSettings/SecSettings.apk" \
-                    "$MODPATH/fingerprint/optical_fod/SecSettings.apk/0001-Add-optical-FOD-support.patch"
-                APPLY_PATCH "system_ext" "priv-app/SystemUI/SystemUI.apk" \
-                    "$MODPATH/fingerprint/optical_fod/SystemUI.apk/0001-Add-optical-FOD-support.patch"
+#                APPLY_PATCH "system" "system/priv-app/SecSettings/SecSettings.apk" \
+#                    "$MODPATH/fingerprint/optical_fod/SecSettings.apk/0001-Add-optical-FOD-support.patch"
 
                 if [[ "$TARGET_FINGERPRINT_CONFIG_SENSOR" == *"no_delay_in_screen_off"* ]]; then
                     APPLY_PATCH "system" "system/priv-app/BiometricSetting/BiometricSetting.apk" \
@@ -317,7 +320,6 @@ if [[ "$SOURCE_FINGERPRINT_CONFIG_SENSOR" != "$TARGET_FINGERPRINT_CONFIG_SENSOR"
                         "semGetTransitionEffectValue()I" \
                         "0"
                 fi
-EOF
             elif [[ "$(GET_FINGERPRINT_SENSOR_TYPE "$TARGET_FINGERPRINT_CONFIG_SENSOR")" == "side" ]]; then
                 SOURCE_FINGERPRINT_CONFIG_SENSOR="google_touch_side,navi=1"
 
@@ -329,14 +331,9 @@ EOF
                     "$MODPATH/fingerprint/side_fp/framework.jar/0001-Add-side-fingerprint-sensor-support.patch"
                 APPLY_PATCH "system" "system/framework/services.jar" \
                     "$MODPATH/fingerprint/side_fp/services.jar/0001-Add-side-fingerprint-sensor-support.patch"
+                EVAL "sed -i \"/implements/i .implements Lcom\/android\/server\/biometrics\/sensors\/fingerprint\/SemFpHalLifecycleListener;\" \"$APKTOOL_DIR/system/framework/services.jar/smali/com/android/server/biometrics/sensors/fingerprint/SemFingerprintServiceExtImpl.smali\""
                 APPLY_PATCH "system" "system/priv-app/SecSettings/SecSettings.apk" \
                     "$MODPATH/fingerprint/side_fp/SecSettings.apk/0001-Add-side-fingerprint-sensor-support.patch"
-                APPLY_PATCH "system_ext" "priv-app/SystemUI/SystemUI.apk" \
-                    "$MODPATH/fingerprint/side_fp/SystemUI.apk/0001-Add-side-fingerprint-sensor-support.patch"
-
-: <<'EOF'
-# Legacy One UI 8 synthetic lambdas / gesture flags omitted for One UI 9
-                EVAL "sed -i \"/implements/i .implements Lcom\/android\/server\/biometrics\/sensors\/fingerprint\/SemFpHalLifecycleListener;\" \"$APKTOOL_DIR/system/framework/services.jar/smali/com/android/server/biometrics/sensors/fingerprint/SemFingerprintServiceExtImpl.smali\""
                 EVAL "sed -i \"s/^\.implements.*/.implements Landroid\/widget\/CompoundButton\$OnCheckedChangeListener;/g\" \"$APKTOOL_DIR/system/priv-app/SecSettings/SecSettings.apk/smali_classes4/com/samsung/android/settings/biometrics/fingerprint/SuwFingerprintUsefulFeature\\\$\\\$ExternalSyntheticLambda1.smali\""
                 SMALI_PATCH "system" "system/priv-app/SecSettings/SecSettings.apk" \
                     "smali_classes4/com/samsung/android/settings/biometrics/fingerprint/SuwFingerprintUsefulFeature\$\$ExternalSyntheticLambda4.smali" "remove"
@@ -344,6 +341,8 @@ EOF
                     "smali_classes4/com/samsung/android/settings/biometrics/fingerprint/SuwFingerprintUsefulFeature\$\$ExternalSyntheticLambda9.smali" "remove"
                 SMALI_PATCH "system" "system/priv-app/SecSettings/SecSettings.apk" \
                     "smali_classes4/com/samsung/android/settings/biometrics/fingerprint/SuwFingerprintUsefulFeature\$1.smali" "remove"
+                APPLY_PATCH "system_ext" "priv-app/SystemUI/SystemUI.apk" \
+                    "$MODPATH/fingerprint/side_fp/SystemUI.apk/0001-Add-side-fingerprint-sensor-support.patch"
                 EVAL "sed -i \"s/^\.implements.*/.implements Ljava\/util\/function\/Consumer;/g\" \"$APKTOOL_DIR/system_ext/priv-app/SystemUI/SystemUI.apk/smali/com/android/keyguard/KeyguardSecUpdateMonitorImpl\\\$\\\$ExternalSyntheticLambda28.smali\""
                 SMALI_PATCH "system_ext" "priv-app/SystemUI/SystemUI.apk" \
                     "smali/com/android/keyguard/KeyguardSecUpdateMonitorImpl\$\$ExternalSyntheticLambda24.smali" "remove"
@@ -383,7 +382,6 @@ EOF
                         "sput-boolean v2, Lcom/android/server/biometrics/SemBiometricFeature;->FP_FEATURE_WOF_OPTION_DEFAULT_OFF:Z" \
                         > /dev/null
                 fi
-EOF
             elif [[ "$(GET_FINGERPRINT_SENSOR_TYPE "$TARGET_FINGERPRINT_CONFIG_SENSOR")" != "ultrasonic" ]]; then
                 # TODO handle this condition
                 LOG_MISSING_PATCHES "SOURCE_FINGERPRINT_CONFIG_SENSOR" "TARGET_FINGERPRINT_CONFIG_SENSOR"
@@ -565,10 +563,17 @@ if [[ "$SOURCE_LCD_CONFIG_HFR_SUPPORTED_REFRESH_RATE" != "$TARGET_LCD_CONFIG_HFR
             "smali_classes3/com/samsung/android/settings/display/SecDisplayUtils.smali" "replaceall" \
             "$SOURCE_LCD_CONFIG_HFR_SUPPORTED_REFRESH_RATE" \
             "${TARGET_LCD_CONFIG_HFR_SUPPORTED_REFRESH_RATE//none/}"
-        SMALI_PATCH "system_ext" "priv-app/SystemUI/SystemUI.apk" \
-            "smali_classes2/com/android/systemui/keyguard/KeyguardViewMediatorHelperImpl\$\$ExternalSyntheticLambda0.smali" "replaceall" \
-            "$SOURCE_LCD_CONFIG_HFR_SUPPORTED_REFRESH_RATE" \
-            "${TARGET_LCD_CONFIG_HFR_SUPPORTED_REFRESH_RATE//none/}"
+     if [[ "$(GET_FINGERPRINT_SENSOR_TYPE "$TARGET_FINGERPRINT_CONFIG_SENSOR")" == "optical" ]]; then
+            SMALI_PATCH "system_ext" "priv-app/SystemUI/SystemUI.apk" \
+                "smali_classes2/com/android/systemui/keyguard/KeyguardViewMediatorHelperImpl\$\$ExternalSyntheticLambda0.smali" "replaceall" \
+                "60,120" \
+                "${TARGET_LCD_CONFIG_HFR_SUPPORTED_REFRESH_RATE//none/}"
+     else
+            SMALI_PATCH "system_ext" "priv-app/SystemUI/SystemUI.apk" \
+                "smali_classes2/com/android/systemui/keyguard/KeyguardViewMediatorHelperImpl\$\$ExternalSyntheticLambda0.smali" "replaceall" \
+                "$SOURCE_LCD_CONFIG_HFR_SUPPORTED_REFRESH_RATE" \
+                "${TARGET_LCD_CONFIG_HFR_SUPPORTED_REFRESH_RATE//none/}"
+     fi
 
     else
         # TODO handle this condition
@@ -625,11 +630,11 @@ if [[ "$SOURCE_RIL_FEATURES" != "$TARGET_RIL_FEATURES" ]]; then
         SMALI_PATCH "system" "system/framework/framework.jar" \
             "smali_classes6/com/android/internal/telephony/TelephonyFeatures.smali" "replaceall" \
             "$SOURCE_RIL_FEATURES" \
-            "${TARGET_RIL_FEATURES//none/}"
         SMALI_PATCH "system" "system/framework/telephony-common.jar" \
-            "smali/com/android/internal/telephony/TelephonyLogger.smali" "replaceall" \
-            "Feature=SecProductFeatures: (${SOURCE_RIL_FEATURES//\"/})" \
-            "Feature=SecProductFeatures: (${TARGET_RIL_FEATURES//none/})"
+            "smali/com/android/internal/telephony/TelephonyLogger.smali" "replace" \
+            "dump(Ljava/io/FileDescriptor;Ljava/io/PrintWriter;[Ljava/lang/String;)V" \
+            "${SOURCE_RIL_FEATURES//\"/}" \
+            "${TARGET_RIL_FEATURES//none/}"
         SMALI_PATCH "system" "system/priv-app/TeleService/TeleService.apk" \
             "smali/com/samsung/telephony/model/feature/SamsungFeatureSatellite.smali" "replaceall" \
             "$SOURCE_RIL_FEATURES" \

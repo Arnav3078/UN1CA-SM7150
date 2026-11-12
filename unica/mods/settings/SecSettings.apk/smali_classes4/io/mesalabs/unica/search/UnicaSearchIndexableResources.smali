@@ -1,11 +1,13 @@
 .class public final Lio/mesalabs/unica/search/UnicaSearchIndexableResources;
-.super Lcom/android/settingslib/search/SearchIndexableResourcesBase;
+.super Lcom/android/settingslib/search/SearchIndexableResourcesMobile;
 .source "UnicaSearchIndexableResources.java"
 
 
 # direct methods
-.method public static addProviders(Lcom/android/settingslib/search/SearchIndexableResourcesBase;)V
+.method public constructor <init>()V
     .locals 3
+
+    invoke-direct {p0}, Lcom/android/settingslib/search/SearchIndexableResourcesMobile;-><init>()V
 
     new-instance v0, Lcom/android/settingslib/search/SearchIndexableData;
 
@@ -15,7 +17,7 @@
 
     invoke-direct {v0, v1, v2}, Lcom/android/settingslib/search/SearchIndexableData;-><init>(Ljava/lang/Class;Lcom/android/settingslib/search/Indexable$SearchIndexProvider;)V
 
-    invoke-virtual {p0, v0}, Lcom/android/settingslib/search/SearchIndexableResourcesBase;->addIndex(Lcom/android/settingslib/search/SearchIndexableData;)V
+    invoke-virtual {p0, v0}, Lio/mesalabs/unica/search/UnicaSearchIndexableResources;->addIndex(Lcom/android/settingslib/search/SearchIndexableData;)V
 
     new-instance v0, Lcom/android/settingslib/search/SearchIndexableData;
 
@@ -25,7 +27,7 @@
 
     invoke-direct {v0, v1, v2}, Lcom/android/settingslib/search/SearchIndexableData;-><init>(Ljava/lang/Class;Lcom/android/settingslib/search/Indexable$SearchIndexProvider;)V
 
-    invoke-virtual {p0, v0}, Lcom/android/settingslib/search/SearchIndexableResourcesBase;->addIndex(Lcom/android/settingslib/search/SearchIndexableData;)V
+    invoke-virtual {p0, v0}, Lio/mesalabs/unica/search/UnicaSearchIndexableResources;->addIndex(Lcom/android/settingslib/search/SearchIndexableData;)V
 
     new-instance v0, Lcom/android/settingslib/search/SearchIndexableData;
 
@@ -35,7 +37,7 @@
 
     invoke-direct {v0, v1, v2}, Lcom/android/settingslib/search/SearchIndexableData;-><init>(Ljava/lang/Class;Lcom/android/settingslib/search/Indexable$SearchIndexProvider;)V
 
-    invoke-virtual {p0, v0}, Lcom/android/settingslib/search/SearchIndexableResourcesBase;->addIndex(Lcom/android/settingslib/search/SearchIndexableData;)V
+    invoke-virtual {p0, v0}, Lio/mesalabs/unica/search/UnicaSearchIndexableResources;->addIndex(Lcom/android/settingslib/search/SearchIndexableData;)V
 
     new-instance v0, Lcom/android/settingslib/search/SearchIndexableData;
 
@@ -45,23 +47,7 @@
 
     invoke-direct {v0, v1, v2}, Lcom/android/settingslib/search/SearchIndexableData;-><init>(Ljava/lang/Class;Lcom/android/settingslib/search/Indexable$SearchIndexProvider;)V
 
-    invoke-virtual {p0, v0}, Lcom/android/settingslib/search/SearchIndexableResourcesBase;->addIndex(Lcom/android/settingslib/search/SearchIndexableData;)V
-
-    return-void
-.end method
-
-.method public constructor <init>()V
-    .locals 1
-
-    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
-
-    new-instance v0, Ljava/util/HashSet;
-
-    invoke-direct {v0}, Ljava/util/HashSet;-><init>()V
-
-    iput-object v0, p0, Lcom/android/settingslib/search/SearchIndexableResourcesBase;->mProviders:Ljava/util/Set;
-
-    invoke-static {p0}, Lio/mesalabs/unica/search/UnicaSearchIndexableResources;->addProviders(Lcom/android/settingslib/search/SearchIndexableResourcesBase;)V
+    invoke-virtual {p0, v0}, Lio/mesalabs/unica/search/UnicaSearchIndexableResources;->addIndex(Lcom/android/settingslib/search/SearchIndexableData;)V
 
     return-void
 .end method

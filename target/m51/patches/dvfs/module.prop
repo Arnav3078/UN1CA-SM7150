@@ -1,0 +1,4 @@
+id=dvfs
+name=DVFS patch
+author=ata-kaner
+description=Add SM7150 support in SamsungDeviceHealthManagerService

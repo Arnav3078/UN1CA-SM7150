@@ -1,22 +1,16 @@
 # shellcheck disable=SC2034
 SKIPUNZIP=1
 
-ADD_TO_WORK_DIR "$MODPATH" "system" "." 0 0 755 "u:object_r:system_file:s0"
-
-# ChoiDujour.apk is prebuilt & patched for Arnav3078/UN1CA-M51-Updates
-if [ -n "$BUILD_TYPE" ]; then
-    SMALI_PATCH "system" \
-        "system/priv-app/ChoiDujour/ChoiDujour.apk" \
-        "smali/t81.smali" \
-        "replace" \
-        "b(Z)V" \
-        "https://raw.githubusercontent.com/Arnav3078/UN1CA-M51-Updates/main/updates/manifest.json" \
-        "https://raw.githubusercontent.com/Arnav3078/UN1CA-M51-Updates/main/updates/manifest${BUILD_TYPE}.json"
+if ! $ROM_IS_OFFICIAL; then
+    LOG "\033[0;33m! Build is not official. Skipping\033[0m"
+    return 0
 fi
+
+ADD_TO_WORK_DIR "$MODPATH" "system" "." 0 0 755 "u:object_r:system_file:s0"
 
 LOG "- Patching /system/system/etc/security/otacerts.zip"
 EVAL "rm \"$WORK_DIR/system/system/etc/security/otacerts.zip\""
-EVAL "cd \"$SRC_DIR\"; zip -q \"$WORK_DIR/system/system/etc/security/otacerts.zip\" \"./security/aosp_testkey.x509.pem\""
+EVAL "cd \"$SRC_DIR\"; zip -q \"$WORK_DIR/system/system/etc/security/otacerts.zip\" \"./security/unica_ota.x509.pem\""
 
 DECODE_APK "system" "system/priv-app/SecSettings/SecSettings.apk"
 
@@ -24,15 +18,9 @@ APPLY_PATCH "system" "system/priv-app/SecSettings/SecSettings.apk" \
     "$MODPATH/suggestions/SecSettings.apk/0001-Launch-UN1CA-Updates-from-suggestions.patch"
 
 # Disable stock OTA references
-if grep -q "isOTAUpgradeAllowed" "$APKTOOL_DIR/system/priv-app/SecSettings/SecSettings.apk/smali_classes3/com/samsung/android/settings/softwareupdate/SoftwareUpdateUtils.smali" 2>/dev/null; then
-    SMALI_PATCH "system" "system/priv-app/SecSettings/SecSettings.apk" \
-        "smali_classes3/com/samsung/android/settings/softwareupdate/SoftwareUpdateUtils.smali" "return" \
-        "isOTAUpgradeAllowed(Landroid/content/Context;)Z" "false"
-fi
-
 SMALI_PATCH "system" "system/priv-app/SecSettings/SecSettings.apk" \
-    "smali_classes3/com/samsung/android/settings/homepage/TopLevelSoftwareUpdatePreferenceController.smali" "return" \
-    "getAvailabilityStatus()I" "3"
+    "smali_classes3/com/samsung/android/settings/softwareupdate/SoftwareUpdateUtils.smali" "return" \
+    "isOTAUpgradeAllowed(Landroid/content/Context;)Z" "false"
 
 # Dynamically patch SecSettings
 # - Add missing/non-xml files in place

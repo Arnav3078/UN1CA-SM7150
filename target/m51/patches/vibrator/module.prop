@@ -1,0 +1,4 @@
+id=vibrator
+name=A73 Vibrator HAL
+author=pascua28
+description=Replaces deprecated HIDL vibrator with AIDL vibrator from A73

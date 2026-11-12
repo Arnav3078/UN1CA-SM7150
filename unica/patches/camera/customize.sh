@@ -60,8 +60,6 @@ if ! $SOURCE_CAMERA_SUPPORT_MASS_APP_FLAVOR; then
     if $TARGET_CAMERA_SUPPORT_MASS_APP_FLAVOR; then
         ADD_TO_WORK_DIR "r9qxxx" "system" "system/priv-app/SamsungCamera/SamsungCamera.apk" 0 0 644 "u:object_r:system_file:s0"
         ADD_TO_WORK_DIR "r9qxxx" "system" "system/priv-app/SamsungCamera/SamsungCamera.apk.prof" 0 0 644 "u:object_r:system_file:s0"
-        APPLY_PATCH "system" "system/priv-app/SamsungCamera/SamsungCamera.apk" \
-            "$MODPATH/camera/SamsungCamera.apk/0001-Fix-crash-on-newer-OneUI-version.patch"
     fi
 else
     if ! $TARGET_CAMERA_SUPPORT_MASS_APP_FLAVOR; then
@@ -355,11 +353,6 @@ HEX_PATCH "$WORK_DIR/system/system/lib/libstagefright.so" \
     "726f2e70726f647563742e6d6f64656c00" "726f2e626f6f742e656d2e6d6f64656c00"
 HEX_PATCH "$WORK_DIR/system/system/lib64/libstagefright.so" \
     "726f2e70726f647563742e6d6f64656c00" "726f2e626f6f742e656d2e6d6f64656c00"
-
-# Fix ACodec buffer overflow
-# mov w2, #0x200 (512) -> mov 2, #0xfe (254)
-HEX_PATCH "$WORK_DIR/system/system/lib64/libstagefright.so" \
-    "02408052e30315aa" "c21f8052e30315aa"
 
 # Fix object capture
 if [[ "$TARGET_OS_SINGLE_SYSTEM_IMAGE" == "essi" ]]; then

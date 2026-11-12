@@ -17,13 +17,6 @@ if [[ "$(GET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_GALLERY_CONFIG_FACE_C
     fi
 fi
 
-if [ -f "$WORK_DIR/system/system/priv-app/FaceService/FaceService.apk" ] && \
-        [ -f "$FW_DIR/$SOURCE_FIRMWARE_PATH/system/system/saiv/imageCropper/sce_detector_cnn.tflite" ]; then
-    ADD_TO_WORK_DIR "$SOURCE_FIRMWARE" \
-        "system" "system/saiv/imageCropper/sce_detector_cnn.tflite" \
-        0 0 644 "u:object_r:system_file:s0"
-fi
-
 # SEC_PRODUCT_FEATURE_SAIV_CONFIG_MIDAS
 if [ ! -f "$WORK_DIR/vendor/etc/midas/moire_detection/moire_detection.tflite" ]; then
     ADD_TO_WORK_DIR "$SOURCE_FIRMWARE" "vendor" "etc/midas/moire_detection/moire_detection.tflite" 0 0 644 "u:object_r:vendor_configs_file:s0"
@@ -214,8 +207,7 @@ if [ ! -d "$WORK_DIR/vendor/saiv/image_understanding/db/sce_detector" ] || \
             DELETE_FROM_WORK_DIR "vendor" "saiv/image_understanding/db/sce_detector"
         fi
         ADD_TO_WORK_DIR "$SOURCE_FIRMWARE" "vendor" "saiv/image_understanding/db/sce_detector/sce_detector_cnn.tflite" 0 0 644 "u:object_r:vendor_snap_file:s0"
-    elif [ -d "$FW_DIR/$TARGET_FIRMWARE_PATH/vendor/saiv/image_understanding/db/sce_detector" ] && \
-            [ ! -d "$WORK_DIR/vendor/saiv/image_understanding/db/sce_detector" ]; then
+    elif [ ! -d "$WORK_DIR/vendor/saiv/image_understanding/db/sce_detector" ]; then
         ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "saiv/image_understanding/db/sce_detector" 0 2000 755 "u:object_r:vendor_snap_file:s0"
     fi
 fi

@@ -73,12 +73,24 @@ while IFS= read -r f; do
 done < <(find "$MODPATH/SecSettings.apk" -type f)
 
 # Add UN1CA Settings SearchIndexableData registrations
-LOG "- Patching \"smali_classes2/com/android/settings/search/SearchFeatureProviderImpl\$\$ExternalSyntheticLambda0.smali\" in /system/system/priv-app/SecSettings.apk"
+LOG "- Patching \"smali/com/android/settingslib/search/SearchIndexableResourcesMobile.smali\" in /system/system/priv-app/SecSettings.apk"
 SMALI_PATCH "system" "system/priv-app/SecSettings/SecSettings.apk" \
-    "smali_classes2/com/android/settings/search/SearchFeatureProviderImpl\$\$ExternalSyntheticLambda0.smali" "replace" \
+    "smali/com/android/settingslib/search/SearchIndexableResourcesMobile.smali" "replaceall" \
+    '.class public final Lcom/android/settingslib/search/SearchIndexableResourcesMobile;' \
+    '.class public Lcom/android/settingslib/search/SearchIndexableResourcesMobile;' \
+    > /dev/null
+LOG "- Patching \"smali/com/android/settings/search/SearchFeatureProviderImpl\$\$ExternalSyntheticLambda0.smali\" in /system/system/priv-app/SecSettings.apk"
+SMALI_PATCH "system" "system/priv-app/SecSettings/SecSettings.apk" \
+    "smali/com/android/settings/search/SearchFeatureProviderImpl\$\$ExternalSyntheticLambda0.smali" "replace" \
     'invoke()Ljava/lang/Object;' \
-    'return-object p0' \
-    '    invoke-static {p0}, Lio/mesalabs/unica/search/UnicaSearchIndexableResources;->addProviders(Lcom/android/settingslib/search/SearchIndexableResourcesBase;)V\n\n    return-object p0' \
+    'new-instance p0, Lcom/android/settingslib/search/SearchIndexableResourcesMobile;' \
+    'new-instance p0, Lio/mesalabs/unica/search/UnicaSearchIndexableResources;' \
+    > /dev/null
+SMALI_PATCH "system" "system/priv-app/SecSettings/SecSettings.apk" \
+    "smali/com/android/settings/search/SearchFeatureProviderImpl\$\$ExternalSyntheticLambda0.smali" "replace" \
+    'invoke()Ljava/lang/Object;' \
+    'invoke-direct {p0}, Lcom/android/settingslib/search/SearchIndexableResourcesBase;-><init>()V' \
+    'invoke-direct {p0}, Lio/mesalabs/unica/search/UnicaSearchIndexableResources;-><init>()V' \
     > /dev/null
 
 DECODE_APK "system" "system/priv-app/SecSettingsIntelligence/SecSettingsIntelligence.apk"
@@ -86,14 +98,14 @@ LOG "- Patching \"smali_classes2/com/samsung/android/settings/intelligence/searc
 SMALI_PATCH "system" "system/priv-app/SecSettingsIntelligence/SecSettingsIntelligence.apk" \
     "smali_classes2/com/samsung/android/settings/intelligence/search/categorizing/TopLevelKeysCollector.smali" "replace" \
     '<init>(Landroid/content/Context;)V' \
+    '.locals 36' \
     '.locals 37' \
-    '.locals 38' \
     > /dev/null
 SMALI_PATCH "system" "system/priv-app/SecSettingsIntelligence/SecSettingsIntelligence.apk" \
     "smali_classes2/com/samsung/android/settings/intelligence/search/categorizing/TopLevelKeysCollector.smali" "replace" \
     '<init>(Landroid/content/Context;)V' \
-    'filled-new-array/range {v1 .. v36}, [Ljava/lang/String;' \
-    '    const-string v37, "top_level_unica"\n\n    filled-new-array/range {v1 .. v37}, [Ljava/lang/String;' \
+    'filled-new-array/range {v1 .. v35}, [Ljava/lang/String;' \
+    '    const-string v36, "top_level_unica"\n\n    filled-new-array/range {v1 .. v36}, [Ljava/lang/String;' \
     > /dev/null
 
 # Show Vulkan renderer toggle if required
