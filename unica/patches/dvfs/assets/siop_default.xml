@@ -57,7 +57,7 @@
 
     <overheatcontrol>
         <complex>
-            <DEX formula="SKIN" temp="470" />
+            <SS formula="SKIN" temp="470" />
         </complex>
     </overheatcontrol>
     <modelsettings>
