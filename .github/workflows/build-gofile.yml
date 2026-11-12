@@ -74,7 +74,6 @@ jobs:
             attr ccache clang ffmpeg gh libbrotli-dev libbz2-dev \
             libgtest-dev libprotobuf-dev libunwind-dev libpcre2-dev \
             libzstd-dev lld protobuf-compiler webp jq curl python3
-          sudo apt install -yq "linux-modules-extra-$(uname -r)" || true
           sudo modprobe erofs || true
           sudo modprobe f2fs || true
           git config --global user.name "github-actions[bot]"
