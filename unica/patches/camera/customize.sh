@@ -60,6 +60,9 @@ if ! $SOURCE_CAMERA_SUPPORT_MASS_APP_FLAVOR; then
     if $TARGET_CAMERA_SUPPORT_MASS_APP_FLAVOR; then
         ADD_TO_WORK_DIR "r9qxxx" "system" "system/priv-app/SamsungCamera/SamsungCamera.apk" 0 0 644 "u:object_r:system_file:s0"
         ADD_TO_WORK_DIR "r9qxxx" "system" "system/priv-app/SamsungCamera/SamsungCamera.apk.prof" 0 0 644 "u:object_r:system_file:s0"
+        if [ -f "$SRC_DIR/target/m51/patches/tweaks/patch_camera.py" ]; then
+            python3 "$SRC_DIR/target/m51/patches/tweaks/patch_camera.py" "$WORK_DIR/system/system/priv-app/SamsungCamera/SamsungCamera.apk" "$SRC_DIR"
+        fi
     fi
 else
     if ! $TARGET_CAMERA_SUPPORT_MASS_APP_FLAVOR; then

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import sys, os, zipfile, subprocess, shutil, tempfile
+import sys, os, zipfile, subprocess, shutil, tempfile, glob
 
 def patch_camera_apk(apk_path, src_dir):
     print(f"[*] Patching SamsungCamera.apk: {apk_path}")
@@ -8,42 +8,65 @@ def patch_camera_apk(apk_path, src_dir):
         return False
 
     tmp_dir = tempfile.mkdtemp(prefix="cam_patch_")
+    patched_any = False
     try:
-        # Extract classes3.dex
         with zipfile.ZipFile(apk_path, 'r') as zin:
-            zin.extract('classes3.dex', tmp_dir)
+            dex_names = [n for n in zin.namelist() if n.startswith('classes') and n.endswith('.dex')]
+            for dex_name in dex_names:
+                zin.extract(dex_name, tmp_dir)
 
-        dex_path = os.path.join(tmp_dir, 'classes3.dex')
-        smali_dir = os.path.join(tmp_dir, 'smali3')
+        for dex_name in sorted(dex_names):
+            dex_path = os.path.join(tmp_dir, dex_name)
+            smali_dir = os.path.join(tmp_dir, f"smali_{dex_name}")
+            print(f"[*] Disassembling {dex_name}...")
+            subprocess.check_call(['baksmali', 'disassemble', dex_path, '-o', smali_dir])
 
-        # Baksmali classes3.dex
-        print("[*] Disassembling classes3.dex...")
-        subprocess.check_call(['baksmali', 'disassemble', dex_path, '-o', smali_dir])
+            # Find smali files containing the argument check
+            candidate_files = []
+            for root, _, files in os.walk(smali_dir):
+                for f in files:
+                    if f.endswith('.smali'):
+                        fpath = os.path.join(root, f)
+                        try:
+                            with open(fpath, 'r', encoding='utf-8') as sf:
+                                content = sf.read()
+                                if 'argument is invalid - ' in content and 'mOneUiVersionCode' in content:
+                                    candidate_files.append((fpath, content))
+                        except Exception:
+                            pass
 
-        k_smali = os.path.join(smali_dir, 'x1', 'k.smali')
-        if not os.path.exists(k_smali):
-            print(f"[-] {k_smali} not found!")
-            return False
+            if not candidate_files:
+                continue
 
-        with open(k_smali, 'r', encoding='utf-8') as f:
-            code = f.read()
+            for target_file, code in candidate_files:
+                print(f"[*] Found candidate smali: {target_file}")
+                # Determine class name
+                class_line = [l for l in code.splitlines() if l.startswith('.class ')][0]
+                class_type = class_line.split()[-1] # e.g. Lx1/k; or Le5/m;
+                print(f"[*] Target enum class: {class_type}")
 
-        start_marker = ".method public static a(I)Lx1/k;"
-        end_marker = ".end method"
+                # Find method a(I)
+                start_marker = f".method public static a(I){class_type}"
+                end_marker = ".end method"
+                start_pos = code.find(start_marker)
+                if start_pos == -1:
+                    print(f"[-] Method a(I){class_type} not found, looking for generic a(I)...")
+                    start_marker = ".method public static a(I)"
+                    start_pos = code.find(start_marker)
 
-        start_pos = code.find(start_marker)
-        if start_pos == -1:
-            print("[-] Method a(I)Lx1/k; not found!")
-            return False
+                if start_pos == -1:
+                    print("[-] Could not find a(I) method!")
+                    continue
 
-        end_pos = code.find(end_marker, start_pos) + len(end_marker)
+                end_pos = code.find(end_marker, start_pos) + len(end_marker)
 
-        # Replacement method that returns V8_0 when unknown One UI version (like 90000) is passed
-        replacement = """
-.method public static a(I)Lx1/k;
+                # Determine fallback field name (V9_0 if exists, else V8_0)
+                fallback_field = "V9_0" if "V9_0:" in code else "V8_0"
+
+                replacement = f""".method public static a(I){class_type}
     .registers 6
 
-    invoke-static {}, Lx1/k;->values()[Lx1/k;
+    invoke-static {{}}, {class_type}->values()[{class_type}
 
     move-result-object v0
 
@@ -60,7 +83,7 @@ def patch_camera_apk(apk_path, src_dir):
 
     if-eq p0, v4, :cond_12
 
-    iget v4, v3, Lx1/k;->mOneUiVersionCode:I
+    iget v4, v3, {class_type}->mOneUiVersionCode:I
 
     if-ne v4, p0, :cond_12
 
@@ -72,32 +95,30 @@ def patch_camera_apk(apk_path, src_dir):
     goto :goto_6
 
     :cond_15
-    sget-object v0, Lx1/k;->V8_0:Lx1/k;
+    sget-object v0, {class_type}->{fallback_field}:{class_type}
 
     return-object v0
-.end method
-""".strip()
+.end method"""
 
-        new_code = code[:start_pos] + replacement + code[end_pos:]
+                new_code = code[:start_pos] + replacement + code[end_pos:]
+                with open(target_file, 'w', encoding='utf-8') as sf:
+                    sf.write(new_code)
+                print(f"[+] Successfully patched {target_file} with fallback {fallback_field}!")
 
-        with open(k_smali, 'w', encoding='utf-8') as f:
-            f.write(new_code)
-        print("[+] Replaced method a(I)Lx1/k; successfully!")
+                # Reassemble dex
+                print(f"[*] Reassembling {dex_name}...")
+                subprocess.check_call(['smali', 'assemble', smali_dir, '-o', dex_path])
+                subprocess.check_call(['zip', '-j', '-u', apk_path, dex_path])
+                patched_any = True
 
-        # Re-assemble with smali
-        patched_dex = os.path.join(tmp_dir, 'classes3.dex')
-        print("[*] Reassembling classes3.dex with smali...")
-        subprocess.check_call(['smali', 'assemble', smali_dir, '-o', patched_dex])
+        if not patched_any:
+            print("[-] No target classes were found to patch!")
+            return False
 
-        # Replace classes3.dex in apk
-        print("[*] Updating classes3.dex in SamsungCamera.apk...")
-        subprocess.check_call(['zip', '-j', '-u', apk_path, patched_dex])
-
-        # Sign apk with testkey
+        # Re-sign apk with testkey
         key_pk8 = os.path.join(src_dir, 'security', 'aosp_platform.pk8')
         cert_pem = os.path.join(src_dir, 'security', 'aosp_platform.x509.pem')
-
-        print(f"[*] Re-signing SamsungCamera.apk with testkey ({key_pk8})...")
+        print(f"[*] Re-signing SamsungCamera.apk with ({key_pk8})...")
         subprocess.check_call([
             'apksigner', 'sign',
             '--v4-signing-enabled', 'false',

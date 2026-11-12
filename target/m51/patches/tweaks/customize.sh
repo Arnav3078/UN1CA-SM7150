@@ -116,7 +116,6 @@ if [ -d "$FW_S23_SRC" ]; then
         "system/system/priv-app/DressRoom/DressRoom.apk" \
         "system/system/priv-app/PhotoEditor_AIFull/PhotoEditor_AIFull.apk" \
         "system/system/priv-app/SpriteWallpaper/SpriteWallpaper.apk" \
-        "system/system/priv-app/SamsungCamera/SamsungCamera.apk" \
         "system/system/priv-app/SecureFolder/SecureFolder.apk" \
         "system/system/priv-app/KnoxCore/KnoxCore.apk" \
         "system/system/priv-app/KnoxGuard/KnoxGuard.apk"
