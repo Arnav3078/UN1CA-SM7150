@@ -112,6 +112,9 @@ if [ -f "$WORK_DIR/vendor/etc/selinux/vendor_sepolicy.cil" ]; then
     echo "(allow hal_camera_default vendor_sysfs_kgsl (file (ioctl read write getattr lock map open watch watch_reads)))" >> "$WORK_DIR/vendor/etc/selinux/vendor_sepolicy.cil"
     echo "(allow system_app_30_0 logpersistd_logging_prop_30_0 (property_service (set)))" >> "$WORK_DIR/vendor/etc/selinux/vendor_sepolicy.cil"
     echo "(allow system_app_30_0 logd_prop_30_0 (property_service (set)))" >> "$WORK_DIR/vendor/etc/selinux/vendor_sepolicy.cil"
+    echo "(allow samsungpowersoundplay audio_service (service_manager (find)))" >> "$WORK_DIR/vendor/etc/selinux/vendor_sepolicy.cil"
+    echo "(allow samsungpowersoundplay audioserver (binder (call transfer)))" >> "$WORK_DIR/vendor/etc/selinux/vendor_sepolicy.cil"
+    echo "(allow audioserver samsungpowersoundplay (binder (transfer)))" >> "$WORK_DIR/vendor/etc/selinux/vendor_sepolicy.cil"
 fi
 if [ -f "$WORK_DIR/system/system/etc/selinux/plat_sepolicy.cil" ]; then
     echo "(allow system_app logpersistd_logging_prop (property_service (set)))" >> "$WORK_DIR/system/system/etc/selinux/plat_sepolicy.cil"

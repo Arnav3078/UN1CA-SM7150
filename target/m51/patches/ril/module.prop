@@ -1,4 +1,4 @@
 id=ril
-name=RIL Stack Update
-author=salvogiangri
-description=Update RIL stack in order to fix it.
+name=Fix RIL
+author=salvogiangri, mehedihjoy0
+description=Replaces vendor RIL blobs with required ones.

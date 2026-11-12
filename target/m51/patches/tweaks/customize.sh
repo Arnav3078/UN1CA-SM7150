@@ -16,24 +16,37 @@ if [ -f "$WORK_DIR/vendor/etc/fstab.emmc" ]; then
 fi
 LOG_STEP_OUT
 
-LOG_STEP_IN "- Setting unencrypted ROM properties"
-SET_PROP "vendor" "ro.crypto.state" "unencrypted"
-SET_PROP "vendor" "ro.crypto.type" "none"
-SET_PROP "vendor" "ro.crypto.override" "false"
-SET_PROP "system" "ro.crypto.state" "unencrypted"
-SET_PROP "system" "ro.crypto.type" "none"
-for f in "$WORK_DIR/vendor/etc"/fstab*; do
-    [ -f "$f" ] || continue
-    sed -E -i \
-        -e 's/fileencryption=[^,[:space:]]+,?//g' \
-        -e 's/metadata_encryption=[^,[:space:]]+,?//g' \
-        -e 's/keydirectory=[^,[:space:]]+,?//g' \
-        -e 's/forceencrypt=[^,[:space:]]+,?//g' \
-        -e 's/forcefde=[^,[:space:]]+,?//g' \
-        -e 's/,,/,/g' \
-        -e 's/,[[:space:]]*$/ /' \
-        "$f"
-done
+if [[ "$BUILD_TYPE" == "-decrypted" ]]; then
+    LOG_STEP_IN "- Setting unencrypted ROM properties"
+    SET_PROP "vendor" "ro.crypto.state" "unencrypted"
+    SET_PROP "vendor" "ro.crypto.type" "none"
+    SET_PROP "vendor" "ro.crypto.override" "false"
+    SET_PROP "system" "ro.crypto.state" "unencrypted"
+    SET_PROP "system" "ro.crypto.type" "none"
+    for f in "$WORK_DIR/vendor/etc"/fstab*; do
+        [ -f "$f" ] || continue
+        sed -E -i \
+            -e 's/fileencryption=[^,[:space:]]+,?//g' \
+            -e 's/metadata_encryption=[^,[:space:]]+,?//g' \
+            -e 's/keydirectory=[^,[:space:]]+,?//g' \
+            -e 's/forceencrypt=[^,[:space:]]+,?//g' \
+            -e 's/forcefde=[^,[:space:]]+,?//g' \
+            -e 's/,,/,/g' \
+            -e 's/,[[:space:]]*$/ /' \
+            "$f"
+    done
+    LOG_STEP_OUT
+fi
+
+LOG_STEP_IN "- Enforcing 64-bit pure zygote mode"
+SET_PROP "vendor" "ro.zygote" "zygote64"
+SET_PROP "system" "ro.zygote" "zygote64"
+if [ -f "$WORK_DIR/vendor/default.prop" ]; then
+    sed -i 's/ro.zygote=zygote64_32/ro.zygote=zygote64/' "$WORK_DIR/vendor/default.prop"
+fi
+if [ -f "$WORK_DIR/vendor/build.prop" ]; then
+    sed -i 's/ro.zygote=zygote64_32/ro.zygote=zygote64/' "$WORK_DIR/vendor/build.prop"
+fi
 LOG_STEP_OUT
 
 LOG_STEP_IN "- Removing crashing Qualcomm QCC telemetry service"
