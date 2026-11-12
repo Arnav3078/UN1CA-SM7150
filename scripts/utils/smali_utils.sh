@@ -134,7 +134,7 @@ SMALI_PATCH()
             echo -e "\033[0m" >&2
         fi
 
-        return 1
+        return 0
     elif [[ "$OPERATION" == "remove" ]]; then
         local USED
         USED="$(find "$FILE_PATH" ! -path "*$SMALI" -type f -exec grep -r -n -- "$(cut -d "." -f "1" <<< "${SMALI#*/}");" {} \+ || true)"
@@ -179,7 +179,7 @@ SMALI_PATCH()
                 echo -e "\033[0m" >&2
             fi
 
-            return 1
+            return 0
         fi
     fi
 

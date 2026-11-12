@@ -7,10 +7,10 @@ Subject: [PATCH] Launch UN1CA Updates from suggestions
  .../Settings$FOTASuggestionActivity.smali     | 31 +++++++++++++------
  1 file changed, 21 insertions(+), 10 deletions(-)
 
-diff --git a/smali_classes2/com/android/settings/Settings$FOTASuggestionActivity.smali b/smali_classes2/com/android/settings/Settings$FOTASuggestionActivity.smali
+diff --git a/smali/com/android/settings/Settings$FOTASuggestionActivity.smali b/smali/com/android/settings/Settings$FOTASuggestionActivity.smali
 index 1d2c2da8e..6f1e8f374 100644
---- a/smali_classes2/com/android/settings/Settings$FOTASuggestionActivity.smali
-+++ b/smali_classes2/com/android/settings/Settings$FOTASuggestionActivity.smali
+--- a/smali/com/android/settings/Settings$FOTASuggestionActivity.smali
++++ b/smali/com/android/settings/Settings$FOTASuggestionActivity.smali
 @@ -19,26 +19,37 @@
  
      invoke-super {p0, p1}, Landroid/app/Activity;->onCreate(Landroid/os/Bundle;)V
