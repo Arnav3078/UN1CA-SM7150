@@ -169,7 +169,7 @@ SMALI_PATCH()
             LOGE "Method \"$METHOD\" not found in /$PARTITION/$FILE/$SMALI"
 
             local MATCHES
-            MATCHES="$(grep -r "^\.method.*$METHOD" "$FILE_PATH")"
+            MATCHES="$(grep -r "^\.method.*$METHOD" "$FILE_PATH" || true)"
 
             if [ "$MATCHES" ]; then
                 echo -e "\n\033[0;31mPossible matches?" >&2
@@ -191,8 +191,8 @@ SMALI_PATCH()
     # Remove the method completely.
     if [[ "$OPERATION" == "strip" ]]; then
         local USED
-        USED="$(grep -r -n -- "invoke.*$(basename "$SMALI" | cut -d "." -f "1");" "$FILE_PATH")"
-        USED="$(grep -F "$METHOD" <<< "$USED" | cut -d ":" -f 1-2)"
+        USED="$(grep -r -n -- "invoke.*$(basename "$SMALI" | cut -d "." -f "1");" "$FILE_PATH" || true)"
+        USED="$(grep -F "$METHOD" <<< "$USED" | cut -d ":" -f 1-2 || true)"
 
         if [ "$USED" ]; then
             LOGE "Cannot strip method \"$METHOD\" in /$PARTITION/$FILE/$SMALI as it is used elsewhere"

@@ -35,9 +35,11 @@ APPLY_PATCH "system" "system/priv-app/SecSettings/SecSettings.apk" \
     "$MODPATH/suggestions/SecSettings.apk/0001-Launch-UN1CA-Updates-from-suggestions.patch"
 
 # Disable stock OTA references
-SMALI_PATCH "system" "system/priv-app/SecSettings/SecSettings.apk" \
-    "smali_classes3/com/samsung/android/settings/softwareupdate/SoftwareUpdateUtils.smali" "return" \
-    "isOTAUpgradeAllowed(Landroid/content/Context;)Z" "false"
+if grep -q "isOTAUpgradeAllowed" "$APKTOOL_DIR/system/priv-app/SecSettings/SecSettings.apk/smali_classes3/com/samsung/android/settings/softwareupdate/SoftwareUpdateUtils.smali" 2>/dev/null; then
+    SMALI_PATCH "system" "system/priv-app/SecSettings/SecSettings.apk" \
+        "smali_classes3/com/samsung/android/settings/softwareupdate/SoftwareUpdateUtils.smali" "return" \
+        "isOTAUpgradeAllowed(Landroid/content/Context;)Z" "false"
+fi
 
 # Dynamically patch SecSettings
 # - Add missing/non-xml files in place
