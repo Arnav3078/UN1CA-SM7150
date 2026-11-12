@@ -46,7 +46,11 @@ ADD_TO_WORK_DIR "a73xqxx" "vendor" "lib64/vendor.samsung.hardware.light-V1-ndk_p
 LOG_STEP_OUT
 
 LOG_STEP_IN "- Adding stock TUI app"
-ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" "system/etc/sysconfig/preinstalled-packages-com.qualcomm.qti.services.secureui.xml" 0 0 644 "u:object_r:system_file:s0"
+TUI_XML="$FW_DIR/$(cut -d "/" -f 1 -s <<< "$TARGET_FIRMWARE")_$(cut -d "/" -f 2 -s <<< "$TARGET_FIRMWARE")/system/system/etc/sysconfig/preinstalled-packages-com.qualcomm.qti.services.secureui.xml"
+if [ -f "$TUI_XML" ]; then
+    ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system" "system/etc/sysconfig/preinstalled-packages-com.qualcomm.qti.services.secureui.xml" 0 0 644 "u:object_r:system_file:s0"
+fi
+unset TUI_XML
 ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "system_ext" "app/com.qualcomm.qti.services.secureui/com.qualcomm.qti.services.secureui.apk" 0 0 644 "u:object_r:system_file:s0"
 LOG_STEP_OUT
 
