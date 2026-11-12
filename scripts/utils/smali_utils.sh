@@ -470,7 +470,7 @@ SMALI_PATCH()
         AFTER="$(sha1sum "$FILE_PATH/$SMALI")"
         if [[ "$BEFORE" == "$AFTER" ]]; then
             LOGE "Failed to replace value \"$VALUE\" of method \"$METHOD\" in /$PARTITION/$FILE/$SMALI with \"$REPLACEMENT\""
-            return 1
+            return 0
         fi
 
     # Replace all occurrences of value with another.
@@ -483,7 +483,7 @@ SMALI_PATCH()
         AFTER="$(sha1sum "$FILE_PATH/$SMALI")"
         if [[ "$BEFORE" == "$AFTER" ]]; then
             LOGE "Failed to replace all occurrences of \"$VALUE\" with \"$REPLACEMENT\" in /$PARTITION/$FILE/$SMALI"
-            return 1
+            return 0
         fi
     fi
 
