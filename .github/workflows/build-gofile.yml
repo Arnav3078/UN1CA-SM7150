@@ -1,0 +1,146 @@
+name: Build ROM (GoFile)
+
+on:
+  workflow_dispatch:
+    inputs:
+      device:
+        description: "Device Codename (e.g. m51)"
+        required: true
+        default: "m51"
+        type: string
+      build_type:
+        description: "ROM Variant"
+        required: true
+        default: "decrypted"
+        type: choice
+        options:
+          - "decrypted"
+          - "encrypted"
+          - "both"
+
+jobs:
+  prepare:
+    name: Prepare Matrix
+    runs-on: ubuntu-24.04
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - name: Select Build Matrix
+        id: set-matrix
+        run: |
+          if [ "${{ inputs.build_type }}" = "both" ]; then
+            echo 'matrix=["decrypted", "encrypted"]' >> "$GITHUB_OUTPUT"
+          else
+            echo "matrix=[\"${{ inputs.build_type }}\"]" >> "$GITHUB_OUTPUT"
+          fi
+
+  build:
+    name: Build (${{ matrix.build_type }})
+    needs: prepare
+    runs-on: ubuntu-24.04
+
+    strategy:
+      fail-fast: false
+      matrix:
+        build_type: ${{ fromJson(needs.prepare.outputs.matrix) }}
+
+    steps:
+      - name: Free disk space (1/3)
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL
+          sudo docker image prune --all --force
+          sudo docker builder prune -a
+
+      - name: Free disk space (2/3)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          preinstalled-runtimes: true
+
+      - name: Free disk space (3/3)
+        uses: rokibhasansagar/slimhub_actions@main
+        with:
+          retain: 'compiler_cmake'
+
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'
+          fetch-depth: 1
+
+      - name: Set up build environment
+        run: |
+          sudo apt update
+          DEBIAN_FRONTEND=noninteractive sudo apt install -yq \
+            attr ccache clang ffmpeg gh libbrotli-dev libbz2-dev \
+            libgtest-dev libprotobuf-dev libunwind-dev libpcre2-dev \
+            libzstd-dev linux-modules-extra-$(uname -r) lld protobuf-compiler webp jq curl python3
+          sudo modprobe erofs f2fs
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if [ -n "${{ secrets.PLATFORM_KEY_PK8 }}" ]; then
+            echo -n "${{ secrets.PLATFORM_KEY_PK8 }}" | base64 --decode > security/unica_platform.pk8
+            echo -n "${{ secrets.PLATFORM_KEY_PEM }}" | base64 --decode > security/unica_platform.x509.pem
+          fi
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'gradle'
+
+      - name: Generate build config
+        env:
+          BUILD_TYPE: ${{ matrix.build_type }}
+        run: |
+          source ./buildenv.sh ${{ inputs.device }}
+          {
+            echo "DEBUG=$DEBUG"
+            echo "SRC_DIR=$SRC_DIR"
+            echo "OUT_DIR=$OUT_DIR"
+            echo "ODIN_DIR=$ODIN_DIR"
+            echo "FW_DIR=$FW_DIR"
+            echo "TOOLS_DIR=$TOOLS_DIR"
+            echo "APKTOOL_DIR=$APKTOOL_DIR"
+            echo "WORK_DIR=$WORK_DIR"
+            echo "TMP_DIR=$TMP_DIR"
+            echo "BUILD_TYPE=$BUILD_TYPE"
+          } >> "$GITHUB_ENV"
+          sed -e "/Automatically/d" -e "s/\"//g" "$OUT_DIR/config.sh" >> "$GITHUB_ENV"
+          echo "$TOOLS_DIR/bin" >> "$GITHUB_PATH"
+
+      - name: Build dependencies
+        run: ./scripts/build_dependencies.sh
+
+      - name: Download stock firmwares
+        uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 60
+          max_attempts: 3
+          retry_on: error
+          command: ./scripts/download_fw.sh
+
+      - name: Extract stock firmwares
+        run: ./scripts/extract_fw.sh
+
+      - name: Build ROM
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: ./scripts/make_rom.sh --build-rom-zip
+
+      - name: Upload ROM to GoFile
+        id: gofile
+        env:
+          GOFILE_TOKEN: ${{ secrets.GOFILE_TOKEN }}
+        run: |
+          chmod +x ./scripts/upload_gofile.py
+          python3 ./scripts/upload_gofile.py
+
+      - name: Upload ROM as GitHub Artifact (Fallback)
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: UN1CA-${{ inputs.device }}-${{ matrix.build_type }}
+          path: out/*.zip
+          retention-days: 7
+          if-no-files-found: warn

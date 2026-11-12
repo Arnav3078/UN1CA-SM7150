@@ -6,7 +6,7 @@ on:
       device:
         description: "Device Codename"
         required: true
-        default: ""
+        default: "m51"
         type: string
       incremental_ota:
         description: "Build Incremental OTA"
@@ -150,7 +150,7 @@ jobs:
         run: ./scripts/release_rom.sh
         
       - name: Upload ROM to PixelDrain
-        if: ${{ inputs.upload }}
+        if: ${{ inputs.upload && secrets.PIXELDRAIN_API_KEY != '' }}
         env:
           PIXELDRAIN_API_KEY: ${{ secrets.PIXELDRAIN_API_KEY }}
         run: |
@@ -159,3 +159,11 @@ jobs:
             echo "Uploading $ROM to PixelDrain..."
             ./pd --api-key "$PIXELDRAIN_API_KEY" upload "$ROM" | sed 's|api/file|u|g'
           done
+
+      - name: Upload ROM to GoFile
+        if: ${{ inputs.upload }}
+        env:
+          GOFILE_TOKEN: ${{ secrets.GOFILE_TOKEN }}
+        run: |
+          chmod +x ./scripts/upload_gofile.py
+          python3 ./scripts/upload_gofile.py
