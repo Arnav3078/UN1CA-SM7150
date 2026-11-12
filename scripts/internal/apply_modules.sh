@@ -22,11 +22,11 @@ APPLY_MODULE()
         MODPATH="$MODPATH/$TARGET_OS_SINGLE_SYSTEM_IMAGE"
     fi
 
-    if [ ! -f "$MODPATH/module.prop" ]; then
+    if [ -f "$MODPATH/disable" ]; then
+        return 0
+    elif [ ! -f "$MODPATH/module.prop" ]; then
         LOGE "File not found: ${MODPATH//$SRC_DIR\//}/module.prop"
         return 1
-    elif [ -f "$MODPATH/disable" ]; then
-        return 0
     else
         MODNAME="$(grep "^name" "$MODPATH/module.prop" | sed "s/name=//")"
         MODAUTH="$(grep "^author" "$MODPATH/module.prop" | sed "s/author=//" | sed "s/, /, @/g")"
