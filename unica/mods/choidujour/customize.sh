@@ -3,31 +3,23 @@ SKIPUNZIP=1
 
 ADD_TO_WORK_DIR "$MODPATH" "system" "." 0 0 755 "u:object_r:system_file:s0"
 
-BUILDER="$(git -C "$SRC_DIR" config --get remote.origin.url | sed -nE \
-    's#^(https://github\.com/|git@github\.com:)([^/]+)/.*#\2#p')"
-    
-LOG_STEP_IN "- Forcing ChoiDujour to fetch OTA metadata from @${BUILDER}'s repository"
-SMALI_PATCH "system" \
-	"system/priv-app/ChoiDujour/ChoiDujour.apk" \
-	"smali/t81.smali" \
-	"replace" \
-    "b(Z)V" \
-    "const-wide v4, 0x5c18d946d5d38297L" \
-    "    const-string v3, \"https://raw.githubusercontent.com/Arnav3078/UN1CA-M51-Updates/main/updates/manifest.json\"\n
-    const-wide v4, 0x5c18d946d5d38297L"
-SMALI_PATCH "system" \
-    "system/priv-app/ChoiDujour/ChoiDujour.apk" \
-    "smali/io/mesalabs/choidujour/activity/WhatsNewActivity.smali" \
-    "replace" \
-    "onCreate(Landroid/os/Bundle;)V" \
-    "invoke-direct {v2, v9}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V" \
-    "    const-string v9, \"https://raw.githubusercontent.com/Arnav3078/UN1CA-M51-Updates/main/updates/\"\n
-    invoke-direct {v2, v9}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V"
-LOG_STEP_OUT
+# ChoiDujour.apk is prebuilt & patched for Arnav3078/UN1CA-M51-Updates
 
 LOG "- Patching /system/system/etc/security/otacerts.zip"
 EVAL "rm \"$WORK_DIR/system/system/etc/security/otacerts.zip\""
 EVAL "cd \"$SRC_DIR\"; zip -q \"$WORK_DIR/system/system/etc/security/otacerts.zip\" \"./security/aosp_testkey.x509.pem\""
+
+PRELOAD_XML="$WORK_DIR/system/system/etc/sysconfig/allowed-system-preload-apps.xml"
+if [ -f "$PRELOAD_XML" ] && ! grep -q "io.mesalabs.choidujour" "$PRELOAD_XML"; then
+    LOG "- Adding ChoiDujour to allowed-system-preload-apps.xml"
+    sed -i '/<\/config>/i \    <allowed-system-preload package="io.mesalabs.choidujour"/>' "$PRELOAD_XML"
+fi
+
+SHAREDUID_XML="$WORK_DIR/system/system/etc/sysconfig/package-shareduid-allowlist.xml"
+if [ -f "$SHAREDUID_XML" ] && ! grep -q "io.mesalabs.choidujour" "$SHAREDUID_XML"; then
+    LOG "- Adding ChoiDujour to package-shareduid-allowlist.xml"
+    sed -i '/<\/config>/i \    <allow-package-shareduid package="io.mesalabs.choidujour" shareduid="android.uid.system"/>' "$SHAREDUID_XML"
+fi
 
 DECODE_APK "system" "system/priv-app/SecSettings/SecSettings.apk"
 
@@ -39,6 +31,12 @@ if grep -q "isOTAUpgradeAllowed" "$APKTOOL_DIR/system/priv-app/SecSettings/SecSe
     SMALI_PATCH "system" "system/priv-app/SecSettings/SecSettings.apk" \
         "smali_classes3/com/samsung/android/settings/softwareupdate/SoftwareUpdateUtils.smali" "return" \
         "isOTAUpgradeAllowed(Landroid/content/Context;)Z" "false"
+fi
+
+if [ -f "$APKTOOL_DIR/system/priv-app/SecSettings/SecSettings.apk/smali_classes3/com/samsung/android/settings/homepage/TopLevelSoftwareUpdatePreferenceController.smali" ]; then
+    SMALI_PATCH "system" "system/priv-app/SecSettings/SecSettings.apk" \
+        "smali_classes3/com/samsung/android/settings/homepage/TopLevelSoftwareUpdatePreferenceController.smali" "return" \
+        "getAvailabilityStatus()I" "3"
 fi
 
 # Dynamically patch SecSettings
