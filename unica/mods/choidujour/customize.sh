@@ -13,7 +13,7 @@ SMALI_PATCH "system" \
 	"replace" \
     "b(Z)V" \
     "const-wide v4, 0x5c18d946d5d38297L" \
-    "    const-string v3, \"https://raw.githubusercontent.com/$BUILDER/static_resources/refs/heads/seventeen/updates/manifest${BUILD_TYPE}.json\"\n
+    "    const-string v3, \"https://raw.githubusercontent.com/Arnav3078/UN1CA-M51-Updates/main/updates/manifest.json\"\n
     const-wide v4, 0x5c18d946d5d38297L"
 SMALI_PATCH "system" \
     "system/priv-app/ChoiDujour/ChoiDujour.apk" \
@@ -21,7 +21,7 @@ SMALI_PATCH "system" \
     "replace" \
     "onCreate(Landroid/os/Bundle;)V" \
     "invoke-direct {v2, v9}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V" \
-    "    const-string v9, \"https://raw.githubusercontent.com/$BUILDER/static_resources/refs/heads/seventeen/updates/\"\n
+    "    const-string v9, \"https://raw.githubusercontent.com/Arnav3078/UN1CA-M51-Updates/main/updates/\"\n
     invoke-direct {v2, v9}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V"
 LOG_STEP_OUT
 

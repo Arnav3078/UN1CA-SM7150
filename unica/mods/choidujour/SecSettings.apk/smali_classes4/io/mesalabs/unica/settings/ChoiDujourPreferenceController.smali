@@ -21,7 +21,7 @@
 
     const-string p0, "io.mesalabs.choidujour"
 
-    invoke-static {v0, p0}, Lcom/android/settings/Utils;->isPackageEnabled(Landroid/content/Context;Ljava/lang/String;)Z
+    invoke-static {v0, p0}, Lcom/samsung/android/settings/PkgUtils;->isPackageEnabled(Landroid/content/Context;Ljava/lang/String;)Z
 
     move-result p0
 
@@ -100,7 +100,7 @@
 
     iget-object v1, p0, Lcom/android/settingslib/core/AbstractPreferenceController;->mContext:Landroid/content/Context;
 
-    const v2, 0x7f142505
+    const v2, 0x7f152ada
 
     invoke-virtual {v1, v2}, Landroid/content/Context;->getString(I)Ljava/lang/String;
 
