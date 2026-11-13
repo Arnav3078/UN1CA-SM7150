@@ -30,11 +30,11 @@ Subject: [PATCH] Allow disable screen capture detection
 +
 +    move-result v0
 +
-+    if-eqz v0, :cond_0
++    if-eqz v0, :cond_skip_detection
 +
 +    const/4 p2, 0x0
 +
-+    :cond_0
++    :cond_skip_detection
      invoke-virtual {p1}, Landroid/util/ArraySet;->isEmpty()Z
  
      move-result v0
