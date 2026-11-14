@@ -132,6 +132,11 @@ if [ -d "$FW_S23_SRC" ]; then
 fi
 LOG_STEP_OUT
 
+# Patch isCompromisedDevice check in SecureFolder
+SMALI_PATCH "system" "system/priv-app/SecureFolder/SecureFolder.apk" \
+    "smali/com/samsung/knox/securefolder/provisioning/setup/viewmodel/WelcomeViewModel.smali" "return" \
+    "isCompromisedDevice()Z" "false"
+
 LOG_STEP_IN "- Removing crashing Qualcomm QCC telemetry service"
 DELETE_FROM_WORK_DIR "system_ext" "app/QCC" || true
 DELETE_FROM_WORK_DIR "system_ext" "bin/qccsyshal@1.2-service" || true
