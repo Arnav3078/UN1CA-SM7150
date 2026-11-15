@@ -1,7 +1,8 @@
 LOG_STEP_IN "- Adding missing bluetooth audio HAL from extra"
-BLOBS_LIST="
-bin/hw/android.hardware.audio.service
-etc/bluetooth_audio_policy_configuration.xml
+ADD_TO_WORK_DIR "$TARGET_EXTRA_FIRMWARES" "vendor" "bin/hw/android.hardware.audio.service" 0 2000 755 "u:object_r:hal_audio_default_exec:s0"
+ADD_TO_WORK_DIR "$TARGET_EXTRA_FIRMWARES" "vendor" "etc/bluetooth_audio_policy_configuration.xml" 0 0 644 "u:object_r:vendor_configs_file:s0"
+
+LIBS_LIST="
 lib/libsehbluetooth_audio_session.so
 lib64/libsehbluetooth_audio_session.so
 lib/vendor.samsung.hardware.bluetooth.audio@2.0.so
@@ -13,8 +14,8 @@ lib64/hw/audio.bluetooth.default.so
 lib/hw/vendor.samsung.hardware.bluetooth.audio@2.1-impl.so
 lib64/hw/vendor.samsung.hardware.bluetooth.audio@2.1-impl.so
 "
-for blob in $BLOBS_LIST; do
-    ADD_TO_WORK_DIR "$TARGET_EXTRA_FIRMWARES" "vendor" "$blob"
+for blob in $LIBS_LIST; do
+    ADD_TO_WORK_DIR "$TARGET_EXTRA_FIRMWARES" "vendor" "$blob" 0 0 644 "u:object_r:vendor_file:s0"
 done
 
 EVAL "sed -i '/<!-- hidden sound Audio HAL -->/s|^|\
