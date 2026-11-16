@@ -2268,7 +2268,7 @@
 
     const-string v1, "KonaBess"
 
-    const-string v2, "GPU frequency and voltage tuning for Galaxy S23 (Adreno 740)."
+    const-string v2, "GPU frequency and voltage tuning for Galaxy M51 (Adreno 618)."
 
     invoke-direct {v0, v1, v2}, Lio/mesalabs/unica/gpu/GpuActivity;->description(Ljava/lang/String;Ljava/lang/CharSequence;)V
 

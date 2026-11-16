@@ -574,7 +574,7 @@
 
     move-result-wide v6
 
-    const-wide/32 v8, 0x1dcd6500
+    const-wide/32 v8, 0x15000000
 
     cmp-long v2, v6, v8
 

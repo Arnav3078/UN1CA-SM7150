@@ -57,9 +57,6 @@ case "$MODE" in
             [ -f "$b/queue/scheduler" ] && echo mq-deadline > "$b/queue/scheduler" 2>/dev/null
             [ -f "$b/queue/read_ahead_kb" ] && echo 128 > "$b/queue/read_ahead_kb" 2>/dev/null
         done
-
-        setprop persist.carbon.power_mode "light"
-        setprop persist.sys.carbon.power_mode "light"
         ;;
 
     normal|balanced|2)
@@ -86,9 +83,6 @@ case "$MODE" in
             [ -f "$b/queue/scheduler" ] && echo ssg > "$b/queue/scheduler" 2>/dev/null || echo cfq > "$b/queue/scheduler" 2>/dev/null
             [ -f "$b/queue/read_ahead_kb" ] && echo 256 > "$b/queue/read_ahead_kb" 2>/dev/null
         done
-
-        setprop persist.carbon.power_mode "normal"
-        setprop persist.sys.carbon.power_mode "normal"
         ;;
 
     performance|3)
@@ -123,9 +117,6 @@ case "$MODE" in
             [ -f "$b/queue/scheduler" ] && echo ssg > "$b/queue/scheduler" 2>/dev/null || echo cfq > "$b/queue/scheduler" 2>/dev/null
             [ -f "$b/queue/read_ahead_kb" ] && echo 512 > "$b/queue/read_ahead_kb" 2>/dev/null
         done
-
-        setprop persist.carbon.power_mode "performance"
-        setprop persist.sys.carbon.power_mode "performance"
         ;;
 
     boot)

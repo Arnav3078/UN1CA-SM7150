@@ -373,6 +373,14 @@
     :goto_0
     invoke-virtual {p1, v0}, Landroidx/preference/DropDownPreference;->setValueIndex(I)V
 
+    invoke-virtual {p1}, Landroidx/preference/ListPreference;->getEntries()[Ljava/lang/CharSequence;
+
+    move-result-object p2
+
+    aget-object p2, p2, v0
+
+    invoke-virtual {p1, p2}, Landroidx/preference/Preference;->setSummary(Ljava/lang/CharSequence;)V
+
     const/4 p0, 0x1
 
     return p0
