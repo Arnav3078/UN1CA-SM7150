@@ -255,3 +255,16 @@ for sysui_perm in "$WORK_DIR/system_ext/etc/permissions/com.android.systemui.xml
     fi
 done
 LOG_STEP_OUT
+
+LOG_STEP_IN "- Adding Moments (Personal Data Engine) from pa2qxxx"
+ADD_TO_WORK_DIR "pa2qxxx" "system"     "system/etc/default-permissions/default-permissions-com.samsung.android.app.moments.xml" 0 0 644 "u:object_r:system_file:s0"
+ADD_TO_WORK_DIR "pa2qxxx" "system"     "system/etc/permissions/privapp-permissions-com.samsung.android.app.moments.xml" 0 0 644 "u:object_r:system_file:s0"
+ADD_TO_WORK_DIR "pa2qxxx" "system"     "system/etc/sysconfig/moments.xml" 0 0 644 "u:object_r:system_file:s0"
+ADD_TO_WORK_DIR "pa2qxxx" "system" "system/priv-app/Moments/Moments.apk" 0 0 644 "u:object_r:system_file:s0"
+LOG_STEP_OUT
+
+LOG_STEP_IN "- Adding full AI SamsungSmartSuggestions with Now Brief widget"
+mkdir -p "$WORK_DIR/system/system/priv-app/SamsungSmartSuggestions"
+cat "$SRC_DIR/unica/mods/paradigm/system/priv-app/SamsungSmartSuggestions/SamsungSmartSuggestions.apk".* >     "$WORK_DIR/system/system/priv-app/SamsungSmartSuggestions/SamsungSmartSuggestions.apk"
+chmod 644 "$WORK_DIR/system/system/priv-app/SamsungSmartSuggestions/SamsungSmartSuggestions.apk"
+LOG_STEP_OUT
