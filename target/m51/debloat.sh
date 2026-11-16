@@ -50,3 +50,10 @@ framework/com.android.hotwordenrollment.common.util.jar
 framework/com.qti.location.sdk.jar
 priv-app/com.qualcomm.location
 "
+
+# Bixby Wakeup debloat (no hardware DSP support on M51, causes crash loop & battery drain)
+SYSTEM_DEBLOAT+="
+system/app/BixbyWakeup
+system/etc/permissions/privapp-permissions-com.samsung.android.bixby.wakeup.xml
+system/etc/sysconfig/preinstalled-packages-com.samsung.android.bixby.wakeup.xml
+"

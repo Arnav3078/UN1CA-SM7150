@@ -228,3 +228,30 @@ if [ -f "$WORK_DIR/vendor/etc/seccomp_policy/samsung.software.media.c2-base-poli
     sed -i 's/mremap: arg3 == 3/mremap: 1/' "$WORK_DIR/vendor/etc/seccomp_policy/samsung.software.media.c2-base-policy"
 fi
 LOG_STEP_OUT
+
+LOG_STEP_IN "- Removing Bixby Wakeup to eliminate crashes and battery drain"
+DELETE_FROM_WORK_DIR "system" "system/app/BixbyWakeup" || true
+DELETE_FROM_WORK_DIR "system" "system/etc/permissions/privapp-permissions-com.samsung.android.bixby.wakeup.xml" || true
+DELETE_FROM_WORK_DIR "system" "system/etc/sysconfig/preinstalled-packages-com.samsung.android.bixby.wakeup.xml" || true
+LOG_STEP_OUT
+
+LOG_STEP_IN "- Enabling Now Brief and Personal Data Engine in floating_feature.xml"
+for ff in "$WORK_DIR/system/system/etc/floating_feature.xml" "$WORK_DIR/vendor/etc/floating_feature.xml"; do
+    if [ -f "$ff" ]; then
+        sed -i 's/<SEC_FLOATING_FEATURE_COMMON_CONFIG_AI_VERSION>.*<\/SEC_FLOATING_FEATURE_COMMON_CONFIG_AI_VERSION>/<SEC_FLOATING_FEATURE_COMMON_CONFIG_AI_VERSION>20263<\/SEC_FLOATING_FEATURE_COMMON_CONFIG_AI_VERSION>/' "$ff"
+        sed -i '/SEC_FLOATING_FEATURE_FRAMEWORK_SUPPORT_PERSONALIZED_DATA_CORE/d' "$ff"
+        sed -i '/SEC_FLOATING_FEATURE_FRAMEWORK_SUPPORT_AI_BRIEF_FOR_UT/d' "$ff"
+        sed -i '/SEC_FLOATING_FEATURE_FRAMEWORK_SUPPORT_NOW_BRIEF/d' "$ff"
+        sed -i '/SEC_FLOATING_FEATURE_GENAI_CONFIG_LLM_VERSION/d' "$ff"
+        sed -i 's/<\/SecFloatingFeatureSet>/    <SEC_FLOATING_FEATURE_FRAMEWORK_SUPPORT_PERSONALIZED_DATA_CORE>TRUE<\/SEC_FLOATING_FEATURE_FRAMEWORK_SUPPORT_PERSONALIZED_DATA_CORE>\n    <SEC_FLOATING_FEATURE_FRAMEWORK_SUPPORT_AI_BRIEF_FOR_UT>TRUE<\/SEC_FLOATING_FEATURE_FRAMEWORK_SUPPORT_AI_BRIEF_FOR_UT>\n    <SEC_FLOATING_FEATURE_FRAMEWORK_SUPPORT_NOW_BRIEF>TRUE<\/SEC_FLOATING_FEATURE_FRAMEWORK_SUPPORT_NOW_BRIEF>\n    <SEC_FLOATING_FEATURE_GENAI_CONFIG_LLM_VERSION>1.70<\/SEC_FLOATING_FEATURE_GENAI_CONFIG_LLM_VERSION>\n<\/SecFloatingFeatureSet>/' "$ff"
+    fi
+done
+LOG_STEP_OUT
+
+LOG_STEP_IN "- Granting GenUI permission to SystemUI for Now Brief cards"
+for sysui_perm in "$WORK_DIR/system_ext/etc/permissions/com.android.systemui.xml" "$WORK_DIR/system/system/etc/permissions/com.android.systemui.xml"; do
+    if [ -f "$sysui_perm" ] && ! grep -q "BIND_GENUI_SERVICE" "$sysui_perm"; then
+        sed -i '/<privapp-permissions package="com.android.systemui">/a \        <permission name="com.samsung.android.smartsuggestions.permission.BIND_GENUI_SERVICE"\/>' "$sysui_perm"
+    fi
+done
+LOG_STEP_OUT
