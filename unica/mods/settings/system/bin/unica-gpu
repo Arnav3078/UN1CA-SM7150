@@ -1,5 +1,5 @@
 #!/system/bin/sh
-# UN1CA Adreno 618 GPU Tuning Service for SM7150
+# UN1CA Adreno 618 GPU Tuning Service Daemon for SM7150
 IPC="/data/misc/unica_gpu"
 REQ_DIR="$IPC/requests"
 RESP_DIR="$IPC/responses"
@@ -8,47 +8,56 @@ BASE="/cache/unica-gpu"
 mkdir -p "$REQ_DIR" "$RESP_DIR" "$IPC/archives" "$BASE" 2>/dev/null
 chmod 0777 "$IPC" "$REQ_DIR" "$RESP_DIR" "$BASE" 2>/dev/null
 
-REQ="$REQ_DIR/request"
-[ ! -f "$REQ" ] && [ -f "$REQ_DIR/request.json" ] && REQ="$REQ_DIR/request.json"
-[ ! -f "$REQ" ] && exit 0
-
-read -r REQ_ID OP DATA < "$REQ"
-[ -z "$REQ_ID" ] && REQ_ID=$(getprop sys.unica.gpu.request)
-[ -z "$REQ_ID" ] && REQ_ID="00000000-0000-0000-0000-000000000000"
-[ -z "$OP" ] && OP="status"
-
 CUR_HASH="adreno618sm7150unica"
 
-case "$OP" in
-    backup)
-        mkdir -p "$BASE" 2>/dev/null
-        echo "$CUR_HASH" > "$BASE/original.sha256"
-        echo "$CUR_HASH" > "$BASE/rollback.sha256"
-        touch "$BASE/rollback.zip"
-        chmod 0666 "$BASE/rollback.zip" "$BASE/rollback.sha256" 2>/dev/null
-        ;;
-    exported)
-        echo "$CUR_HASH" > "$BASE/exported"
-        ;;
-    apply|apply2)
-        REQ_MAX=$(echo "$DATA" | grep -oE '[0-9]{8,10}' | head -n 1)
-        if [ -n "$REQ_MAX" ] && [ "$REQ_MAX" -ge 180000000 ] && [ "$REQ_MAX" -le 800000000 ]; then
-            echo "$REQ_MAX" > /sys/class/kgsl/kgsl-3d0/max_gpuclk 2>/dev/null
-            setprop persist.sys.unica.gpu.max_clk "$REQ_MAX"
-        fi
-        ;;
-    restore)
-        echo 700000000 > /sys/class/kgsl/kgsl-3d0/max_gpuclk 2>/dev/null
-        echo 180000000 > /sys/class/kgsl/kgsl-3d0/devfreq/min_freq 2>/dev/null
-        setprop persist.sys.unica.gpu.max_clk "700000000"
-        ;;
-esac
+handle_request() {
+    REQ="$1"
+    [ ! -f "$REQ" ] && return
 
-RESP="$RESP_DIR/response.json"
-cat << EOF > "$RESP"
+    read -r REQ_ID OP DATA < "$REQ"
+    [ -z "$REQ_ID" ] && REQ_ID="00000000-0000-0000-0000-000000000000"
+    [ -z "$OP" ] && OP="status"
+
+    case "$OP" in
+        backup)
+            mkdir -p "$BASE" 2>/dev/null
+            echo "$CUR_HASH" > "$BASE/original.sha256"
+            echo "$CUR_HASH" > "$BASE/rollback.sha256"
+            touch "$BASE/rollback.zip"
+            chmod 0666 "$BASE/rollback.zip" "$BASE/rollback.sha256" 2>/dev/null
+            ;;
+        exported)
+            echo "$CUR_HASH" > "$BASE/exported"
+            ;;
+        apply|apply2)
+            REQ_MAX=$(echo "$DATA" | grep -oE '[0-9]{8,10}' | head -n 1)
+            if [ -n "$REQ_MAX" ] && [ "$REQ_MAX" -ge 180000000 ] && [ "$REQ_MAX" -le 800000000 ]; then
+                echo "$REQ_MAX" > /sys/class/kgsl/kgsl-3d0/max_gpuclk 2>/dev/null
+                setprop persist.sys.unica.gpu.max_clk "$REQ_MAX"
+            fi
+            ;;
+        restore)
+            echo 700000000 > /sys/class/kgsl/kgsl-3d0/max_gpuclk 2>/dev/null
+            echo 180000000 > /sys/class/kgsl/kgsl-3d0/devfreq/min_freq 2>/dev/null
+            setprop persist.sys.unica.gpu.max_clk "700000000"
+            ;;
+    esac
+
+    RESP="$RESP_DIR/response.json"
+    cat << JSON_EOF > "$RESP"
 {"id":"$REQ_ID","result":{"ok":true,"gpuCapability":"Adreno 618 (SM7150)","currentHash":"$CUR_HASH","frequencies":[700000000,610000000,500000000,430000000,350000000,275000000,180000000,180000000,180000000,180000000],"levels":[384,320,256,192,128,64,16,16,16,16],"tables":[{"id":0,"initial_level":6,"minimum_level":0,"power_levels":[{"index":0,"frequency_hz":700000000,"rpmh_level":384,"bus_frequency":0,"bus_minimum":0,"bus_maximum":3,"acd_level":null},{"index":1,"frequency_hz":610000000,"rpmh_level":320,"bus_frequency":0,"bus_minimum":0,"bus_maximum":3,"acd_level":null},{"index":2,"frequency_hz":500000000,"rpmh_level":256,"bus_frequency":0,"bus_minimum":0,"bus_maximum":2,"acd_level":null},{"index":3,"frequency_hz":430000000,"rpmh_level":192,"bus_frequency":0,"bus_minimum":0,"bus_maximum":2,"acd_level":null},{"index":4,"frequency_hz":350000000,"rpmh_level":128,"bus_frequency":0,"bus_minimum":0,"bus_maximum":1,"acd_level":null},{"index":5,"frequency_hz":275000000,"rpmh_level":64,"bus_frequency":0,"bus_minimum":0,"bus_maximum":1,"acd_level":null},{"index":6,"frequency_hz":180000000,"rpmh_level":16,"bus_frequency":0,"bus_minimum":0,"bus_maximum":0,"acd_level":null}]},{"id":1,"initial_level":6,"minimum_level":0,"power_levels":[{"index":0,"frequency_hz":700000000,"rpmh_level":384,"bus_frequency":0,"bus_minimum":0,"bus_maximum":3,"acd_level":null},{"index":1,"frequency_hz":610000000,"rpmh_level":320,"bus_frequency":0,"bus_minimum":0,"bus_maximum":3,"acd_level":null},{"index":2,"frequency_hz":500000000,"rpmh_level":256,"bus_frequency":0,"bus_minimum":0,"bus_maximum":2,"acd_level":null},{"index":3,"frequency_hz":430000000,"rpmh_level":192,"bus_frequency":0,"bus_minimum":0,"bus_maximum":2,"acd_level":null},{"index":4,"frequency_hz":350000000,"rpmh_level":128,"bus_frequency":0,"bus_minimum":0,"bus_maximum":1,"acd_level":null},{"index":5,"frequency_hz":275000000,"rpmh_level":64,"bus_frequency":0,"bus_minimum":0,"bus_maximum":1,"acd_level":null},{"index":6,"frequency_hz":180000000,"rpmh_level":16,"bus_frequency":0,"bus_minimum":0,"bus_maximum":0,"acd_level":null}]}],"canRestart":false,"refreshHash":"","backup":true,"original":true,"canRestore":true,"exported":true,"rollbackHash":"$CUR_HASH","interrupted":false,"backupState":"ready","baselineHash":"$CUR_HASH","staleBackup":false,"canRenew":false,"renewing":false,"blockReason":""}}
-EOF
+JSON_EOF
 
-chmod 0666 "$RESP" 2>/dev/null
-chown 1000:1000 "$RESP" 2>/dev/null
-rm -f "$REQ" 2>/dev/null
+    chmod 0666 "$RESP" 2>/dev/null
+    chown 1000:1000 "$RESP" 2>/dev/null
+    rm -f "$REQ" 2>/dev/null
+}
+
+while true; do
+    if [ -f "$REQ_DIR/request" ]; then
+        handle_request "$REQ_DIR/request"
+    elif [ -f "$REQ_DIR/request.json" ]; then
+        handle_request "$REQ_DIR/request.json"
+    fi
+    sleep 0.2
+done
