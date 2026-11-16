@@ -248,10 +248,15 @@ for ff in "$WORK_DIR/system/system/etc/floating_feature.xml" "$WORK_DIR/vendor/e
 done
 LOG_STEP_OUT
 
-LOG_STEP_IN "- Granting GenUI permission to SystemUI for Now Brief cards"
+LOG_STEP_IN "- Granting GenUI permission to SystemUI and AODService for Now Brief cards"
 for sysui_perm in "$WORK_DIR/system_ext/etc/permissions/com.android.systemui.xml" "$WORK_DIR/system/system/etc/permissions/com.android.systemui.xml"; do
     if [ -f "$sysui_perm" ] && ! grep -q "BIND_GENUI_SERVICE" "$sysui_perm"; then
         sed -i '/<privapp-permissions package="com.android.systemui">/a \        <permission name="com.samsung.android.smartsuggestions.permission.BIND_GENUI_SERVICE"\/>' "$sysui_perm"
+    fi
+done
+for aod_perm in "$WORK_DIR/system/system/etc/permissions/privapp-permissions-com.samsung.android.app.aodservice.xml"; do
+    if [ -f "$aod_perm" ] && ! grep -q "BIND_GENUI_SERVICE" "$aod_perm"; then
+        sed -i '/<privapp-permissions package="com.samsung.android.app.aodservice">/a \       <permission name="com.samsung.android.smartsuggestions.permission.BIND_GENUI_SERVICE"\/>\n       <permission name="com.samsung.android.smartsuggestions.search.permission.READ"\/>\n       <permission name="com.samsung.android.smartsuggestions.search.permission.WRITE"\/>\n       <permission name="com.samsung.android.smartsuggestions.search.permission.UPDATE_INDEX"\/>' "$aod_perm"
     fi
 done
 LOG_STEP_OUT
