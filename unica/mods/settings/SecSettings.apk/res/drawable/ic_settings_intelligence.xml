@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector android:height="28.0dp" android:width="28.0dp" android:viewportWidth="28.0" android:viewportHeight="28.0"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <path android:fillColor="@color/unica_settings_ic_intelligence_color" android:pathData="M14,14m-14,0a14,14 0,1 1,28 0a14,14 0,1 1,-28 0" android:strokeColor="#00000000" android:strokeWidth="1.0" android:fillType="evenOdd" />
+    <group android:scaleX="0.45" android:scaleY="0.45" android:translateX="3.5" android:translateY="3.5">
+        <path android:fillColor="#ffffff" android:pathData="M15.045,8.545L16.125,5.807C16.255,5.55 16.622,5.55 16.753,5.807L17.832,8.545L19.963,9.623C20.22,9.753 20.22,10.119 19.963,10.249L17.832,11.327L16.753,14.065C16.622,14.322 16.255,14.322 16.125,14.065L15.045,11.327L12.915,10.249C12.657,10.119 12.657,9.753 12.915,9.623L15.045,8.545Z" android:strokeColor="#00000000" android:strokeWidth="1.0" android:fillType="evenOdd" />
+        <path android:fillColor="#ffffff" android:pathData="M33.826,34.673L34.906,31.934C35.036,31.678 35.403,31.678 35.534,31.934L36.613,34.673L38.744,35.751C39.001,35.881 39.001,36.247 38.744,36.377L36.613,37.454L35.534,40.193C35.403,40.45 35.036,40.45 34.906,40.193L33.826,37.454L31.696,36.377C31.438,36.247 31.438,35.881 31.696,35.751L33.826,34.673Z" android:strokeColor="#00000000" android:strokeWidth="1.0" android:fillType="evenOdd" />
+        <path android:fillColor="#ffffff" android:pathData="M14.786,16.856C15.074,16.273 15.888,16.273 16.177,16.856L17.161,19.418L16.374,19.819C13.637,21.263 14.16,23.95 16.312,24.901L16.374,24.934L21.668,27.63L21.721,27.767L18.569,29.402L16.177,35.626C15.888,36.21 15.074,36.21 14.786,35.626L12.393,29.402L7.672,26.953C7.101,26.658 7.101,25.825 7.672,25.53L12.393,23.081Z" android:strokeColor="#00000000" android:strokeWidth="1.0" android:fillType="evenOdd" />
+        <path android:fillColor="#ffffff" android:pathData="M31.38,18.207L28.141,9.928C27.75,9.153 26.649,9.153 26.258,9.928L23.019,18.207L16.626,21.464C15.855,21.857 15.855,22.964 16.626,23.357L23.019,26.614L26.258,34.893C26.649,35.668 27.75,35.668 28.141,34.893L31.38,26.614L37.772,23.357C38.543,22.964 38.543,21.857 37.772,21.464L31.38,18.207Z" android:strokeColor="#00000000" android:strokeWidth="1.0" android:fillType="evenOdd" />
+    </group>
+    <path android:fillColor="@color/sec_dashboard_layer_color" android:pathData="M14,14m-14,0a14,14 0,1 1,28 0a14,14 0,1 1,-28 0" android:strokeColor="#00000000" android:strokeWidth="1.0" android:fillType="evenOdd" />
+</vector>

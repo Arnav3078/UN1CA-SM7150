@@ -1,0 +1,137 @@
+#!/system/bin/sh
+#
+# UN1CA Performance & Power Mode Engine for Galaxy M51 (SM-M515F / SM7150)
+# Snapdragon 730G (8x Kryo 470, Adreno 618)
+#
+
+MODE="$1"
+[ -z "$MODE" ] && MODE=$(getprop persist.sys.carbon.power_mode)
+[ -z "$MODE" ] && MODE="normal"
+
+apply_zram() {
+    # Initialize ZRAM with ZSTD algorithm at early boot if supported
+    if [ -f /sys/block/zram0/comp_algorithm ]; then
+        if [ $(cat /sys/block/zram0/comp_algorithm | grep -c "\[zstd\]") -eq 0 ]; then
+            swapoff /dev/block/zram0 2>/dev/null
+            echo 1 > /sys/block/zram0/reset 2>/dev/null
+            echo zstd > /sys/block/zram0/comp_algorithm 2>/dev/null
+            # 4 GiB ZRAM
+            echo 4294967296 > /sys/block/zram0/disksize 2>/dev/null
+            mkswap /dev/block/zram0 2>/dev/null
+            swapon /dev/block/zram0 -p 32758 2>/dev/null
+        fi
+    fi
+    # Virtual Memory tuning for high responsiveness
+    sysctl -w vm.swappiness=100 >/dev/null 2>&1
+    sysctl -w vm.vfs_cache_pressure=50 >/dev/null 2>&1
+    sysctl -w vm.watermark_boost_factor=0 >/dev/null 2>&1
+    sysctl -w vm.watermark_scale_factor=150 >/dev/null 2>&1
+    sysctl -w vm.dirty_ratio=20 >/dev/null 2>&1
+    sysctl -w vm.dirty_background_ratio=5 >/dev/null 2>&1
+}
+
+case "$MODE" in
+    light|1)
+        # 🍃 LIGHT MODE (Battery & Cool)
+        # Restrict CPU to ~70% of max
+        # Little cores (policy0 max 1804800 -> cap to 1248000 kHz)
+        echo 1248000 > /sys/devices/system/cpu/cpufreq/policy0/scaling_max_freq 2>/dev/null
+        # Big cores (policy6 max 2208000 -> cap to 1555200 kHz)
+        echo 1555200 > /sys/devices/system/cpu/cpufreq/policy6/scaling_max_freq 2>/dev/null
+        echo 300000 > /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq 2>/dev/null
+        echo 652800 > /sys/devices/system/cpu/cpufreq/policy6/scaling_min_freq 2>/dev/null
+
+        # Clamp GPU Adreno 618 to 350 MHz (50% max)
+        echo 350000000 > /sys/class/kgsl/kgsl-3d0/max_gpuclk 2>/dev/null
+        echo 180000000 > /sys/class/kgsl/kgsl-3d0/devfreq/min_freq 2>/dev/null
+
+        # CPU Governor: relaxed rate limits, no boost
+        for p in /sys/devices/system/cpu/cpufreq/policy*/schedutil /sys/devices/system/cpu/cpufreq/policy*/walt; do
+            [ -d "$p" ] && echo 10000 > "$p/up_rate_limit_us" 2>/dev/null
+            [ -d "$p" ] && echo 10000 > "$p/down_rate_limit_us" 2>/dev/null
+            [ -d "$p" ] && echo 0 > "$p/boost" 2>/dev/null
+        done
+
+        # UFS Storage: battery efficient
+        for b in /sys/block/sd[a-z]; do
+            [ -f "$b/queue/scheduler" ] && echo mq-deadline > "$b/queue/scheduler" 2>/dev/null
+            [ -f "$b/queue/read_ahead_kb" ] && echo 128 > "$b/queue/read_ahead_kb" 2>/dev/null
+        done
+
+        setprop persist.carbon.power_mode "light"
+        setprop persist.sys.carbon.power_mode "light"
+        ;;
+
+    normal|balanced|2)
+        # ⚖️ BALANCED MODE (Stock & Normal)
+        # Full stock CPU frequencies
+        echo 1804800 > /sys/devices/system/cpu/cpufreq/policy0/scaling_max_freq 2>/dev/null
+        echo 2208000 > /sys/devices/system/cpu/cpufreq/policy6/scaling_max_freq 2>/dev/null
+        echo 300000 > /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq 2>/dev/null
+        echo 652800 > /sys/devices/system/cpu/cpufreq/policy6/scaling_min_freq 2>/dev/null
+
+        # Full GPU Adreno 618 range (180 MHz - 700 MHz)
+        echo 700000000 > /sys/class/kgsl/kgsl-3d0/max_gpuclk 2>/dev/null
+        echo 180000000 > /sys/class/kgsl/kgsl-3d0/devfreq/min_freq 2>/dev/null
+
+        # CPU Governor: standard balanced rate limits
+        for p in /sys/devices/system/cpu/cpufreq/policy*/schedutil /sys/devices/system/cpu/cpufreq/policy*/walt; do
+            [ -d "$p" ] && echo 2000 > "$p/up_rate_limit_us" 2>/dev/null
+            [ -d "$p" ] && echo 5000 > "$p/down_rate_limit_us" 2>/dev/null
+            [ -d "$p" ] && echo 0 > "$p/boost" 2>/dev/null
+        done
+
+        # UFS Storage: standard Samsung SSG or CFQ
+        for b in /sys/block/sd[a-z]; do
+            [ -f "$b/queue/scheduler" ] && echo ssg > "$b/queue/scheduler" 2>/dev/null || echo cfq > "$b/queue/scheduler" 2>/dev/null
+            [ -f "$b/queue/read_ahead_kb" ] && echo 256 > "$b/queue/read_ahead_kb" 2>/dev/null
+        done
+
+        setprop persist.carbon.power_mode "normal"
+        setprop persist.sys.carbon.power_mode "normal"
+        ;;
+
+    performance|3)
+        # 🔥 PERFORMANCE MODE (Speed & FPS)
+        # Unlocked max CPU frequencies, raised min frequencies to prevent frame drops
+        echo 1804800 > /sys/devices/system/cpu/cpufreq/policy0/scaling_max_freq 2>/dev/null
+        echo 2208000 > /sys/devices/system/cpu/cpufreq/policy6/scaling_max_freq 2>/dev/null
+        echo 768000 > /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq 2>/dev/null
+        echo 1094400 > /sys/devices/system/cpu/cpufreq/policy6/scaling_min_freq 2>/dev/null
+
+        # Instant frequency jump (zero latency)
+        for p in /sys/devices/system/cpu/cpufreq/policy*/schedutil /sys/devices/system/cpu/cpufreq/policy*/walt; do
+            [ -d "$p" ] && echo 0 > "$p/up_rate_limit_us" 2>/dev/null
+            [ -d "$p" ] && echo 500 > "$p/down_rate_limit_us" 2>/dev/null
+            [ -d "$p" ] && echo 1 > "$p/boost" 2>/dev/null
+        done
+
+        # Adreno 618 GPU: full 700 MHz, raised minimum floor (350 MHz) to eliminate stutter
+        echo 700000000 > /sys/class/kgsl/kgsl-3d0/max_gpuclk 2>/dev/null
+        echo 350000000 > /sys/class/kgsl/kgsl-3d0/devfreq/min_freq 2>/dev/null
+        echo 1 > /sys/class/kgsl/kgsl-3d0/force_bus_on 2>/dev/null
+        echo 1 > /sys/class/kgsl/kgsl-3d0/force_clk_on 2>/dev/null
+        echo 1 > /sys/class/kgsl/kgsl-3d0/force_rail_on 2>/dev/null
+
+        # Relax thermal throttling trip points where permissible
+        for tz in /sys/devices/virtual/thermal/thermal_zone*; do
+            [ -f "$tz/mode" ] && echo "enabled" > "$tz/mode" 2>/dev/null
+        done
+
+        # UFS Storage: I/O turbo
+        for b in /sys/block/sd[a-z]; do
+            [ -f "$b/queue/scheduler" ] && echo ssg > "$b/queue/scheduler" 2>/dev/null || echo cfq > "$b/queue/scheduler" 2>/dev/null
+            [ -f "$b/queue/read_ahead_kb" ] && echo 512 > "$b/queue/read_ahead_kb" 2>/dev/null
+        done
+
+        setprop persist.carbon.power_mode "performance"
+        setprop persist.sys.carbon.power_mode "performance"
+        ;;
+
+    boot)
+        apply_zram
+        CURRENT=$(getprop persist.sys.carbon.power_mode)
+        [ -z "$CURRENT" ] && CURRENT="normal"
+        /system/bin/carbon_power_engine "$CURRENT"
+        ;;
+esac

@@ -58,4 +58,55 @@
     <string name="unica_updates_title">UN1CA Updates</string>
     <string name="unica_vulkan_summary">This is unstable and might cause issues!</string>
     <string name="unica_vulkan_title">Enable Vulkan renderer</string>
+
+    <!-- UN1CA / Carbon Performance & Power Engine -->
+    <string name="carbon_power_mode_category">Performance &amp; Battery</string>
+    <string name="carbon_power_mode_title">UN1CA Performance Profile</string>
+    <string name="carbon_power_mode_summary">Toggle between Light, Balanced and Performance modes</string>
+    <string name="carbon_mode_light">🍃 Light Mode (Battery &amp; Cool)</string>
+    <string name="carbon_mode_normal">⚖️ Balanced Mode (Normal)</string>
+    <string name="carbon_mode_performance">🔥 Performance Mode (Speed &amp; FPS)</string>
+
+    <!-- Advanced GPU Tuning -->
+    <string name="carbon_gpu_tuning_title">Advanced GPU Tuning (Adreno 618)</string>
+    <string name="carbon_gpu_tuning_summary">GPU overclocking, undervolting, and voltage curves</string>
+
+    <!-- Offline Local AI (Qwen 2.5 0.5B LLM) -->
+    <string name="carbon_local_llm_title">Offline Local AI (Qwen 2.5 0.5B LLM)</string>
+    <string name="carbon_local_llm_summary">On-chip model management and local responses</string>
+    <string name="carbon_local_llm_status_title">Local Inference Engine</string>
+    <string name="carbon_local_llm_status_summary">Active on Snapdragon 730G Hexagon DSP &amp; Adreno 618</string>
+    <string name="carbon_local_llm_model_title">Quantized Model</string>
+    <string name="carbon_local_llm_model_summary">Qwen 2.5 0.5B (Offline On-Device)</string>
+    <string name="carbon_local_llm_engine_title">Service Architecture</string>
+    <string name="carbon_local_llm_engine_summary">io.mesalabs.rezoss.qwen.EngineService</string>
+    <string name="carbon_qwen_category_status">Engine &amp; Model Status</string>
+    <string name="carbon_qwen_engine_state_title">Engine State</string>
+    <string name="carbon_qwen_engine_state_summary">Checking model status…</string>
+    <string name="carbon_qwen_model_path_title">Model Location</string>
+    <string name="carbon_qwen_specs_title">Model Specifications</string>
+    <string name="carbon_qwen_category_manage">Model Management</string>
+    <string name="carbon_qwen_download_title">Download Qwen 2.5 0.5B Model (468 MB)</string>
+    <string name="carbon_qwen_download_summary">Direct download from HuggingFace with SHA-256 validation</string>
+    <string name="carbon_qwen_test_title">Test Local Inference</string>
+    <string name="carbon_qwen_test_summary">Run on-device completion benchmark</string>
+    <string name="carbon_qwen_category_integration">System Architecture</string>
+    <string name="carbon_qwen_service_title">Engine Service</string>
+    <string name="carbon_qwen_hardware_title">Hardware Acceleration</string>
+    <string name="carbon_qwen_download_confirm_title">Download Qwen 2.5 0.5B Model (468 MB)</string>
+    <string name="carbon_qwen_download_confirm_msg">Download the Qwen 2.5 0.5B (Q4_K_M GGUF) model directly to device?\n\n• Location: Internal Storage (Download/Qwen)\n• Source: Official HuggingFace Repository\n• Wi-Fi connection recommended.</string>
+    <string name="carbon_qwen_download_btn">Download Now</string>
+    <string name="carbon_qwen_cancel_btn">Cancel</string>
+    <string name="carbon_qwen_status_ready">🟢 Model Ready on Device (%1$d MB)</string>
+    <string name="carbon_qwen_status_not_downloaded">🔴 Model Not Downloaded (Inference Inactive)</string>
+    <string name="carbon_qwen_status_downloading">🟠 Downloading Model (%1$d%%)…</string>
+    <string name="carbon_qwen_status_download_in_progress">Download in progress (%1$d%%)</string>
+    <string name="carbon_qwen_status_verified">Model installed and verified</string>
+    <string name="carbon_qwen_download_success">Qwen 2.5 0.5B model downloaded successfully!</string>
+    <string name="carbon_qwen_download_failed">Download failed: %1$s</string>
+    <string name="carbon_qwen_test_missing_title">Model Missing</string>
+    <string name="carbon_qwen_test_missing_msg">"The Qwen 2.5 neural model has not been downloaded yet.\nTap \"Download Qwen 2.5 0.5B Model\" above to install it."</string>
+    <string name="carbon_qwen_test_success_title">Local Inference Test</string>
+    <string name="carbon_qwen_test_success_msg">Model: Qwen 2.5 0.5B (GGUF Q4_K_M)\nStatus: Ready in storage\nAcceleration: Snapdragon 730G (Hexagon 688 DSP + Adreno 618)\n\nLocal inference engine ready for on-device summaries.</string>
+
 </resources>

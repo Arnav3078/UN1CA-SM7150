@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen android:title="@string/carbon_local_llm_title" settings:hierarchicalParentFragment="io.mesalabs.unica.settings.UnicaSettingsFragment" settings:topLevelPreferenceKey="top_level_unica"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:settings="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory android:title="@string/carbon_qwen_category_status">
+        <Preference android:key="carbon_qwen_engine_state" android:title="@string/carbon_qwen_engine_state_title" android:summary="@string/carbon_qwen_engine_state_summary" />
+        <Preference android:key="carbon_qwen_model_path" android:title="@string/carbon_qwen_model_path_title" android:summary="/sdcard/Download/Qwen/qwen2.5-0.5b-instruct-q4_k_m.gguf" />
+        <Preference android:key="carbon_qwen_specs" android:title="@string/carbon_qwen_specs_title" android:summary="Qwen 2.5 0.5B Instruct • Q4_K_M (468 MB) • ARM64" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/carbon_qwen_category_manage">
+        <Preference android:key="carbon_qwen_download" android:title="@string/carbon_qwen_download_title" android:summary="@string/carbon_qwen_download_summary" />
+        <Preference android:key="carbon_qwen_test_prompt" android:title="@string/carbon_qwen_test_title" android:summary="@string/carbon_qwen_test_summary" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/carbon_qwen_category_integration">
+        <Preference android:title="@string/carbon_qwen_service_title" android:summary="io.mesalabs.rezoss.qwen.EngineService" />
+        <Preference android:title="@string/carbon_qwen_hardware_title" android:summary="Qualcomm Snapdragon 730G (Hexagon 688 DSP + Adreno 618)" />
+    </PreferenceCategory>
+</PreferenceScreen>

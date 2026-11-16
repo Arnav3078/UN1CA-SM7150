@@ -1,0 +1,15 @@
+#
+# UN1CA Performance Profile Trigger Service
+#
+
+on property:sys.boot_completed=1
+    exec_background -- /system/bin/sh /system/bin/carbon_power_engine boot
+
+on property:persist.sys.carbon.power_mode=light
+    exec_background -- /system/bin/sh /system/bin/carbon_power_engine light
+
+on property:persist.sys.carbon.power_mode=normal
+    exec_background -- /system/bin/sh /system/bin/carbon_power_engine normal
+
+on property:persist.sys.carbon.power_mode=performance
+    exec_background -- /system/bin/sh /system/bin/carbon_power_engine performance

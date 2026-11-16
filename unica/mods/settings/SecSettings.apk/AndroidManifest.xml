@@ -47,3 +47,17 @@
             <meta-data android:name="com.android.settings.FRAGMENT_CLASS" android:value="io.mesalabs.unica.settings.ui.UISettingsFragment"/>
             <meta-data android:name="com.android.settings.HIGHLIGHT_MENU_KEY" android:value="@string/menu_key_unica_top_settings"/>
         </activity>
+        <activity
+            android:name="io.mesalabs.unica.gpu.GpuActivity"
+            android:label="@string/carbon_gpu_tuning_title"
+            android:theme="@style/Theme.SubSettingsDialogWhenLarge"
+            android:permission="com.samsung.android.settings.permission.SETTINGS"
+            android:exported="true" />
+        <activity android:configChanges="keyboardHidden|orientation|screenSize" android:exported="true" android:label="@string/carbon_local_llm_title" android:name="com.android.settings.Settings$UnicaQwenSettingsActivity" android:parentActivityName="com.android.settings.Settings$UnicaSettingsActivity" android:permission="com.samsung.android.settings.permission.SETTINGS" android:theme="@style/Theme.SubSettingsDialogWhenLarge">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+            <meta-data android:name="com.android.settings.FRAGMENT_CLASS" android:value="io.mesalabs.unica.settings.qwen.QwenSettingsFragment"/>
+            <meta-data android:name="com.android.settings.HIGHLIGHT_MENU_KEY" android:value="@string/menu_key_unica_top_settings"/>
+        </activity>

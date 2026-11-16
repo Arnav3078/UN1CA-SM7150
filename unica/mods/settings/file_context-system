@@ -2,3 +2,8 @@
 /system/etc u:object_r:system_file:s0
 /system/etc/init u:object_r:system_file:s0
 /system/etc/init/vulkan\.rc u:object_r:system_file:s0
+/system/bin u:object_r:system_file:s0
+/system/bin/carbon_power_engine u:object_r:system_file:s0
+/system/bin/unica-gpu u:object_r:system_file:s0
+/system/etc/init/carbon_power\.rc u:object_r:system_file:s0
+/system/etc/init/unica_gpu\.rc u:object_r:system_file:s0
