@@ -62,6 +62,11 @@ LOG_STEP_OUT
 
 ADD_TO_WORK_DIR "a73xqxx" "vendor" "lib64/libsnaplite_native.so" 0 0 644 "u:object_r:same_process_hal_file:s0"
 
+LOG_STEP_IN "- Adding A36 libhwui for HDR color fix"
+ADD_TO_WORK_DIR "a36xxx" "system" "system/lib/libhwui.so" 0 0 644 "u:object_r:system_lib_file:s0"
+ADD_TO_WORK_DIR "a36xxx" "system" "system/lib64/libhwui.so" 0 0 644 "u:object_r:system_lib_file:s0"
+LOG_STEP_OUT
+
 LOG_STEP_IN "- Patching /system/system/etc/ueventd.rc for Qualcomm device nodes"
 if [ -f "$WORK_DIR/system/system/etc/ueventd.rc" ]; then
     if ! grep -q "import /vendor/ueventd.rc" "$WORK_DIR/system/system/etc/ueventd.rc"; then
