@@ -1,0 +1,1755 @@
+[0;33m(scripts/internal/gen_config_file.sh:67) config.sh already exists. Regenerating[0m
+==============================
+ROM_IS_OFFICIAL="false"
+ROM_VERSION="5.3.0-7ecef670"
+ROM_BUILD_TIMESTAMP="1794850700"
+SOURCE_FIRMWARE="SM-S911B/INS/352404911234563"
+SOURCE_EXTRA_FIRMWARES=""
+SOURCE_PLATFORM_SDK_VERSION="37"
+SOURCE_PRODUCT_SHIPPING_API_LEVEL="33"
+SOURCE_BOARD_API_LEVEL="33"
+TARGET_NAME="Galaxy M51"
+TARGET_CODENAME="m51"
+TARGET_PLATFORM="none"
+TARGET_ASSERT_MODEL="SM-M515F"
+TARGET_FIRMWARE="SM-M515F/BVO/357563172596302"
+TARGET_EXTRA_FIRMWARES="SM-G990B/EUX/353718681234563"
+TARGET_PLATFORM_SDK_VERSION="33"
+TARGET_PRODUCT_SHIPPING_API_LEVEL="29"
+TARGET_BOARD_API_LEVEL="30"
+TARGET_DISABLE_AVB_SIGNING="true"
+TARGET_INCLUDE_PATCHED_VBMETA="false"
+TARGET_KEEP_ORIGINAL_SIGN="false"
+TARGET_BOOT_PARTITION_SIZE="67108864"
+TARGET_DTBO_PARTITION_SIZE="10485760"
+TARGET_INIT_BOOT_PARTITION_SIZE="none"
+TARGET_VENDOR_BOOT_PARTITION_SIZE="none"
+TARGET_CACHE_PARTITION_SIZE="419430400"
+TARGET_USE_DYNAMIC_PARTITIONS="true"
+TARGET_SUPER_PARTITION_SIZE="8053063680"
+SOURCE_SUPER_GROUP_NAME="qti_dynamic_partitions"
+TARGET_SUPER_GROUP_NAME="qti_dynamic_partitions"
+TARGET_QTI_DYNAMIC_PARTITIONS_SIZE="8048869376"
+TARGET_OS_SINGLE_SYSTEM_IMAGE="qssi"
+TARGET_OS_FILE_SYSTEM_TYPE="erofs"
+TARGET_OS_BUILD_SYSTEM_EXT_PARTITION="false"
+SOURCE_AUDIO_CONFIG_RECORDALIVE_LIB_VERSION="08020"
+TARGET_AUDIO_CONFIG_RECORDALIVE_LIB_VERSION="07010"
+SOURCE_AUDIO_SUPPORT_ACH_RINGTONE="true"
+TARGET_AUDIO_SUPPORT_ACH_RINGTONE="false"
+SOURCE_AUDIO_SUPPORT_DUAL_SPEAKER="true"
+TARGET_AUDIO_SUPPORT_DUAL_SPEAKER="false"
+SOURCE_AUDIO_SUPPORT_VIRTUAL_VIBRATION_SOUND="true"
+TARGET_AUDIO_SUPPORT_VIRTUAL_VIBRATION_SOUND="false"
+SOURCE_BLUETOOTH_SUPPORT_A2DPSINK_PROFILE="true"
+TARGET_BLUETOOTH_SUPPORT_A2DPSINK_PROFILE="true"
+SOURCE_BLUETOOTH_SUPPORT_A2DP_SBM="false"
+TARGET_BLUETOOTH_SUPPORT_A2DP_SBM="false"
+SOURCE_BLUETOOTH_SUPPORT_HEAD_SAR_BACKOFF="false"
+TARGET_BLUETOOTH_SUPPORT_HEAD_SAR_BACKOFF="false"
+SOURCE_BLUETOOTH_SUPPORT_XLNA_CONTROL="true"
+TARGET_BLUETOOTH_SUPPORT_XLNA_CONTROL="false"
+SOURCE_CAMERA_SUPPORT_CAMERAX_EXTENSION="true"
+TARGET_CAMERA_SUPPORT_CAMERAX_EXTENSION="false"
+SOURCE_CAMERA_SUPPORT_CUTOUT_PROTECTION="false"
+TARGET_CAMERA_SUPPORT_CUTOUT_PROTECTION="false"
+SOURCE_CAMERA_SUPPORT_MASS_APP_FLAVOR="false"
+TARGET_CAMERA_SUPPORT_MASS_APP_FLAVOR="true"
+SOURCE_CAMERA_SUPPORT_SDK_SERVICE="true"
+TARGET_CAMERA_SUPPORT_SDK_SERVICE="false"
+SOURCE_COMMON_CONFIG_MDNIE_MODE="65303"
+TARGET_COMMON_CONFIG_MDNIE_MODE="62481"
+SOURCE_COMMON_SUPPORT_DYN_RESOLUTION_CONTROL="false"
+TARGET_COMMON_SUPPORT_DYN_RESOLUTION_CONTROL="false"
+SOURCE_COMMON_SUPPORT_EMBEDDED_SIM="true"
+TARGET_COMMON_SUPPORT_EMBEDDED_SIM="false"
+SOURCE_COMMON_SUPPORT_HDR_EFFECT="true"
+TARGET_COMMON_SUPPORT_HDR_EFFECT="false"
+SOURCE_DVFSAPP_CONFIG_DVFS_POLICY_FILENAME="dvfs_policy_default"
+TARGET_DVFSAPP_CONFIG_DVFS_POLICY_FILENAME="dvfs_policy_sm7150_xx"
+SOURCE_DVFSAPP_CONFIG_SSRM_POLICY_FILENAME="siop_dm1q_sm8550"
+TARGET_DVFSAPP_CONFIG_SSRM_POLICY_FILENAME="siop_m51_sm7150"
+SOURCE_FINGERPRINT_CONFIG_SENSOR="google_touch_display_ultrasonic"
+TARGET_FINGERPRINT_CONFIG_SENSOR="google_touch_side,settings=3,navi=1"
+SOURCE_LCD_CONFIG_COLOR_WEAKNESS_SOLUTION="3"
+TARGET_LCD_CONFIG_COLOR_WEAKNESS_SOLUTION="3"
+SOURCE_LCD_CONFIG_CONTROL_AUTO_BRIGHTNESS="5"
+TARGET_LCD_CONFIG_CONTROL_AUTO_BRIGHTNESS="3"
+SOURCE_LCD_CONFIG_HFR_DEFAULT_REFRESH_RATE="120"
+TARGET_LCD_CONFIG_HFR_DEFAULT_REFRESH_RATE="60"
+SOURCE_LCD_CONFIG_HFR_MODE="2"
+TARGET_LCD_CONFIG_HFR_MODE="0"
+SOURCE_LCD_CONFIG_HFR_SUPPORTED_REFRESH_RATE="24,10,30,48,60,96,120"
+TARGET_LCD_CONFIG_HFR_SUPPORTED_REFRESH_RATE="none"
+SOURCE_LCD_CONFIG_HFR_SUPPORTED_REFRESH_RATE_NS="60"
+TARGET_LCD_CONFIG_HFR_SUPPORTED_REFRESH_RATE_NS="none"
+SOURCE_LCD_CONFIG_SEAMLESS_BRT="84,91"
+TARGET_LCD_CONFIG_SEAMLESS_BRT="none"
+SOURCE_LCD_CONFIG_SEAMLESS_LUX="200,2500"
+TARGET_LCD_CONFIG_SEAMLESS_LUX="none"
+SOURCE_LCD_SUPPORT_MDNIE_HW="true"
+TARGET_LCD_SUPPORT_MDNIE_HW="true"
+SOURCE_RIL_FEATURES="onebinary"
+TARGET_RIL_FEATURES="onebinary embms_qc"
+SOURCE_RIL_SIM_CONFIG_MULTISIM_TRAYCOUNT="1"
+TARGET_RIL_SIM_CONFIG_MULTISIM_TRAYCOUNT="1"
+SOURCE_RIL_SUPPORT_WATERPROOF_SIM_TRAY_MSG="true"
+TARGET_RIL_SUPPORT_WATERPROOF_SIM_TRAY_MSG="false"
+SOURCE_SECURITY_CONFIG_ESE_CHIP_VENDOR="NXP"
+TARGET_SECURITY_CONFIG_ESE_CHIP_VENDOR="NXP"
+SOURCE_SECURITY_CONFIG_ESE_COS_NAME="JCOP6.3U"
+TARGET_SECURITY_CONFIG_ESE_COS_NAME="JCOP4.0"
+SOURCE_SECURITY_SUPPORT_ESEK="false"
+TARGET_SECURITY_SUPPORT_ESEK="false"
+SOURCE_WLAN_CONFIG_CONNECTION_PERSONALIZATION="1"
+TARGET_WLAN_CONFIG_CONNECTION_PERSONALIZATION="0"
+SOURCE_WLAN_CONFIG_CPU_CSTATE_DISABLE_THRESHOLD="0"
+TARGET_WLAN_CONFIG_CPU_CSTATE_DISABLE_THRESHOLD="0"
+SOURCE_WLAN_CONFIG_CUSTOM_BACKOFF="CAM_FRONT -1 -1 -1 -1 12 8 CAM_BACK -1 -1 -1 -1 12 8"
+TARGET_WLAN_CONFIG_CUSTOM_BACKOFF="none"
+SOURCE_WLAN_CONFIG_DATA_ACTIVITY_AFFINITY_BOOSTER_THRESHOLD="0"
+TARGET_WLAN_CONFIG_DATA_ACTIVITY_AFFINITY_BOOSTER_THRESHOLD="0"
+SOURCE_WLAN_CONFIG_DYNAMIC_SWITCH="0"
+TARGET_WLAN_CONFIG_DYNAMIC_SWITCH="0"
+SOURCE_WLAN_CONFIG_L1SS_DISABLE_THRESHOLD="0"
+TARGET_WLAN_CONFIG_L1SS_DISABLE_THRESHOLD="0"
+SOURCE_WLAN_CONFIG_SEPARATE_ANT_BACKOFF="none"
+TARGET_WLAN_CONFIG_SEPARATE_ANT_BACKOFF="none"
+SOURCE_WLAN_CONFIG_SINGLE_ANT_BACKOFF="none"
+TARGET_WLAN_CONFIG_SINGLE_ANT_BACKOFF="none"
+SOURCE_WLAN_SUPPORT_80211AX="true"
+TARGET_WLAN_SUPPORT_80211AX="false"
+SOURCE_WLAN_SUPPORT_80211AX_6GHZ="true"
+TARGET_WLAN_SUPPORT_80211AX_6GHZ="false"
+SOURCE_WLAN_SUPPORT_APE_SERVICE="true"
+TARGET_WLAN_SUPPORT_APE_SERVICE="false"
+SOURCE_WLAN_SUPPORT_LOWLATENCY="true"
+TARGET_WLAN_SUPPORT_LOWLATENCY="false"
+SOURCE_WLAN_SUPPORT_MBO="true"
+TARGET_WLAN_SUPPORT_MBO="false"
+SOURCE_WLAN_SUPPORT_MIMO="true"
+TARGET_WLAN_SUPPORT_MIMO="false"
+SOURCE_WLAN_SUPPORT_MOBILEAP_11AX="true"
+TARGET_WLAN_SUPPORT_MOBILEAP_11AX="false"
+SOURCE_WLAN_SUPPORT_MOBILEAP_5G_BASEDON_COUNTRY="false"
+TARGET_WLAN_SUPPORT_MOBILEAP_5G_BASEDON_COUNTRY="false"
+SOURCE_WLAN_SUPPORT_MOBILEAP_6G="true"
+TARGET_WLAN_SUPPORT_MOBILEAP_6G="false"
+SOURCE_WLAN_SUPPORT_MOBILEAP_DUALAP="true"
+TARGET_WLAN_SUPPORT_MOBILEAP_DUALAP="false"
+SOURCE_WLAN_SUPPORT_MOBILEAP_OWE="true"
+TARGET_WLAN_SUPPORT_MOBILEAP_OWE="false"
+SOURCE_WLAN_SUPPORT_MOBILEAP_POWER_SAVEMODE="true"
+TARGET_WLAN_SUPPORT_MOBILEAP_POWER_SAVEMODE="false"
+SOURCE_WLAN_SUPPORT_MOBILEAP_PRIORITIZE_TRAFFIC="true"
+TARGET_WLAN_SUPPORT_MOBILEAP_PRIORITIZE_TRAFFIC="false"
+SOURCE_WLAN_SUPPORT_MOBILEAP_WIFI_CONCURRENCY="true"
+TARGET_WLAN_SUPPORT_MOBILEAP_WIFI_CONCURRENCY="true"
+SOURCE_WLAN_SUPPORT_MOBILEAP_WIFISHARING_LITE="false"
+TARGET_WLAN_SUPPORT_MOBILEAP_WIFISHARING_LITE="false"
+SOURCE_WLAN_SUPPORT_SWITCH_FOR_INDIVIDUAL_APPS="true"
+TARGET_WLAN_SUPPORT_SWITCH_FOR_INDIVIDUAL_APPS="true"
+SOURCE_WLAN_SUPPORT_TWT_CONTROL="false"
+TARGET_WLAN_SUPPORT_TWT_CONTROL="false"
+SOURCE_WLAN_SUPPORT_WIFI_TO_CELLULAR="true"
+TARGET_WLAN_SUPPORT_WIFI_TO_CELLULAR="false"
+==============================
+=========================================
+Building UN1CA for Galaxy M51 (m51)
+Build Type: -decrypted
+Version: 5.3.0-7ecef670
+Timestamp: Mon Nov 16 17:38:20 UTC 2026
+=========================================
+[1;37mCreating work dir[0m
+  - Copying /product from source firmware
+    - Replacing "ro.product.product.name" prop with "m51nsxx" in /product/etc/build.prop
+  - Copying /system from source firmware
+    - Adding "ro.product.device" prop with "dm1q" in /system/system/build.prop
+  - Copying /system/system/system_ext from source firmware[0m
+    - Adding metadata for /system_ext (uid:0 gid:0 mode:644 selabel:u:object_r:system_file:s0)
+    - Adding /system/system/system_ext/etc/build_flags.json from prebuilts/samsung/b0sxxx
+    - Deleting /system/system/system_ext/etc/NOTICE.xml.gz
+  - Copying /odm from target firmware
+  - Copying /vendor from target firmware
+    - Replacing "ro.config.ringtone" prop with "ACH_Galaxy_Bells.ogg" in /vendor/build.prop
+    - Replacing "ro.config.notification_sound" prop with "ACH_Spaceline.ogg" in /vendor/build.prop
+    - Replacing "ro.config.alarm_alert" prop with "ACH_Homecoming.ogg" in /vendor/build.prop
+    - Replacing "ro.config.media_sound" prop with "Media_preview_Over_the_horizon.ogg" in /vendor/build.prop
+    - Replacing "ro.config.ringtone_2" prop with "ACH_Atomic_Bell.ogg" in /vendor/build.prop
+    - Replacing "ro.config.notification_sound_2" prop with "ACH_Signal.ogg" in /vendor/build.prop
+  - Copying target firmware kernel images[0m
+    - Removing AVB footer signature from dtbo.img
+    - Removing Samsung footer signature from dtbo.img
+    - Removing AVB footer signature from boot.img
+    - Removing Samsung footer signature from boot.img
+    - Removing AVB footer signature from recovery.img
+    - Removing Samsung footer signature from recovery.img
+[1;37mApplying device patches[0m
+  - Processing "VINTF" by @mehedihjoy0[0m
+  - Processing "Audio HAL" by @mehedihjoy0[0m
+    - Adding missing bluetooth audio HAL from extra[0m
+      - Adding /vendor/bin/hw/android.hardware.audio.service from out/fw/SM-G990B_EUX
+      - Adding /vendor/etc/bluetooth_audio_policy_configuration.xml from out/fw/SM-G990B_EUX
+      - Adding /vendor/lib/libsehbluetooth_audio_session.so from out/fw/SM-G990B_EUX
+      - Adding /vendor/lib64/libsehbluetooth_audio_session.so from out/fw/SM-G990B_EUX
+      - Adding /vendor/lib/vendor.samsung.hardware.bluetooth.audio@2.0.so from out/fw/SM-G990B_EUX
+      - Adding /vendor/lib64/vendor.samsung.hardware.bluetooth.audio@2.0.so from out/fw/SM-G990B_EUX
+      - Adding /vendor/lib/vendor.samsung.hardware.bluetooth.audio@2.1.so from out/fw/SM-G990B_EUX
+      - Adding /vendor/lib64/vendor.samsung.hardware.bluetooth.audio@2.1.so from out/fw/SM-G990B_EUX
+      - Adding /vendor/lib/hw/audio.bluetooth.default.so from out/fw/SM-G990B_EUX
+      - Adding /vendor/lib64/hw/audio.bluetooth.default.so from out/fw/SM-G990B_EUX
+      - Adding /vendor/lib/hw/vendor.samsung.hardware.bluetooth.audio@2.1-impl.so from out/fw/SM-G990B_EUX
+      - Adding /vendor/lib64/hw/vendor.samsung.hardware.bluetooth.audio@2.1-impl.so from out/fw/SM-G990B_EUX
+    - Increasing audio offload buffer size[0m
+      - Replacing "vendor.audio.offload.buffer.size.kb" prop with "256" in /vendor/build.prop
+    - Increasing speaker volume values 85 => 90[0m
+  - Processing "Blobs" by @salvogiangri[0m
+    - Adding r0qksx FMRadio[0m
+      - Adding /system/system/etc/permissions/privapp-permissions-com.sec.android.app.fm.xml from prebuilts/samsung/r0qksx
+      - Adding /system/system/etc/sysconfig/preinstalled-packages-com.sec.android.app.fm.xml from prebuilts/samsung/r0qksx
+      - Adding /system/system/priv-app/HybridRadio/HybridRadio.apk from prebuilts/samsung/r0qksx
+    - Adding FM Radio libs[0m
+      - Adding /system/system/lib/libfmradio_jni.so from prebuilts/samsung/a52qnsxx
+      - Adding /system/system/lib64/libfmradio_jni.so from prebuilts/samsung/a52qnsxx
+      - Adding /system/system/system_ext/lib/fm_helium.so from prebuilts/samsung/a52qnsxx
+      - Adding /system/system/system_ext/lib/libfm-hci.so from prebuilts/samsung/a52qnsxx
+      - Adding /system/system/system_ext/lib/vendor.qti.hardware.fm@1.0.so from prebuilts/samsung/a52qnsxx
+      - Adding /system/system/system_ext/lib64/fm_helium.so from prebuilts/samsung/a52qnsxx
+      - Adding /system/system/system_ext/lib64/libfm-hci.so from prebuilts/samsung/a52qnsxx
+      - Adding /system/system/system_ext/lib64/vendor.qti.hardware.fm@1.0.so from prebuilts/samsung/a52qnsxx
+    - Adding /vendor/bin/hw/wpa_supplicant from prebuilts/samsung/a52qnsxx
+    - Adding a73xqxx biometric blobs[0m
+      - Deleting /vendor/bin/hw/vendor.samsung.hardware.biometrics.face@2.0-service
+      - Deleting /vendor/etc/init/vendor.samsung.hardware.biometrics.face@2.0-service.rc
+      - Adding /vendor/bin/hw/vendor.samsung.hardware.biometrics.face@3.0-service from prebuilts/samsung/a73xqxx
+      - Adding /vendor/etc/init/vendor.samsung.hardware.biometrics.face@3.0-service.rc from prebuilts/samsung/a73xqxx
+      - Adding /vendor/lib/vendor.samsung.hardware.biometrics.face@2.0.so from prebuilts/samsung/a73xqxx
+      - Adding /vendor/lib/vendor.samsung.hardware.biometrics.face@3.0.so from prebuilts/samsung/a73xqxx
+      - Adding /vendor/lib64/vendor.samsung.hardware.biometrics.face@2.0.so from prebuilts/samsung/a73xqxx
+      - Adding /vendor/lib64/vendor.samsung.hardware.biometrics.face@3.0.so from prebuilts/samsung/a73xqxx
+    - Fixing biometrics vintf manifest[0m
+    - Adding a73xqxx light blobs[0m
+      - Adding /vendor/bin/hw/vendor.samsung.hardware.light-service from prebuilts/samsung/a73xqxx
+      - Adding /vendor/lib64/vendor.samsung.hardware.light-V1-ndk_platform.so from prebuilts/samsung/a73xqxx
+    - Adding stock TUI app[0m
+      - Adding /system/system/system_ext/app/com.qualcomm.qti.services.secureui/com.qualcomm.qti.services.secureui.apk from out/fw/SM-M515F_BVO
+    - Removing configstore-1.1 service[0m
+      - Deleting /vendor/bin/hw/android.hardware.configstore@1.1-service
+      - Deleting /vendor/etc/init/android.hardware.configstore@1.1-service.rc
+      - Deleting /vendor/etc/seccomp_policy/configstore@1.1.policy
+    - Adding /vendor/lib64/libsnaplite_native.so from prebuilts/samsung/a73xqxx
+    - Patching /system/system/etc/ueventd.rc for Qualcomm device nodes[0m
+  - Processing "Camera patches" by @salvogiangri[0m
+    - Adding /system/system/etc/public.libraries-polarr.txt from prebuilts/samsung/a73xqxx
+    - Adding /system/system/lib64/libBestComposition.polarr.so from prebuilts/samsung/a73xqxx
+    - Adding /system/system/lib64/libFeature.polarr.so from prebuilts/samsung/a73xqxx
+    - Adding /system/system/lib64/libPolarrSnap.polarr.so from prebuilts/samsung/a73xqxx
+    - Adding /system/system/lib64/libTracking.polarr.so from prebuilts/samsung/a73xqxx
+    - Adding /system/system/lib64/libYuv.polarr.so from prebuilts/samsung/a73xqxx
+    - Adding /system/system/lib64/libSceneDetector_v1.camera.samsung.so from prebuilts/samsung/r9qxxx
+    - Adding /system/system/lib64/liblow_light_hdr.arcsoft.so from out/fw/SM-M515F_BVO
+    - Adding /system/system/lib64/libhigh_dynamic_range.arcsoft.so from out/fw/SM-M515F_BVO
+    - Adding /system/system/lib64/libhumantracking.arcsoft.so from out/fw/SM-M515F_BVO
+    - Adding /system/system/lib64/libhumantracking_util.camera.samsung.so from out/fw/SM-M515F_BVO
+    - Adding /system/system/lib64/libsecimaging_pdk.camera.samsung.so from prebuilts/samsung/a73xqxx
+    - Adding /system/system/lib64/libveengine.arcsoft.so from out/fw/SM-M515F_BVO
+    - Patching /vendor/ueventd.rc and creating /vendor/etc/ueventd.rc
+    - Adding metadata for /vendor/etc/ueventd.rc (uid:0 gid:0 mode:644 selabel:u:object_r:vendor_configs_file:s0)
+  - Processing "Display patch for Galaxy M51" by @pascua28, @mehedihjoy0[0m
+    - Adding "debug.sf.latch_unsignaled" prop with "1" in /vendor/build.prop
+    - Adding "vendor.display.disable_excl_rect_partial_fb" prop with "1" in /vendor/build.prop
+    - Adding "vendor.display.use_smooth_motion" prop with "0" in /vendor/build.prop
+    - Adding "debug.sf.enable_advanced_sf_phase_offset" prop with "0" in /vendor/build.prop
+    - Adding "vendor.display.disable_offline_rotator" prop with "1" in /vendor/build.prop
+    - Adding "vendor.display.enable_async_powermode" prop with "0" in /vendor/build.prop
+    - Adding "vendor.display.enable_early_wakeup" prop with "0" in /vendor/build.prop
+  - Processing "DVFS patch" by @ata-kaner[0m
+    - Decoding /system/system/priv-app/SamsungDeviceHealthManagerService/SamsungDeviceHealthManagerService.apk
+    - Replacing value "SM6375" of method "<clinit>()V" in /system/system/priv-app/SamsungDeviceHealthManagerService/SamsungDeviceHealthManagerService.apk/smali/c4/c.smali with "SM7150"
+    - Replacing entire body of method "valueOf(Ljava/lang/String;)Lcom/sec/android/sdhms/thermal/overheatcontrol/overheatcomplex/OverheatComplexType;" in /system/system/priv-app/SamsungDeviceHealthManagerService/SamsungDeviceHealthManagerService.apk/smali/com/sec/android/sdhms/thermal/overheatcontrol/overheatcomplex/OverheatComplexType.smali
+  - Processing "Edge lighting fix" by @salvogiangri[0m
+    - Adding "ro.factory.model" prop with "SM-A715F" in /system/system/build.prop
+  - Processing "Emulated Storage support" by @ata-kaner[0m
+    - Adding "external_storage.projid.enabled" prop with "1" in /vendor/build.prop
+    - Adding "external_storage.casefold.enabled" prop with "1" in /vendor/build.prop
+    - Adding "external_storage.sdcardfs.enabled" prop with "0" in /vendor/build.prop
+    - Adding "persist.sys.fuse.passthrough.enable" prop with "true" in /vendor/build.prop
+  - Processing "FBEv2 support" by @ata-kaner[0m
+    - Adding "ro.crypto.dm_default_key.options_format.version" prop with "2" in /vendor/build.prop
+    - Adding "ro.crypto.volume.metadata.method" prop with "dm-default-key" in /vendor/build.prop
+    - Adding "ro.crypto.volume.options" prop with "::v2" in /vendor/build.prop
+    - Patching /vendor/etc/fstab.default
+  - Processing "FCM level" by @ata-kaner[0m
+    - Patching /vendor/etc/vintf/manifest.xml
+[0;33m(target/m51/patches/fcm/customize.sh:6:DELETE_FROM_WORK_DIR) File not found: /vendor/bin/hw/android.hardware.configstore@1.1-service[0m
+[0;33m(target/m51/patches/fcm/customize.sh:7:DELETE_FROM_WORK_DIR) File not found: /vendor/etc/init/android.hardware.configstore@1.1-service.rc[0m
+[0;33m(target/m51/patches/fcm/customize.sh:8:DELETE_FROM_WORK_DIR) File not found: /vendor/etc/seccomp_policy/configstore@1.1.policy[0m
+  - Processing "ParadigmKernel" by @pascua28[0m
+    - Using cached LostPrime kernel: LostPrime-m51-ksu_20261112-160426.zip
+  - Processing "Keymaster" by @salvogiangri[0m
+    - Patching init.rc for Keymaster 4.0 / Decrypted compatibility[0m
+  - Processing "Misc patches" by @salvogiangri[0m
+    - Adding "persist.sys.unica.nativeblur" prop with "false" in /system/system/build.prop
+    - Adding "dalvik.vm.dex2oat64.enabled" prop with "true" in /vendor/build.prop
+/home/arnav/UN1CA-4.0-M51/target/m51/patches/miscs/customize.sh: line 2: warning: command substitution: ignored null byte in input
+/home/arnav/UN1CA-4.0-M51/target/m51/patches/miscs/customize.sh: line 6: warning: command substitution: ignored null byte in input
+  - Processing "Fix RIL" by @salvogiangri, @mehedihjoy0[0m
+    - Adding /vendor from target/m51/patches/ril
+    - Replacing radio HAL version with 1.5[0m
+  - Processing "Legacy selinux" by @pascua28[0m
+    - Adding /system/system/etc/selinux/mapping/30.0.cil from out/fw/SM-M515F_BVO
+    - Adding /system/system/etc/selinux/mapping/30.0.compat.cil from out/fw/SM-M515F_BVO
+    - Adding /system/system/system_ext/etc/selinux/mapping/30.0.cil from out/fw/SM-M515F_BVO
+    - Adding /system/system/system_ext/etc/selinux/mapping/30.0.compat.cil from out/fw/SM-M515F_BVO
+    - Adding /product/etc/selinux/mapping/30.0.cil from out/fw/SM-M515F_BVO
+    - Adding keymaster, vaultkeeper and surfaceflinger graphics permissions[0m
+    - Adding GPU and ION device contexts to plat_file_contexts[0m
+  - Processing "Stock props" by @salvogiangri[0m
+    - Deleting "media.extractor.sec.pcm-32bit" prop in /system/system/build.prop
+    - Adding "ro.security.ese.cosname" prop with "JCOP4.0_0050534A" in /system/system/build.prop
+    - Adding "ro.netflix.bsp_rev" prop with "Q7250-19133-1" in /system/system/build.prop
+  - Processing "Misc tweaks" by @salvogiangri, @mehedihjoy0[0m
+    - Removing performance capping[0m
+      - Deleting /vendor/etc/hyper
+      - Deleting /vendor/etc/perf
+    - Removing WAV 32-bit PCM support[0m
+    - Replacing default zram size with 0[0m
+    - Setting unencrypted ROM properties[0m
+      - Adding "ro.crypto.state" prop with "unencrypted" in /vendor/build.prop
+      - Adding "ro.crypto.type" prop with "none" in /vendor/build.prop
+      - Adding "ro.crypto.override" prop with "false" in /vendor/build.prop
+      - Adding "ro.crypto.state" prop with "unencrypted" in /system/system/build.prop
+      - Adding "ro.crypto.type" prop with "none" in /system/system/build.prop
+    - Fixing Qualcomm hardware device nodes in ueventd and init.rc[0m
+    - Enabling Hardware Acceleration & Full One UI 9 Live Blur[0m
+      - Replacing "debug.egl.hw" prop with "1" in /vendor/build.prop
+      - Replacing "debug.sf.hw" prop with "1" in /vendor/build.prop
+      - Adding "ro.hwui.use_vulkan" prop with "false" in /vendor/build.prop
+      - Adding "debug.hwui.renderer" prop with "skiagl" in /vendor/build.prop
+      - Adding "ro.surface_flinger.supports_background_blur" prop with "1" in /vendor/build.prop
+      - Adding "persist.sys.unica.nativeblur" prop with "true" in /vendor/build.prop
+      - Adding "sys.sysctl.swappiness" prop with "100" in /vendor/build.prop
+      - Adding "debug.egl.hw" prop with "1" in /system/system/build.prop
+      - Adding "debug.sf.hw" prop with "1" in /system/system/build.prop
+      - Adding "ro.hwui.use_vulkan" prop with "false" in /system/system/build.prop
+      - Adding "debug.hwui.renderer" prop with "skiagl" in /system/system/build.prop
+      - Adding "ro.surface_flinger.supports_background_blur" prop with "1" in /system/system/build.prop
+      - Replacing "persist.sys.unica.nativeblur" prop with "true" in /system/system/build.prop
+      - Adding "sys.sysctl.swappiness" prop with "100" in /system/system/build.prop
+    - Neutralizing kernel 4.14 BPF GPU memory tracking abort in libmeminfo[0m
+Patched ReadProcessGpuUsageKb at 0x14bc8
+Patched ReadPerProcessGpuMem at 0x14044
+Patched BpfMapRO::abortOnMismatch at 0x18814
+Patched dmabuf abort at 0x207d4
+All patches applied successfully to /home/arnav/UN1CA-4.0-M51/out/target/m51/work_dir/system/system/lib64/libmeminfo.so
+    - Patching Qualcomm HWC 2.4 service to ignore unknown SurfaceFlinger display commands[0m
+Successfully patched HWC command parser at 0x16cb4 with NOP!
+Patching composer complete.
+    - Restoring authentic Samsung platform priv-apps[0m
+    - Decoding /system/system/priv-app/SecureFolder/SecureFolder.apk
+    - Replacing return value of method "isCompromisedDevice()Z" in /system/system/priv-app/SecureFolder/SecureFolder.apk/smali/com/samsung/knox/securefolder/provisioning/setup/viewmodel/WelcomeViewModel.smali to "const/4 p0, 0x0"
+    - Removing crashing Qualcomm QCC telemetry service[0m
+      - Deleting /system/system/system_ext/app/QCC
+      - Deleting /system/system/system_ext/bin/qccsyshal@1.2-service
+      - Deleting /system/system/system_ext/bin/qccsyshal_aidl-service
+      - Deleting /system/system/system_ext/etc/init/vendor.qti.hardware.qccsyshal@1.2-service.rc
+      - Deleting /system/system/system_ext/etc/init/vendor.qti.qccsyshal_aidl-service.rc
+      - Deleting /system/system/system_ext/etc/permissions/com.qti.qcc.vendor_qcc.xml
+    - Permitting Developer Options in SELinux policy[0m
+    - Patching libstagefright to prevent fortify fread abort during video encoding[0m
+Patched 32-bit libstagefright.so
+Patched 64-bit libstagefright.so
+    - Restoring One UI 9 Live Blur in floating_feature.xml[0m
+    - Tuning UI responsiveness, smoothness and dexopt for Snapdragon 730G[0m
+      - Replacing "debug.hwui.renderer" prop with "skiagl" in /system/system/build.prop
+      - Replacing "ro.hwui.use_vulkan" prop with "false" in /system/system/build.prop
+      - Replacing "ro.surface_flinger.supports_background_blur" prop with "1" in /system/system/build.prop
+      - Replacing "persist.sys.unica.nativeblur" prop with "true" in /system/system/build.prop
+      - Adding "renderthread.skia.reduceopstasksplitting" prop with "true" in /system/system/build.prop
+      - Adding "ro.surface_flinger.max_frame_buffer_acquired_buffers" prop with "3" in /system/system/build.prop
+      - Adding "persist.sys.scrollingcache" prop with "3" in /system/system/build.prop
+      - Replacing "sys.sysctl.swappiness" prop with "100" in /system/system/build.prop
+      - Adding "dalvik.vm.dex2oat-threads" prop with "6" in /system/system/build.prop
+      - Adding "dalvik.vm.boot-dex2oat-threads" prop with "8" in /system/system/build.prop
+      - Adding "dalvik.vm.dex2oat-cpu-set" prop with "0,1,2,3,4,5,6,7" in /system/system/build.prop
+      - Adding "dalvik.vm.boot-dex2oat-cpu-set" prop with "0,1,2,3,4,5,6,7" in /system/system/build.prop
+      - Replacing "dalvik.vm.dex2oat64.enabled" prop with "true" in /system/system/build.prop
+      - Replacing "debug.hwui.renderer" prop with "skiagl" in /vendor/build.prop
+      - Replacing "ro.hwui.use_vulkan" prop with "false" in /vendor/build.prop
+      - Replacing "ro.surface_flinger.supports_background_blur" prop with "1" in /vendor/build.prop
+      - Replacing "persist.sys.unica.nativeblur" prop with "true" in /vendor/build.prop
+      - Adding "renderthread.skia.reduceopstasksplitting" prop with "true" in /vendor/build.prop
+      - Replacing "ro.surface_flinger.max_frame_buffer_acquired_buffers" prop with "3" in /vendor/default.prop
+      - Replacing "sys.sysctl.swappiness" prop with "100" in /vendor/build.prop
+    - Fixing Qualcomm Codec2 seccomp policy[0m
+    - Removing Bixby Wakeup to eliminate crashes and battery drain[0m
+      - Deleting /system/system/app/BixbyWakeup
+      - Deleting /system/system/etc/permissions/privapp-permissions-com.samsung.android.bixby.wakeup.xml
+      - Deleting /system/system/etc/sysconfig/preinstalled-packages-com.samsung.android.bixby.wakeup.xml
+    - Enabling Now Brief and Personal Data Engine in floating_feature.xml[0m
+    - Granting GenUI permission to SystemUI and AODService for Now Brief cards[0m
+    - Adding Moments (Personal Data Engine) from pa2qxxx[0m
+      - Adding /system/system/etc/default-permissions/default-permissions-com.samsung.android.app.moments.xml from prebuilts/samsung/pa2qxxx
+      - Adding /system/system/etc/permissions/privapp-permissions-com.samsung.android.app.moments.xml from prebuilts/samsung/pa2qxxx
+      - Adding /system/system/etc/sysconfig/moments.xml from prebuilts/samsung/pa2qxxx
+      - Adding /system/system/priv-app/Moments/Moments.apk from prebuilts/samsung/pa2qxxx
+    - Adding full AI SamsungSmartSuggestions with Now Brief widget[0m
+  - Processing "A73 Vibrator HAL" by @pascua28[0m
+    - Removing stock vibrator service
+    - Deleting /vendor/bin/hw/vendor.samsung.hardware.vibrator@2.2-service
+    - Deleting /vendor/etc/init/vendor.samsung.hardware.vibrator@2.2-service.rc
+    - Deleting /vendor/lib64/vendor.samsung.hardware.vibrator@2.0.so
+    - Deleting /vendor/lib64/vendor.samsung.hardware.vibrator@2.1.so
+    - Deleting /vendor/lib64/vendor.samsung.hardware.vibrator@2.2.so
+    - Removing stock vibrator service vintf entry
+    - Adding vibrator service from a73xqxx
+    - Adding /vendor/bin/hw/vendor.samsung.hardware.vibrator-service from prebuilts/samsung/a73xqxx
+    - Adding /vendor/etc/init/vendor.samsung.hardware.vibrator-default.rc from prebuilts/samsung/a73xqxx
+    - Adding /vendor/etc/vintf/manifest/vendor.samsung.hardware.vibrator-default.xml from prebuilts/samsung/a73xqxx
+    - Adding /vendor/lib64/vendor.samsung.hardware.vibrator-V3-ndk_platform.so from prebuilts/samsung/a73xqxx
+[1;37mApplying ROM patches[0m
+  - Processing "floating_feature.xml patches" by @salvogiangri[0m
+    - Applying target floating feature config[0m
+      - Deleting "SEC_FLOATING_FEATURE_ACCESSIBILITY_SUPPORT_HEARING_AIDS" config in /system/system/etc/floating_feature.xml
+      - Replacing "SEC_FLOATING_FEATURE_AUDIO_CONFIG_INTERPRETER" config with "0" in /system/system/etc/floating_feature.xml
+      - Replacing "SEC_FLOATING_FEATURE_AUDIO_CONFIG_MULTI_MIC" config with "2" in /system/system/etc/floating_feature.xml
+      - Replacing "SEC_FLOATING_FEATURE_AUDIO_CONFIG_REMOTE_MIC" config with "FW" in /system/system/etc/floating_feature.xml
+      - Replacing "SEC_FLOATING_FEATURE_AUDIO_CONFIG_SOUNDALIVE_VERSION" config with "eq_custom,uhq_onoff,adapt,spk_stereo,karaoke,dvfs_700000" in /system/system/etc/floating_feature.xml
+      - Replacing "SEC_FLOATING_FEATURE_AUDIO_CONFIG_VOLUMEMONITOR_STAGE" config with "1" in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_AUDIO_SUPPORT_ADAPT_SOUND_CALL_PARAM" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_AUDIO_SUPPORT_DUAL_SPEAKER" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_AUDIO_SUPPORT_MICMODE_QUICK_PANEL" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_AUDIO_SUPPORT_SITUATION_EXTENSION" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_AUDIO_SUPPORT_TRANSITION_EFFECT" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_AUDIO_SUPPORT_VOICE_TX_FOR_INCALL_MUSIC" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_AUDIO_SUPPORT_VOIP_VIA_SMART_MONITOR" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_AUDIO_SUPPORT_VOIP_VIA_SMART_VIEW" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_AUDIO_SUPPORT_VOLUME_MONITOR" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_BATTERY_SUPPORT_BSOH_GALAXYDIAGNOSTICS" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_BATTERY_SUPPORT_PASS_THROUGH" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_BATTERY_SUPPORT_WIRELESS_HV" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_BATTERY_SUPPORT_WIRELESS_NIGHT_MODE" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_BATTERY_SUPPORT_WIRELESS_TX" config in /system/system/etc/floating_feature.xml
+      - Replacing "SEC_FLOATING_FEATURE_BIOAUTH_CONFIG_FINGERPRINT_FEATURES" config with "capacitive_powerkey_phone" in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_BIXBYVISION_CONFIG_QUICKMEASURE" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_BIXBY_CONFIG_CUSTOM_FIRMWARE" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_BIXBY_SUPPORT_BIXBYKWD" config in /system/system/etc/floating_feature.xml
+      - Replacing "SEC_FLOATING_FEATURE_BIXBY_SUPPORT_CUSTOM_WAKEUP" config with "0" in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_BIXBY_SUPPORT_LONG_KEY_SERVICE" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_CAMERA_CONFIG_AIFRC_EXTENSIONS" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_CAMERA_CONFIG_AIFRC_SPEC" config in /system/system/etc/floating_feature.xml
+      - Replacing "SEC_FLOATING_FEATURE_CAMERA_CONFIG_AI_HIGH_RESOLUTION_MAX_CAPTURE" config with "1" in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_CAMERA_CONFIG_AVATAR_MAX_FACE_NUM" config in /system/system/etc/floating_feature.xml
+      - Replacing "SEC_FLOATING_FEATURE_CAMERA_CONFIG_CAMID_TELE_STANDARD_CROP" config with "-1" in /system/system/etc/floating_feature.xml
+      - Replacing "SEC_FLOATING_FEATURE_CAMERA_CONFIG_CAMID_UW" config with "2" in /system/system/etc/floating_feature.xml
+      - Replacing "SEC_FLOATING_FEATURE_CAMERA_CONFIG_CAMID_WIDE" config with "0" in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_CAMERA_CONFIG_GALAXYRAW_PLATFORM_VERSION" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_CAMERA_CONFIG_GPPM_SOLUTIONS" config in /system/system/etc/floating_feature.xml
+      - Replacing "SEC_FLOATING_FEATURE_CAMERA_CONFIG_HIGH_RESOLUTION_MAX_CAPTURE" config with "-1" in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_CAMERA_CONFIG_IS_GPPM_1_0_ENABLED" config in /system/system/etc/floating_feature.xml
+      - Replacing "SEC_FLOATING_FEATURE_CAMERA_CONFIG_MEMORY_USAGE_LEVEL" config with "3" in /system/system/etc/floating_feature.xml
+      - Replacing "SEC_FLOATING_FEATURE_CAMERA_CONFIG_NIGHT_FRONT_DISPLAY_FLASH_TRANSPARENT" config with "50" in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_CAMERA_CONFIG_PERSONALIZATION" config in /system/system/etc/floating_feature.xml
+      - Replacing "SEC_FLOATING_FEATURE_CAMERA_CONFIG_QRCODE_INTERVAL" config with "500" in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_CAMERA_CONFIG_SDK_FEATURE_INFO" config in /system/system/etc/floating_feature.xml
+      - Replacing "SEC_FLOATING_FEATURE_CAMERA_CONFIG_UW_DISTORTION_CORRECTION" config with "0,110,2,19010504,4000,3000,0,0,0,1" in /system/system/etc/floating_feature.xml
+      - Replacing "SEC_FLOATING_FEATURE_CAMERA_CONFIG_VENDOR_LIB_INFO" config with "beauty.samsung.v4,face_landmark.arcsoft.v2_1,facial_attribute.samsung.v1,event_detection.samsung.v2,food.samsung.v1,selfie_correction.samsung.v1,mfhdr.arcsoft.v1,llhdr.arcsoft.v1,swuwdc.arcsoft.v1,human_tracking.arcsoft.v2_1,single_bokeh.samsung.v2,human_segmentation.samsung.v2,smart_scan.samsung.v2,dual_bokeh.samsung.v1,image_enhance.arcsoft.v1,scene_detection.samsung.v1,localtm.samsung.v1_1" in /system/system/etc/floating_feature.xml
+      - Replacing "SEC_FLOATING_FEATURE_CAMERA_CONFIG_WIDE_DISTORTION_CORRECTION" config with "0,0,0,0,0,0,0,0,0,0" in /system/system/etc/floating_feature.xml
+      - Replacing "SEC_FLOATING_FEATURE_CAMERA_GRAW_CONFIG_MFP_PIPELINE_MODE" config with "V1" in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_CAMERA_SUPPORT_30FPS_ALL_PORTRAITVIDEO" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_CAMERA_SUPPORT_4K_PORTRAITVIDEO" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_CAMERA_SUPPORT_AFSKIP" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_CAMERA_SUPPORT_AIFRC" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_CAMERA_SUPPORT_AI_HIGH_RESOLUTION" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_CAMERA_SUPPORT_GALLERY_LR" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_CAMERA_SUPPORT_HIGH_RESOLUTION_MEMORY_CHECK" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_CAMERA_SUPPORT_HYPERLAPSE_VDISONOFF" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_CAMERA_SUPPORT_LOGICAL_CAMERA" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_CAMERA_SUPPORT_PREWARMING_LEVEL" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_CAMERA_SUPPORT_PRO_RGB_CONVERSION" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_CAMERA_SUPPORT_VDIS_PORTRAITVIDEO" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_CAMERA_SUPPORT_VIDEO_PALM" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_CLOCK_CONFIG_PACKAGE_NAME" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_COMMON_CONFIG_EMBEDDED_SIM_SLOTSWITCH" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_COMMON_CONFIG_GESTUREWAKEUP_CHANGEMIC" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_COMMON_CONFIG_GESTUREWAKEUP_EXTRTO" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_COMMON_CONFIG_GESTUREWAKEUP_NORMRTO" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_COMMON_CONFIG_GESTUREWAKEUP_VERSION" config in /system/system/etc/floating_feature.xml
+      - Replacing "SEC_FLOATING_FEATURE_COMMON_CONFIG_MDNIE_MODE" config with "62481" in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_COMMON_CONFIG_SPEN_SENSITIVITY_ADJUSTMENT" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_COMMON_CONFIG_WAKEUP_MULTIAGENT_VERSION" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_COMMON_SUPPORT_BIXBY" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_COMMON_SUPPORT_COLOR_LENS" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_COMMON_SUPPORT_EVS" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_COMMON_SUPPORT_HDR_EFFECT" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_COMMON_SUPPORT_WEARABLE_GLASSES" config in /system/system/etc/floating_feature.xml
+      - Replacing "SEC_FLOATING_FEATURE_FMRADIO_CONFIG_CHIP_VENDOR" config with "9" in /system/system/etc/floating_feature.xml
+      - Replacing "SEC_FLOATING_FEATURE_FMRADIO_CONFIG_COMMON_SNR" config with "3" in /system/system/etc/floating_feature.xml
+      - Replacing "SEC_FLOATING_FEATURE_FMRADIO_CONFIG_QUALCOMM_BLEND_RMSSI_HI" config with "-65" in /system/system/etc/floating_feature.xml
+      - Replacing "SEC_FLOATING_FEATURE_FMRADIO_CONFIG_QUALCOMM_BLEND_SINR_HI" config with "22" in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_FMRADIO_CONFIG_SPRD_FREQ_OFFSET" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_FMRADIO_CONFIG_SPRD_NOISE_PWR" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_FMRADIO_CONFIG_SPRD_PILOT_PWR" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_FMRADIO_SUPPORT_SOFTMUTE" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_FRAMEWORK_CONFIG_AGENT_WITH_PDE" config in /system/system/etc/floating_feature.xml
+      - Replacing "SEC_FLOATING_FEATURE_FRAMEWORK_CONFIG_FRAME_SPLIT_COUNT" config with "0" in /system/system/etc/floating_feature.xml
+      - Replacing "SEC_FLOATING_FEATURE_FRAMEWORK_CONFIG_NFC_LED_COVER_LEVEL" config with "90" in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_FRAMEWORK_CONFIG_NOW_NUDGE_VERSION" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_FRAMEWORK_SUPPORT_BLOCKCHAIN_SERVICE" config in /system/system/etc/floating_feature.xml
+      - Replacing "SEC_FLOATING_FEATURE_GALLERY_CONFIG_AI_EXPANSION" config with "AI_Timelapse" in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_GALLERY_CONFIG_BEST_FACE_MODE" config in /system/system/etc/floating_feature.xml
+      - Replacing "SEC_FLOATING_FEATURE_GALLERY_CONFIG_LIVEFOCUS_EFFECT_DUAL_BOKEH" config with "BLUR,EFFECT,PORTRAIT,RELIGHT,REFOCUS,LIGHT360" in /system/system/etc/floating_feature.xml
+      - Replacing "SEC_FLOATING_FEATURE_GRAPHICS_CONFIG_GAME_DEFAULT_FRAMERATE" config with "60" in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_GRAPHICS_SUPPORT_AUTO_CONTROL_DEFAULT" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_GRAPHICS_SUPPORT_GAMEBOOSTER_PERF_MONITOR" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_IMS_SUPPORT_UPDATABLE_IMS_SERVICE" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_LCD_CONFIG_ACL_DIMMING" config in /system/system/etc/floating_feature.xml
+      - Replacing "SEC_FLOATING_FEATURE_LCD_CONFIG_CONTROL_AUTO_BRIGHTNESS" config with "3" in /system/system/etc/floating_feature.xml
+      - Replacing "SEC_FLOATING_FEATURE_LCD_CONFIG_HFR_DEFAULT_REFRESH_RATE" config with "60" in /system/system/etc/floating_feature.xml
+      - Replacing "SEC_FLOATING_FEATURE_LCD_CONFIG_HFR_MODE" config with "0" in /system/system/etc/floating_feature.xml
+      - Replacing "SEC_FLOATING_FEATURE_LCD_CONFIG_HFR_SUPPORTED_REFRESH_RATE" config with "0" in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_LCD_CONFIG_NIGHT_DIM" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_LCD_CONFIG_REDDISH_COMPENSATION" config in /system/system/etc/floating_feature.xml
+      - Replacing "SEC_FLOATING_FEATURE_LCD_SUPPORT_BLUE_FILTER_ADAPTIVE_MODE" config with "0" in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_LCD_SUPPORT_EXTRA_BRIGHTNESS" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_LCD_SUPPORT_MDNIE_HW" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_LCD_SUPPORT_SELFMASK" config in /system/system/etc/floating_feature.xml
+      - Replacing "SEC_FLOATING_FEATURE_LOCKSCREEN_CONFIG_PUNCHHOLE_VI" config with "face,pos:0.5:0.02292,size:0.1018:0.04583,type:circle" in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_LOCKSCREEN_CONFIG_SUBDISPLAY_POLICY" config in /system/system/etc/floating_feature.xml
+      - Replacing "SEC_FLOATING_FEATURE_LOCKSCREEN_CONFIG_WALLPAPER_STYLE" config with "VIDEO" in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_MMFW_SUPPORT_AI_MASTERINGNET" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_MMFW_SUPPORT_APE_FORMAT" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_MMFW_SUPPORT_DSD_FORMAT" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_MMFW_SUPPORT_HDR2SDR" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_MMFW_SUPPORT_LONGEXPOSURE_EFFECT" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_SAIV_SUPPORT_AI_REVITAL" config in /system/system/etc/floating_feature.xml
+      - Replacing "SEC_FLOATING_FEATURE_SETTINGS_CONFIG_BRAND_NAME" config with "Galaxy M51" in /system/system/etc/floating_feature.xml
+      - Replacing "SEC_FLOATING_FEATURE_SETTINGS_CONFIG_FCC_ID" config with "A3LSMM515F" in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_SETTINGS_SUPPORT_EASY_MODE" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_SETTINGS_SUPPORT_TOUCH_SENSTIVITY_MATERIAL" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_SYSTEMUI_CONFIG_SHOW_CONTENT_WHEN_UNLOCKED" config in /system/system/etc/floating_feature.xml
+      - Replacing "SEC_FLOATING_FEATURE_SYSTEM_CONFIG_SIOP_POLICY_FILENAME" config with "siop_m51_sm7150" in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_SYSTEM_SUPPORT_LOW_HEAT_MODE" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_VIDEO_CONFIG_VIDEO_CLIPPING_MODE" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_VISION_CONFIG_IMAGE_CROPPER_VERSION" config in /system/system/etc/floating_feature.xml
+      - Replacing "SEC_FLOATING_FEATURE_VISION_CONFIG_RELIGHTING_SOLUTION" config with "arsoft_vieweronly.v1" in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_VISION_CONFIG_STORYGEN" config in /system/system/etc/floating_feature.xml
+      - Replacing "SEC_FLOATING_FEATURE_VOICERECORDER_CONFIG_DEF_MODE" config with "normal" in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_FRAMEWORK_SUPPORT_AI_BRIEF_FOR_UT" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_FRAMEWORK_SUPPORT_NOW_BRIEF" config in /system/system/etc/floating_feature.xml
+      - Deleting "SEC_FLOATING_FEATURE_GENAI_CONFIG_LLM_VERSION" config in /system/system/etc/floating_feature.xml
+      - Adding "SEC_FLOATING_FEATURE_CAMERA_CONFIG_ARDOODLE_PEN_TYPE" config with "3d,Pattern,Regular,Highlighter,Glass_lite,Text,Organic_lite" in /system/system/etc/floating_feature.xml
+      - Adding "SEC_FLOATING_FEATURE_COMMON_CONFIG_SWLENS_DISTORTION_CORRECTION" config with "m51,S5K3L6" in /system/system/etc/floating_feature.xml
+      - Adding "SEC_FLOATING_FEATURE_LCD_CONFIG_HFR_SUPPORTED_REFRESH_RATE_NS" config with "60" in /system/system/etc/floating_feature.xml
+      - Adding "SEC_FLOATING_FEATURE_MMFW_SUPPORT_HW_HDR" config with "TRUE" in /system/system/etc/floating_feature.xml
+      - Adding "SEC_FLOATING_FEATURE_MUSICPLAYER_SUPPORT_SCREEN_OFF_MUSIC" config with "TRUE" in /system/system/etc/floating_feature.xml
+    - Applying custom device floating feature config[0m
+      - Adding "SEC_FLOATING_FEATURE_LCD_SUPPORT_EXTRA_BRIGHTNESS" config with "TRUE" in /system/system/etc/floating_feature.xml
+      - Replacing "SEC_FLOATING_FEATURE_COMMON_CONFIG_AI_VERSION" config with "20263" in /system/system/etc/floating_feature.xml
+      - Replacing "SEC_FLOATING_FEATURE_FRAMEWORK_SUPPORT_PERSONALIZED_DATA_CORE" config with "TRUE" in /system/system/etc/floating_feature.xml
+      - Adding "SEC_FLOATING_FEATURE_FRAMEWORK_SUPPORT_AI_BRIEF_FOR_UT" config with "TRUE" in /system/system/etc/floating_feature.xml
+      - Adding "SEC_FLOATING_FEATURE_FRAMEWORK_SUPPORT_NOW_BRIEF" config with "TRUE" in /system/system/etc/floating_feature.xml
+      - Adding "SEC_FLOATING_FEATURE_GENAI_CONFIG_LLM_VERSION" config with "1.70" in /system/system/etc/floating_feature.xml
+  - Processing "UN1CA build properties" by @Fede2782[0m
+    - Adding "ro.unica.version" prop with "5.3.0-7ecef670" in /system/system/build.prop
+    - Adding "ro.unica.timestamp" prop with "1794850700" in /system/system/build.prop
+    - Adding "ro.unica.device" prop with "m51" in /system/system/build.prop
+    - Adding "ro.unica.fingerprint" prop with "unica/m51:5.3.0/7ecef670/1794850700:user/test-keys" in /system/system/build.prop
+    - Decoding /system/system/framework/framework.jar
+    - Applying "Add ro.unica.fingerprint in PackagePartitions.FINGERPRINT" to /system/system/framework/framework.jar
+  - Processing "Debloat list" by @salvogiangri[0m
+    - Deleting /product/priv-app/CarrierWifi/oat
+    - Deleting /product/priv-app/AiWallpaper/oat
+    - Deleting /product/priv-app/AndroidAutoStub/oat
+    - Deleting /product/priv-app/AndroidDeveloperVerifier/oat
+    - Deleting /product/priv-app/AndroidSystemIntelligence/oat
+    - Deleting /product/priv-app/Messages/oat
+    - Deleting /product/priv-app/ConfigUpdater/oat
+    - Deleting /product/priv-app/GoogleRestore/oat
+    - Deleting /product/priv-app/HotwordEnrollmentOKGoogleEx4HEXAGON/oat
+    - Deleting /product/priv-app/SearchSelector/oat
+    - Deleting /product/priv-app/HotwordEnrollmentXGoogleEx4HEXAGON/oat
+    - Deleting /product/priv-app/Phonesky/oat
+    - Deleting /product/priv-app/Turbo/oat
+    - Deleting /product/priv-app/Velvet/oat
+    - Deleting /product/priv-app/PrivateComputeServices/oat
+    - Deleting /product/priv-app/CrossDeviceServices/oat
+    - Deleting /product/priv-app/GooglePartnerSetup/oat
+    - Deleting /product/priv-app/AndroidGlassesCore/oat
+    - Deleting /product/app/BardShell/oat
+    - Deleting /product/app/GoogleCalendarSyncAdapter/oat
+    - Deleting /product/app/WebViewGoogle/oat
+    - Deleting /product/app/AssistantShell/oat
+    - Deleting /product/app/GoogleLpaOverlay/oat
+    - Deleting /product/app/SpeechServicesByGoogle/oat
+    - Deleting /product/app/Maps/oat
+    - Deleting /product/app/GoogleLocationHistory/oat
+    - Deleting /product/app/YouTube/oat
+    - Deleting /product/app/Chrome/oat
+    - Deleting /product/app/DuoStub/oat
+    - Deleting /product/app/Gmail2/oat
+    - Deleting /system/system/framework/oat
+    - Deleting /system/system/preload/Facebook_stub_preload/oat
+    - Deleting /system/system/preload/Tips/oat
+    - Deleting /system/system/priv-app/AuthFramework/oat
+    - Deleting /system/system/priv-app/OMCAgent5/oat
+    - Deleting /system/system/priv-app/SamsungVideoPlayer/oat
+    - Deleting /system/system/priv-app/CallBGProvider/oat
+    - Deleting /system/system/priv-app/TeleService/oat
+    - Deleting /system/system/priv-app/EmergencySOS/oat
+    - Deleting /system/system/priv-app/CMHProvider/oat
+    - Deleting /system/system/priv-app/PrivacyDashboard/oat
+    - Deleting /system/system/priv-app/EpdgService/oat
+    - Deleting /system/system/priv-app/ShareLive/oat
+    - Deleting /system/system/priv-app/SEMFactoryApp/oat
+    - Deleting /system/system/priv-app/ImsLogger/oat
+    - Deleting /system/system/priv-app/VexScanner/oat
+    - Deleting /system/system/priv-app/OdaService/oat
+    - Deleting /system/system/priv-app/SecAppSeparation/oat
+    - Deleting /system/system/priv-app/PaymentFramework/oat
+    - Deleting /system/system/priv-app/FBServices/oat
+    - Deleting /system/system/priv-app/DynamicSystemInstallationService/oat
+    - Deleting /system/system/priv-app/AppUpdateCenter/oat
+    - Deleting /system/system/priv-app/TaskEdgePanel_v3.2/oat
+    - Deleting /system/system/priv-app/SamsungCloudClient/oat
+    - Deleting /system/system/priv-app/LiveEffectService/oat
+    - Deleting /system/system/priv-app/PhotoRemasterService/oat
+    - Deleting /system/system/priv-app/SecTelephonyProvider/oat
+    - Deleting /system/system/priv-app/CredentialManager/oat
+    - Deleting /system/system/priv-app/GameTools_Dream/oat
+    - Deleting /system/system/priv-app/BixbyInterpreter/oat
+    - Deleting /system/system/priv-app/SecDownloadProvider/oat
+    - Deleting /system/system/priv-app/MCFDeviceSync/oat
+    - Deleting /system/system/priv-app/SecSoundPicker/oat
+    - Deleting /system/system/priv-app/vexfwk_service/oat
+    - Deleting /system/system/priv-app/SamsungMessages/oat
+    - Deleting /system/system/priv-app/DiagMonAgent97/oat
+    - Deleting /system/system/priv-app/EarphoneTypeC/oat
+    - Deleting /system/system/priv-app/SmartThingsKit/oat
+    - Deleting /system/system/priv-app/OmaCP/oat
+    - Deleting /system/system/priv-app/VolumeMonitorProvider_C/oat
+    - Deleting /system/system/priv-app/FBInstaller_NS/oat
+    - Deleting /system/system/priv-app/UserDictionaryProvider/oat
+    - Deleting /system/system/priv-app/MtpService/oat
+    - Deleting /system/system/priv-app/EsimKeyString/oat
+    - Deleting /system/system/priv-app/NSFusedLocation_v6.0/oat
+    - Deleting /system/system/priv-app/SecSettings/oat
+    - Deleting /system/system/priv-app/SVCAgent/oat
+    - Deleting /system/system/priv-app/SmartManager_v5/oat
+    - Deleting /system/system/priv-app/BlockedNumberProvider/oat
+    - Deleting /system/system/priv-app/GalleryWidget/oat
+    - Deleting /system/system/priv-app/InputDevices/oat
+    - Deleting /system/system/priv-app/LiveWallpapersPicker/oat
+    - Deleting /system/system/priv-app/LinkToWindowsService/oat
+    - Deleting /system/system/priv-app/PeopleStripe/oat
+    - Deleting /system/system/priv-app/OdaAgent/oat
+    - Deleting /system/system/priv-app/FotaAgent/oat
+    - Deleting /system/system/priv-app/KnoxCore/oat
+    - Deleting /system/system/priv-app/ThemeCenter/oat
+    - Deleting /system/system/priv-app/SsuService/oat
+    - Deleting /system/system/priv-app/BlueLightFilter/oat
+    - Deleting /system/system/priv-app/MmsService/oat
+    - Deleting /system/system/priv-app/DrmEventapp/oat
+    - Deleting /system/system/priv-app/SmartEpdgTestApp/oat
+    - Deleting /system/system/priv-app/HWResourceShare/oat
+    - Deleting /system/system/priv-app/ManagedProvisioning/oat
+    - Deleting /system/system/priv-app/SamsungMagnifier3/oat
+    - Deleting /system/system/priv-app/Accessibility/oat
+    - Deleting /system/system/priv-app/CallLogBackup/oat
+    - Deleting /system/system/priv-app/SkpmAgent/oat
+    - Deleting /system/system/priv-app/imsservice/oat
+    - Deleting /system/system/priv-app/MobileWips/oat
+    - Deleting /system/system/priv-app/CIDManager/oat
+    - Deleting /system/system/priv-app/EnhancedAttestationAgent/oat
+    - Deleting /system/system/priv-app/UnifiedTetheringProvision/oat
+    - Deleting /system/system/priv-app/SamsungPass/oat
+    - Deleting /system/system/priv-app/AREmoji/oat
+    - Deleting /system/system/priv-app/MtpApplication/oat
+    - Deleting /system/system/priv-app/TelecomUi/oat
+    - Deleting /system/system/priv-app/WarrantyCare/oat
+    - Deleting /system/system/priv-app/SecFactoryPhoneTest/oat
+    - Deleting /system/system/priv-app/MultiSoundSetting/oat
+    - Deleting /system/system/priv-app/SamsungBilling/oat
+    - Deleting /system/system/priv-app/SOAgent77/oat
+    - Deleting /system/system/priv-app/SecMyFiles2020/oat
+    - Deleting /system/system/priv-app/SohService/oat
+    - Deleting /system/system/priv-app/CallAssistant/oat
+    - Deleting /system/system/priv-app/SamsungDialer/oat
+    - Deleting /system/system/priv-app/BuiltInPrintService/oat
+    - Deleting /system/system/priv-app/BeaconManager/oat
+    - Deleting /system/system/priv-app/TelephonyUI/oat
+    - Deleting /system/system/priv-app/SamsungDeviceHealthManagerService/oat
+    - Deleting /system/system/priv-app/SCameraSDKService/oat
+    - Deleting /system/system/priv-app/HashTagService/oat
+    - Deleting /system/system/priv-app/Tag/oat
+    - Deleting /system/system/priv-app/SettingsProvider/oat
+    - Deleting /system/system/priv-app/DeviceBasedServiceConsent/oat
+    - Deleting /system/system/priv-app/NSDSWebApp/oat
+    - Deleting /system/system/priv-app/DownloadProviderUi/oat
+    - Deleting /system/system/priv-app/knoxanalyticsagent/oat
+    - Deleting /system/system/priv-app/SamsungCalendarProvider/oat
+    - Deleting /system/system/priv-app/SecMediaProvider/oat
+    - Deleting /system/system/priv-app/EuiccGoogle/oat
+    - Deleting /system/system/priv-app/StickerFaceARAvatar/oat
+    - Deleting /system/system/priv-app/MFContents/oat
+    - Deleting /system/system/priv-app/TalkbackSE/oat
+    - Deleting /system/system/priv-app/StorageAgent/oat
+    - Deleting /system/system/priv-app/SPPPushClient/oat
+    - Deleting /system/system/priv-app/E2eeContactKeysProvider/oat
+    - Deleting /system/system/priv-app/SamsungCarKeyFw/oat
+    - Deleting /system/system/priv-app/ONS/oat
+    - Deleting /system/system/priv-app/KnoxGuard/oat
+    - Deleting /system/system/priv-app/KnoxNetworkFilter/oat
+    - Deleting /system/system/priv-app/BixbyVisionFramework3.5/oat
+    - Deleting /system/system/priv-app/SecTrashProvider/oat
+    - Deleting /system/system/priv-app/SamsungContactsProvider/oat
+    - Deleting /system/system/priv-app/DeviceDiagnostics/oat
+    - Deleting /system/system/priv-app/DigitalKey/oat
+    - Deleting /system/system/priv-app/SecureFolder/oat
+    - Deleting /system/system/priv-app/SendHelpMessage/oat
+    - Deleting /system/system/priv-app/serviceModeApp_FB/oat
+    - Deleting /system/system/priv-app/SharedStorageBackup/oat
+    - Deleting /system/system/priv-app/ContactsPicker/oat
+    - Deleting /system/system/priv-app/AdaptSound_C/oat
+    - Deleting /system/system/priv-app/ModemServiceMode/oat
+    - Deleting /system/system/priv-app/IAFDManagerService/oat
+    - Deleting /system/system/priv-app/VpnDialogs/oat
+    - Deleting /system/system/priv-app/CSC/oat
+    - Deleting /system/system/priv-app/BadgeProvider_N/oat
+    - Deleting /system/system/priv-app/KnoxZtFramework/oat
+    - Deleting /system/system/priv-app/Bixby/oat
+    - Deleting /system/system/priv-app/MediaSearch/oat
+    - Deleting /system/system/priv-app/EasySetup/oat
+    - Deleting /system/system/priv-app/DressRoom/oat
+    - Deleting /system/system/priv-app/SecSettingsIntelligence/oat
+    - Deleting /system/system/priv-app/KnoxPushManager/oat
+    - Deleting /system/system/priv-app/Fmm/oat
+    - Deleting /system/system/priv-app/SamsungCamera/oat
+    - Deleting /system/system/priv-app/Crane/oat
+    - Deleting /system/system/priv-app/SoundAlive_C/oat
+    - Deleting /system/system/priv-app/SamsungSmartSuggestions/oat
+    - Deleting /system/system/priv-app/GooglePackageInstaller/oat
+    - Deleting /system/system/priv-app/KnoxMposAgent/oat
+    - Deleting /system/system/priv-app/BackupRestoreConfirmation/oat
+    - Deleting /system/system/priv-app/GalaxyApps_OPEN/oat
+    - Deleting /system/system/priv-app/IntentResolver/oat
+    - Deleting /system/system/priv-app/SmartSwitchAssistant/oat
+    - Deleting /system/system/priv-app/PetService/oat
+    - Deleting /system/system/priv-app/LocalTransport/oat
+    - Deleting /system/system/priv-app/ProxyHandler/oat
+    - Deleting /system/system/priv-app/ExternalStorageProvider/oat
+    - Deleting /system/system/priv-app/BCService/oat
+    - Deleting /system/system/priv-app/KLMSAgent/oat
+    - Deleting /system/system/priv-app/FusedLocation/oat
+    - Deleting /system/system/priv-app/EuiccService/oat
+    - Deleting /system/system/priv-app/smartfaceservice/oat
+    - Deleting /system/system/priv-app/SamsungInCallUI/oat
+    - Deleting /system/system/priv-app/GpuWatchApp/oat
+    - Deleting /system/system/priv-app/SamsungMultiConnectivity/oat
+    - Deleting /system/system/priv-app/knoxvpnproxyhandler/oat
+    - Deleting /system/system/priv-app/BiometricSetting/oat
+    - Deleting /system/system/priv-app/USBSettings/oat
+    - Deleting /system/system/priv-app/FactoryTestProvider/oat
+    - Deleting /system/system/priv-app/SamsungContacts/oat
+    - Deleting /system/system/priv-app/DigitalWellbeing/oat
+    - Deleting /system/system/priv-app/SmartCallProvider/oat
+    - Deleting /system/system/priv-app/PhoneErrService/oat
+    - Deleting /system/system/priv-app/YourPhone_P1_5/oat
+    - Deleting /system/system/priv-app/OneDrive_Samsung_v3/oat
+    - Deleting /system/system/priv-app/StoryService/oat
+    - Deleting /system/system/priv-app/MyGalaxyService/oat
+    - Deleting /system/system/priv-app/KPECore/oat
+    - Deleting /system/system/priv-app/AudioMirroring/oat
+    - Deleting /system/system/priv-app/SKMSAgent/oat
+    - Deleting /system/system/priv-app/EyeDropper/oat
+    - Deleting /system/system/priv-app/SecSetupWizard_Global/oat
+    - Deleting /system/system/priv-app/sec_camerax_service/oat
+    - Deleting /system/system/priv-app/GameOptimizingService/oat
+    - Deleting /system/system/priv-app/Routines/oat
+    - Deleting /system/system/priv-app/SDMConfig/oat
+    - Deleting /system/system/priv-app/SamsungGallery2018/oat
+    - Deleting /system/system/priv-app/GameHome/oat
+    - Deleting /system/system/priv-app/KnoxERAgent/oat
+    - Deleting /system/system/priv-app/DynamicLockscreen/oat
+    - Deleting /system/system/priv-app/FaceService/oat
+    - Deleting /system/system/priv-app/KmxService/oat
+    - Deleting /system/system/priv-app/AutoHotspotMDE/oat
+    - Deleting /system/system/priv-app/EsimClient/oat
+    - Deleting /system/system/priv-app/Telecom/oat
+    - Deleting /system/system/priv-app/AODService_v80/oat
+    - Deleting /system/system/priv-app/TouchWizHome_2017/oat
+    - Deleting /system/system/priv-app/HdmApk/oat
+    - Deleting /system/system/priv-app/DeviceQualityAgent38/oat
+    - Deleting /system/system/priv-app/SCPMAgent/oat
+    - Deleting /system/system/priv-app/ThemeStore/oat
+    - Deleting /system/system/priv-app/SpriteWallpaper/oat
+    - Deleting /system/system/priv-app/SecNfc/oat
+    - Deleting /system/system/priv-app/SamsungExperienceService/oat
+    - Deleting /system/system/priv-app/IPService/oat
+    - Deleting /system/system/priv-app/SamsungSeAgent/oat
+    - Deleting /system/system/priv-app/StorageShare/oat
+    - Deleting /system/system/priv-app/BudsUniteManager/oat
+    - Deleting /system/system/priv-app/MultiControl/oat
+    - Deleting /system/system/priv-app/Shell/oat
+    - Deleting /system/system/priv-app/GlobalPostProcMgr/oat
+    - Deleting /system/system/priv-app/PhoneNumberService/oat
+    - Deleting /system/system/app/SamsungTTSVoice_es_US_f00/oat
+    - Deleting /system/system/hidden/SmartTutor/oat
+    - Deleting /system/system/app/MotionPhoto/oat
+    - Deleting /system/system/app/WifiGuider/oat
+    - Deleting /system/system/app/SamsungTTSVoice_es_ES_f00/oat
+    - Deleting /system/system/app/MhsAiService/oat
+    - Deleting /system/system/app/BluetoothAgent/oat
+    - Deleting /system/system/app/SecureElement/oat
+    - Deleting /system/system/app/SamsungTTSVoice_es_MX_f00/oat
+    - Deleting /system/system/app/SecHTMLViewer/oat
+    - Deleting /system/system/app/LiveTranscribe/oat
+    - Deleting /system/system/app/HiyaService/oat
+    - Deleting /system/system/app/Rampart/oat
+    - Deleting /system/system/app/ImsSettings/oat
+    - Deleting /system/system/app/ChromeCustomizations/oat
+    - Deleting /system/system/app/AllshareMediaShare/oat
+    - Deleting /system/system/app/SamsungTTSVoice_en_GB_f00/oat
+    - Deleting /system/system/app/SoundPicker_C/oat
+    - Deleting /system/system/app/TalkBack/oat
+    - Deleting /system/system/app/HoneyBoard/oat
+    - Deleting /system/system/app/SamsungTTSVoice_id_ID_f00/oat
+    - Deleting /system/system/app/OCRDataProvider/oat
+    - Deleting /system/system/app/SamsungPassAutofill_v1/oat
+    - Deleting /system/system/app/CarrierDefaultApp/oat
+    - Deleting /system/system/app/Stk2/oat
+    - Deleting /system/system/app/SamsungTTSVoice_ar_AE_m00/oat
+    - Deleting /system/system/app/FilterProvider/oat
+    - Deleting /system/system/app/FactoryAirCommandManager/oat
+    - Deleting /system/system/app/SamsungTTSVoice_it_IT_f00/oat
+    - Deleting /system/system/app/Personalization/oat
+    - Deleting /system/system/app/MdecService/oat
+    - Deleting /system/system/app/SimAppDialog/oat
+    - Deleting /system/system/app/BrightnessBackupService/oat
+    - Deleting /system/system/app/VisionIntelligence3.7/oat
+    - Deleting /system/system/app/CertInstaller/oat
+    - Deleting /system/system/app/PartnerBookmarksProvider/oat
+    - Deleting /system/system/app/ccinfo/oat
+    - Deleting /system/system/app/SketchBook/oat
+    - Deleting /system/system/app/DsmsAPK/oat
+    - Deleting /system/system/app/Traceur/oat
+    - Deleting /system/system/app/SamsungTTSVoice_th_TH_f00/oat
+    - Deleting /system/system/app/DeviceKeystring/oat
+    - Deleting /system/system/app/MoccaMobile/oat
+    - Deleting /system/system/app/PacProcessor/oat
+    - Deleting /system/system/app/EasterEgg/oat
+    - Deleting /system/system/app/MAPSAgent/oat
+    - Deleting /system/system/app/GalaxyResourceUpdater/oat
+    - Deleting /system/system/app/SamsungTTS/oat
+    - Deleting /system/system/app/CameraExtensionsProxy/oat
+    - Deleting /system/system/app/SamsungTTSVoice_pt_BR_f00/oat
+    - Deleting /system/system/app/VTCameraSetting/oat
+    - Deleting /system/system/app/HandwritingService/oat
+    - Deleting /system/system/app/UnifiedWFC/oat
+    - Deleting /system/system/app/TetheringAutomation/oat
+    - Deleting /system/system/app/ParentalCare/oat
+    - Deleting /system/system/app/GooglePrintRecommendationService/oat
+    - Deleting /system/system/app/BasicDreams/oat
+    - Deleting /system/system/app/Foundation/oat
+    - Deleting /system/system/app/EasyOneHand3/oat
+    - Deleting /system/system/app/SmartMirroring/oat
+    - Deleting /system/system/app/KidsHome_Installer/oat
+    - Deleting /system/system/app/Securitybrief/oat
+    - Deleting /system/system/app/KeyChain/oat
+    - Deleting /system/system/app/PhotoTable/oat
+    - Deleting /system/system/app/DRParser/oat
+    - Deleting /system/system/app/Stk/oat
+    - Deleting /system/system/app/MyDevice/oat
+    - Deleting /system/system/app/SamsungOne/oat
+    - Deleting /system/system/app/BookmarkProvider/oat
+    - Deleting /system/system/app/SamsungCalendar/oat
+    - Deleting /system/system/app/SamsungTTSVoice_fr_FR_f00/oat
+    - Deleting /system/system/app/CompanionDeviceManager/oat
+    - Deleting /system/system/app/EasymodeContactsWidget81/oat
+    - Deleting /system/system/app/GearManagerStub/oat
+    - Deleting /system/system/app/SimAgent/oat
+    - Deleting /system/system/app/SamsungTTSVoice_vi_VN_f00/oat
+    - Deleting /system/system/app/BBCAgent/oat
+    - Deleting /system/system/app/SmartSwitchStub/oat
+    - Deleting /system/system/app/SamsungTTSVoice_ru_RU_f00/oat
+    - Deleting /system/system/app/GoogleExtShared/oat
+    - Deleting /system/system/app/Roboto/oat
+    - Deleting /system/system/app/SetupWizardLegalProvider/oat
+    - Deleting /system/system/app/WlanTest/oat
+    - Deleting /system/system/app/SmartTethering/oat
+    - Deleting /system/system/app/NfwLocationPrivacy/oat
+    - Deleting /system/system/app/WallpaperBackup/oat
+    - Deleting /system/system/app/VoiceAccess/oat
+    - Deleting /system/system/app/HMT/oat
+    - Deleting /system/system/app/StickerCenter/oat
+    - Deleting /system/system/app/DrivingPlus/oat
+    - Deleting /system/system/app/ClipboardEdge/oat
+    - Deleting /system/system/app/PrintSpooler/oat
+    - Deleting /system/system/app/FBAppManager_NS/oat
+    - Deleting /system/system/app/SafetyInformation/oat
+    - Deleting /system/system/app/AllShareAware/oat
+    - Deleting /system/system/app/MdxKitService/oat
+    - Deleting /system/system/app/SmartReminder/oat
+    - Deleting /system/system/app/VideoTrimmer/oat
+    - Deleting /system/system/app/SmartSwitchAgent/oat
+    - Deleting /system/system/app/UniversalMDMClient/oat
+    - Deleting /system/system/app/BluetoothMidiService/oat
+    - Deleting /system/system/app/ContainerService/oat
+    - Deleting /system/system/app/BGMProvider/oat
+    - Deleting /system/system/app/SilentLog/oat
+    - Deleting /system/system/app/ARCore/oat
+    - Deleting /system/system/app/SLocation/oat
+    - Deleting /system/system/app/sveservice/oat
+    - Deleting /system/system/app/DAAgent/oat
+    - Deleting /system/system/app/CocktailQuickTool/oat
+    - Deleting /system/system/app/MDMApp/oat
+    - Deleting /system/system/app/MessageGuardSync/oat
+    - Deleting /system/system/app/SamsungTTSVoice_de_DE_f00/oat
+    - Deleting /system/system/app/SamsungTTSVoice_en_US_l03/oat
+    - Deleting /system/system/app/SamsungWeather/oat
+    - Deleting /system/system/app/FacAtFunction/oat
+    - Deleting /system/system/app/SamsungTTSVoice_pl_PL_f00/oat
+    - Deleting /system/system/app/ShortcutBackupService/oat
+    - Deleting /system/system/app/SamsungTTSVoice_hi_IN_f00/oat
+    - Deleting /system/system/app/FactoryCameraFB/oat
+    - Deleting /system/system/system_ext/framework/oat
+    - Deleting /system/system/system_ext/priv-app/WallpaperCropper/oat
+    - Deleting /system/system/system_ext/priv-app/GoogleServicesFramework/oat
+    - Deleting /system/system/system_ext/priv-app/screenunderstanding/oat
+    - Deleting /system/system/system_ext/priv-app/AvatarPicker/oat
+    - Deleting /system/system/system_ext/priv-app/StorageManager/oat
+    - Deleting /system/system/system_ext/priv-app/com.qualcomm.location/oat
+    - Deleting /system/system/system_ext/priv-app/SetupWizard/oat
+    - Deleting /system/system/system_ext/priv-app/GoogleFeedback/oat
+    - Deleting /system/system/system_ext/priv-app/QaiorScreenUnderstandingService/oat
+    - Deleting /system/system/system_ext/priv-app/CarrierConfig/oat
+    - Deleting /system/system/system_ext/priv-app/SystemUI/oat
+    - Deleting /system/system/system_ext/priv-app/com.qualcomm.qti.services.systemhelper/oat
+    - Deleting /system/system/etc/boot-image.bprof
+    - Deleting /system/system/etc/boot-image.prof
+    - Deleting /system/system/framework/arm
+    - Deleting /system/system/framework/arm64
+    - Deleting /system/system/framework/boot-core-icu4j.vdex
+    - Deleting /system/system/framework/boot-okhttp.vdex
+    - Deleting /system/system/framework/boot-ims-common.vdex
+    - Deleting /system/system/framework/boot-bouncycastle.vdex
+    - Deleting /system/system/framework/boot-framework-ondeviceintelligence-platform.vdex
+    - Deleting /system/system/framework/boot-framework-adservices.vdex
+    - Deleting /system/system/framework/boot-tcmiface.vdex
+    - Deleting /system/system/framework/boot-telephony-ext.vdex
+    - Deleting /system/system/framework/boot-voip-common.vdex
+    - Deleting /system/system/framework/boot-core-libart.vdex
+    - Deleting /system/system/framework/boot-telephony-common.vdex
+    - Deleting /system/system/framework/boot-framework-location.vdex
+    - Deleting /system/system/framework/boot-QPerformance.vdex
+    - Deleting /system/system/framework/boot-ext.vdex
+    - Deleting /system/system/framework/boot-apache-xml.vdex
+    - Deleting /system/system/framework/boot.vdex
+    - Deleting /system/system/framework/boot-UxPerformance.vdex
+    - Deleting /system/system/framework/boot-knoxsdk.vdex
+    - Deleting /system/system/framework/boot-esecomm.vdex
+    - Deleting /system/system/framework/boot-framework-graphics.vdex
+    - Deleting /system/system/framework/boot-framework.vdex
+    - Deleting /system/system/framework/boot-framework-telecom.vdex
+    - Adding /system/system/etc/permissions/signature-permissions-com.samsung.android.game.gamehome.xml from prebuilts/samsung/pa2qxxx
+    - Adding /system/system/priv-app/YourPhone_Stub/YourPhone_Stub.apk from prebuilts/samsung/gta9pxxx
+    - Deleting "SEC_FLOATING_FEATURE_CONTEXTSERVICE_ENABLE_SURVEY_MODE" config in /system/system/etc/floating_feature.xml
+    - Deleting "SEC_FLOATING_FEATURE_COMMON_CONFIG_SMARTTUTOR_PACKAGES_PATH" config in /system/system/etc/floating_feature.xml
+    - Deleting /product/app/BardShell
+    - Deleting /product/app/Chrome
+    - Deleting /product/app/DuoStub
+    - Deleting /product/app/Gmail2
+    - Deleting /product/app/AssistantShell
+    - Deleting /product/overlay/GmsConfigOverlaySearchSelector.apk
+    - Deleting /product/app/Maps
+    - Deleting /product/app/YouTube
+    - Deleting /product/priv-app/HotwordEnrollmentXGoogleEx4HEXAGON
+    - Deleting /product/priv-app/SearchSelector
+    - Deleting /product/priv-app/HotwordEnrollmentOKGoogleEx4HEXAGON
+    - Deleting /system/dpolicy_system
+    - Deleting /system/system/app/DsmsAPK
+    - Deleting /system/system/app/FactoryAirCommandManager
+    - Deleting /system/system/app/FBAppManager_NS
+    - Deleting /system/system/app/FactoryCameraFB
+    - Deleting /system/system/app/HMT
+    - Deleting /system/system/app/LiveTranscribe
+    - Deleting /system/system/app/MAPSAgent
+    - Deleting /system/system/app/PlayAutoInstallConfig
+    - Deleting /system/system/app/SamsungCalendar
+    - Deleting /system/system/app/SamsungPassAutofill_v1
+    - Deleting /system/system/app/SamsungTTSVoice_ar_AE_m00
+    - Deleting /system/system/app/SamsungTTSVoice_de_DE_f00
+    - Deleting /system/system/app/SamsungTTSVoice_en_GB_f00
+    - Deleting /system/system/app/SamsungTTSVoice_en_US_l03
+    - Deleting /system/system/app/SamsungTTSVoice_es_ES_f00
+    - Deleting /system/system/app/SamsungTTSVoice_es_MX_f00
+    - Deleting /system/system/app/SamsungTTSVoice_es_US_f00
+    - Deleting /system/system/app/SamsungTTSVoice_fr_FR_f00
+    - Deleting /system/system/app/SamsungTTSVoice_hi_IN_f00
+    - Deleting /system/system/app/SamsungTTSVoice_id_ID_f00
+    - Deleting /system/system/app/SamsungTTSVoice_it_IT_f00
+    - Deleting /system/system/app/SamsungTTSVoice_pl_PL_f00
+    - Deleting /system/system/app/SamsungTTSVoice_pt_BR_f00
+    - Deleting /system/system/app/SamsungTTSVoice_ru_RU_f00
+    - Deleting /system/system/app/SamsungTTSVoice_th_TH_f00
+    - Deleting /system/system/app/SamsungTTSVoice_vi_VN_f00
+    - Deleting /system/system/app/SmartReminder
+    - Deleting /system/system/app/WlanTest
+    - Deleting /system/system/bin/dhkprov
+    - Deleting /system/system/app/VoiceAccess
+    - Deleting /system/system/bin/qchdcpkprov
+    - Deleting /system/system/bin/mafpc_write
+    - Deleting /system/system/bin/ssud
+    - Deleting /system/system/etc/default-permissions/default-permissions-com.samsung.android.messaging.xml
+    - Deleting /system/system/etc/default-permissions/default-permissions-meta.xml
+    - Deleting /system/system/etc/init/dhkprov.rc
+    - Deleting /system/system/etc/init/digitalkey_init_ble_tss2.rc
+    - Deleting /system/system/etc/init/samsung_pass_authenticator_service.rc
+    - Deleting /system/system/etc/init/ssu.rc
+    - Deleting /system/system/etc/init/ssu_dm1qxxx.rc
+    - Deleting /system/system/etc/permissions/com.samsung.feature.ipsgeofence.xml
+    - Deleting /system/system/etc/permissions/authfw.xml
+    - Deleting /system/system/etc/permissions/org.carconnectivity.android.digitalkey.rangingintent.xml
+    - Deleting /system/system/etc/permissions/org.carconnectivity.android.digitalkey.secureelement.xml
+    - Deleting /system/system/etc/permissions/privapp-permissions-com.microsoft.skydrive.xml
+    - Deleting /system/system/etc/permissions/privapp-permissions-com.mygalaxy.service.xml
+    - Deleting /system/system/etc/permissions/privapp-permissions-com.samsung.android.app.earphonetypec.xml
+    - Deleting /system/system/etc/permissions/privapp-permissions-com.samsung.android.app.esimkeystring.xml
+    - Deleting /system/system/etc/permissions/privapp-permissions-com.samsung.android.app.updatecenter.xml
+    - Deleting /system/system/etc/permissions/privapp-permissions-com.samsung.android.authfw.xml
+    - Deleting /system/system/etc/permissions/privapp-permissions-com.samsung.android.dkey.xml
+    - Deleting /system/system/etc/permissions/privapp-permissions-com.samsung.android.carkey.xml
+    - Deleting /system/system/etc/permissions/privapp-permissions-com.samsung.android.dqagent.xml
+    - Deleting /system/system/etc/permissions/privapp-permissions-com.samsung.android.game.gamehome.xml
+    - Deleting /system/system/etc/permissions/privapp-permissions-com.samsung.android.ipsgeofence.xml
+    - Deleting /system/system/etc/permissions/privapp-permissions-com.samsung.android.providers.factory.xml
+    - Deleting /system/system/etc/permissions/privapp-permissions-com.samsung.android.messaging.xml
+    - Deleting /system/system/etc/permissions/privapp-permissions-com.samsung.android.samsungpass.xml
+    - Deleting /system/system/etc/permissions/privapp-permissions-com.samsung.android.spayfw.xml
+    - Deleting /system/system/etc/permissions/privapp-permissions-com.samsung.android.svcagent.xml
+    - Deleting /system/system/etc/permissions/privapp-permissions-com.samsung.euicc.xml
+    - Deleting /system/system/etc/permissions/privapp-permissions-com.samsung.ssu.xml
+    - Deleting /system/system/etc/permissions/privapp-permissions-com.sec.android.diagmonagent.xml
+    - Deleting /system/system/etc/permissions/privapp-permissions-com.sec.android.soagent.xml
+    - Deleting /system/system/etc/permissions/privapp-permissions-com.sec.bcservice.xml
+    - Deleting /system/system/etc/permissions/privapp-permissions-com.sec.facatfunction.xml
+    - Deleting /system/system/etc/permissions/privapp-permissions-com.wssyncmldm.xml
+    - Deleting /system/system/etc/permissions/privapp-permissions-meta.xml
+    - Deleting /system/system/etc/permissions/signature-permissions-com.samsung.android.samsungpass.xml
+    - Deleting /system/system/etc/permissions/signature-permissions-com.samsung.android.samsungpassautofill.xml
+    - Deleting /system/system/etc/proca.db
+    - Deleting /system/system/etc/permissions/signature-permissions-com.samsung.android.spay.xml
+    - Deleting /system/system/etc/permissions/signature-permissions-com.samsung.android.spayfw.xml
+    - Deleting /system/system/etc/sysconfig/digitalkey.xml
+    - Deleting /system/system/etc/sysconfig/feature-a11y-preload.xml
+    - Deleting /system/system/etc/sysconfig/feature-a11y-preload-voacc.xml
+    - Deleting /system/system/etc/sysconfig/meta-hiddenapi-package-allowlist.xml
+    - Deleting /system/system/etc/sysconfig/preinstalled-packages-com.mygalaxy.service.xml
+    - Deleting /system/system/etc/sysconfig/preinstalled-packages-com.samsung.android.app.esimkeystring.xml
+    - Deleting /system/system/etc/sysconfig/preinstalled-packages-com.samsung.android.spayfw.xml
+    - Deleting /system/system/etc/sysconfig/preinstalled-packages-com.samsung.euicc.xml
+    - Deleting /system/system/etc/sysconfig/samsungpassapp.xml
+    - Deleting /system/system/etc/sysconfig/samsungsimunlock.xml
+    - Deleting /system/system/etc/sysconfig/preinstalled-packages-com.samsung.android.dkey.xml
+    - Deleting /system/system/hidden/SmartTutor
+    - Deleting /system/system/lib64/android.security.securekeygeneration-ndk.so
+    - Deleting /system/system/etc/sysconfig/samsungauthframework.xml
+    - Deleting /system/system/lib64/vendor.samsung.hardware.security.hdcp.keyprovisioning@1.0.so
+    - Deleting /system/system/lib64/libssu_keystore2.so
+    - Deleting /system/system/priv-app/AppUpdateCenter
+    - Deleting /system/system/priv-app/AuthFramework
+    - Deleting /system/system/preload
+    - Deleting /system/system/priv-app/BCService
+    - Deleting /system/system/priv-app/DigitalKey
+    - Deleting /system/system/priv-app/EarphoneTypeC
+    - Deleting /system/system/priv-app/EuiccService
+    - Deleting /system/system/priv-app/EsimKeyString
+    - Deleting /system/system/priv-app/FBServices
+    - Deleting /system/system/priv-app/FBInstaller_NS
+    - Deleting /system/system/priv-app/FactoryTestProvider
+    - Deleting /system/system/priv-app/FotaAgent
+    - Deleting /system/system/priv-app/GameHome
+    - Deleting /system/system/priv-app/IpsGeofence
+    - Deleting /system/system/priv-app/MyGalaxyService
+    - Deleting /system/system/priv-app/OneDrive_Samsung_v3
+    - Deleting /system/system/priv-app/PaymentFramework
+    - Deleting /system/system/priv-app/SVCAgent
+    - Deleting /system/system/priv-app/SamsungCarKeyFw
+    - Deleting /system/system/priv-app/SamsungMessages
+    - Deleting /system/system/priv-app/SamsungPass
+    - Deleting /system/system/priv-app/SsuService
+    - Deleting /system/system/priv-app/YourPhone_P1_5
+    - Deleting /system/system/system_ext/etc/permissions/com.qti.location.sdk.xml
+    - Deleting /system/system/system_ext/etc/permissions/com.qualcomm.location.xml
+    - Deleting /system/system/system_ext/etc/permissions/com.android.hotwordenrollment.common.util.xml
+    - Deleting /system/system/system_ext/etc/permissions/privapp-permissions-com.qualcomm.location.xml
+    - Deleting /system/system/system_ext/framework/com.qti.location.sdk.jar
+    - Deleting /system/system/system_ext/framework/org.carconnectivity.android.digitalkey.rangingintent.jar
+    - Deleting /system/system/system_ext/framework/com.android.hotwordenrollment.common.util.jar
+    - Deleting /system/system/system_ext/framework/org.carconnectivity.android.digitalkey.secureelement.jar
+    - Deleting /system/system/system_ext/priv-app/com.qualcomm.location
+    - Deleting /vendor/bin/install-recovery.sh
+    - Deleting /vendor/etc/dpolicy
+    - Deleting /vendor/etc/init/vendor_flash_recovery.rc
+    - Deleting /vendor/recovery-from-boot.p
+  - Processing "Debug USB" by @salvogiangri[0m
+    [0;33m! Non-debug build detected. Skipping[0m
+  - Processing "Camera patches" by @salvogiangri[0m
+    - Deleting /system/system/cameradata/portrait_data
+    - Adding /system/system/cameradata/portrait_data from out/fw/SM-M515F_BVO
+    - Adding /system/system/cameradata/singletake/service-feature.xml from out/fw/SM-M515F_BVO
+    - Adding /system/system/cameradata/aremoji-feature.xml from out/fw/SM-M515F_BVO
+    - Adding /system/system/cameradata/camera-feature.xml
+    - Adding /system/system/priv-app/SamsungCamera/SamsungCamera.apk from prebuilts/samsung/r9qxxx
+    - Adding /system/system/priv-app/SamsungCamera/SamsungCamera.apk.prof from prebuilts/samsung/r9qxxx
+updating: classes3.dex (deflated 64%)
+[*] Patching SamsungCamera.apk: /home/arnav/UN1CA-4.0-M51/out/target/m51/work_dir/system/system/priv-app/SamsungCamera/SamsungCamera.apk
+[*] Disassembling classes.dex...
+[*] Disassembling classes2.dex...
+[*] Disassembling classes3.dex...
+[*] Found candidate smali: /tmp/cam_patch_2eh_fw8u/smali_classes3.dex/x1/k.smali
+[*] Target enum class: Lx1/k;
+[+] Successfully patched /tmp/cam_patch_2eh_fw8u/smali_classes3.dex/x1/k.smali with fallback V8_0!
+[*] Reassembling classes3.dex...
+[*] Disassembling classes4.dex...
+[*] Re-signing SamsungCamera.apk with (/home/arnav/UN1CA-4.0-M51/security/aosp_platform.pk8)...
+[+] SamsungCamera.apk successfully patched and signed!
+    - Adding /system/system/app/FunModeSDK from prebuilts/samsung/a73xqxx
+    - Adding /system/system/priv-app/SingleTakeService/SingleTakeService.apk from prebuilts/samsung/a73xqxx
+    - Adding /vendor/etc/singletake/dynamic_viewing from out/fw/SM-S911B_INS
+    - Deleting /system/system/etc/default-permissions/default-permissions-com.samsung.android.globalpostprocmgr.xml
+    - Deleting /system/system/etc/permissions/privapp-permissions-com.samsung.android.globalpostprocmgr.xml
+    - Deleting /system/system/priv-app/GlobalPostProcMgr
+    - Deleting /system/system/lib64/libstartrail.camera.samsung.so
+    - Deleting /system/system/lib64/libdvs.camera.samsung.so
+    - Deleting /system/system/etc/permissions/cameraservice.xml
+    - Deleting /system/system/framework/scamera_sep.jar
+    - Deleting /system/system/priv-app/SCameraSDKService
+    - Deleting /system/system/etc/permissions/sec_camerax_impl.xml
+    - Deleting /system/system/etc/permissions/sec_camerax_service.xml
+    - Deleting /system/system/framework/sec_camerax_impl.jar
+    - Deleting /system/system/lib/libsec_camerax_util_jni.camera.samsung.so
+    - Deleting /system/system/lib64/libsec_camerax_util_jni.camera.samsung.so
+    - Deleting /system/system/priv-app/sec_camerax_service
+    - Deleting "ro.camerax.extensions.enabled" prop in /system/system/build.prop
+    - Deleting /system/system/lib64/libRelighting_API.camera.samsung.so
+    - Deleting /system/system/lib64/libBestPhoto.camera.samsung.so
+    - Deleting /system/system/lib64/libAEBHDR_wrapper.camera.samsung.so
+    - Deleting /system/system/lib64/libae_bracket_hdr.arcsoft.so
+    - Deleting /system/system/lib64/libDualCamBokehCapture.camera.samsung.so
+    - Deleting /system/system/lib64/libarcsoft_dualcam_portraitlighting.so
+    - Deleting /system/system/lib64/libarcsoft_single_cam_glasses_seg.so
+[0;33m(unica/patches/camera/customize.sh:278:DELETE_FROM_WORK_DIR) File not found: /system/system/lib64/libarcsoft_superresolution_bokeh.so[0m
+    - Deleting /system/system/lib64/libdualcam_refocus_image.so
+    - Deleting /system/system/lib64/libhigh_dynamic_range_bokeh.so
+    - Deleting /system/system/lib64/libFaceRecognition.arcsoft.so
+    - Deleting /system/system/lib64/libfrtracking_engine.arcsoft.so
+    - Deleting /system/system/lib64/libhybridHDR_wrapper.camera.samsung.so
+    - Deleting /system/system/lib64/libhybrid_high_dynamic_range.arcsoft.so
+    - Deleting /system/system/lib64/libAIQSolution_MPISingleRGB40.camera.samsung.so
+    - Deleting /system/system/lib64/libMPISingleRGB40.camera.samsung.so
+    - Deleting /system/system/lib64/libMPISingleRGB40Tuning.camera.samsung.so
+    - Deleting /system/system/lib64/libAIQSolution_MPI.camera.samsung.so
+    - Deleting /system/system/lib64/libLocalTM_pcc.camera.samsung.so
+    - Deleting /system/system/lib64/libMultiFrameProcessing30.camera.samsung.so
+    - Deleting /system/system/lib64/libMultiFrameProcessing30.snapwrapper.camera.samsung.so
+    - Deleting /system/system/lib64/libMultiFrameProcessing30Tuning.camera.samsung.so
+    - Deleting /system/system/lib64/libObjectDetector_v1.camera.samsung.so
+    - Deleting /system/system/lib64/libSwIsp_core.camera.samsung.so
+    - Deleting /system/system/lib64/libSwIsp_wrapper_v1.camera.samsung.so
+    - Deleting /system/system/lib64/libsuperresolutionraw_wrapper_v2.camera.samsung.so
+    - Deleting /system/system/lib64/libsuperresolution_raw.arcsoft.so
+    - Deleting /system/system/lib64/libImageSegmenter_v1.camera.samsung.so
+    - Patching "726f2e70726f647563742e6d6f64656c00" to "726f2e626f6f742e656d2e6d6f64656c00" in /vendor/lib/hw/camera.qcom.so
+    - Patching "726f2e70726f647563742e6d6f64656c00" to "726f2e626f6f742e656d2e6d6f64656c00" in /vendor/lib64/hw/camera.qcom.so
+    - Patching "726f2e70726f647563742e6d6f64656c00" to "726f2e626f6f742e656d2e6d6f64656c00" in /system/system/lib/libstagefright.so
+    - Patching "726f2e70726f647563742e6d6f64656c00" to "726f2e626f6f742e656d2e6d6f64656c00" in /system/system/lib64/libstagefright.so
+    - Replacing "ro.build.flavor" prop with "m51nsxx-user" in /system/system/build.prop
+  - Processing "DVFS patches" by @salvogiangri, @ata-kaner[0m
+    - Decoding /system/system/framework/ssrm.jar
+    - Replacing value "dvfs_policy_default" of method "<clinit>()V" in /system/system/framework/ssrm.jar/smali/com/android/server/ssrm/Feature.smali with "dvfs_policy_sm7150_xx"
+    - Replacing value "dvfs_policy_default" of method "<clinit>()V" in /system/system/priv-app/SamsungDeviceHealthManagerService/SamsungDeviceHealthManagerService.apk/smali/c4/c.smali with "dvfs_policy_sm7150_xx"
+    - Replacing value "dvfs_policy_default" of method "<init>(Landroid/content/Context;)V" in /system/system/priv-app/SamsungDeviceHealthManagerService/SamsungDeviceHealthManagerService.apk/smali/k4/e.smali with "dvfs_policy_sm7150_xx"
+    - Replacing "SEC_FLOATING_FEATURE_SYSTEM_CONFIG_SIOP_POLICY_FILENAME" config with "siop_m51_sm7150" in /system/system/etc/floating_feature.xml
+    - Replacing value "siop_dm1q_sm8550" of method "<clinit>()V" in /system/system/framework/ssrm.jar/smali/com/android/server/ssrm/Feature.smali with "siop_m51_sm7150"
+    - Replacing value "siop_dm1q_sm8550" of method "<clinit>()V" in /system/system/priv-app/SamsungDeviceHealthManagerService/SamsungDeviceHealthManagerService.apk/smali/n5/i0.smali with "siop_m51_sm7150"
+    - Deleting /system/system/priv-app/SamsungDeviceHealthManagerService/SamsungDeviceHealthManagerService.apk/assets/siop_default
+    - Deleting /system/system/priv-app/SamsungDeviceHealthManagerService/SamsungDeviceHealthManagerService.apk/assets/siop_model
+    - Deleting /system/system/priv-app/SamsungDeviceHealthManagerService/SamsungDeviceHealthManagerService.apk/assets/ssrm_default
+    - Adding /system/system/priv-app/SamsungDeviceHealthManagerService/SamsungDeviceHealthManagerService.apk/assets/siop_default.xml
+    - Adding /system/system/priv-app/SamsungDeviceHealthManagerService/SamsungDeviceHealthManagerService.apk/assets/siop_m51_sm7150.xml
+    - Adding /system/system/priv-app/SamsungDeviceHealthManagerService/SamsungDeviceHealthManagerService.apk/assets/ssrm_default.xml
+  - Processing "Filesystem support" by @salvogiangri, @utkustnr, @nhglong[0m
+    - Extracting boot.img
+    - Extracting boot.img/ramdisk
+    - Patching boot.img/fstab.default
+    - Repacking boot.img/ramdisk
+    - Patching /vendor/etc/fstab.default
+    - Repacking boot.img
+  - Processing "GrdmIcccManagerService" by @pascua28[0m
+    - Decoding /system/system/framework/services.jar
+    - Applying "Implement GrdmIcccManagerService" to /system/system/framework/services.jar
+  - Processing "Disable ICCC service" by @pascua28[0m
+    - Applying "Nuke ICCC service" to /system/system/framework/services.jar
+    - Applying "Nuke ICCC service" to /system/system/framework/framework.jar
+  - Processing "Disable knoxguard" by @salvogiangri[0m
+    - Applying "Disable KnoxGuard" to /system/system/framework/services.jar
+  - Processing "Legacy patches" by @salvogiangri[0m
+    - Adding "ro.surface_flinger.enable_frame_rate_override" prop with "false" in /vendor/default.prop
+    - Adding "ro.surface_flinger.use_content_detection_for_refresh_rate" prop with "false" in /vendor/default.prop
+    - Adding "debug.sf.show_refresh_rate_overlay_render_rate" prop with "true" in /vendor/default.prop
+    - Adding "ro.surface_flinger.game_default_frame_rate_override" prop with "60" in /vendor/default.prop
+    - Applying "Backport legacy CameraMetadataNative code" to /system/system/framework/framework.jar
+    - Decoding /system/system/priv-app/SamsungCamera/SamsungCamera.apk
+    - Applying "Backport legacy Scene detection code" to /system/system/priv-app/SamsungCamera/SamsungCamera.apk
+    - Applying "Backport CONTROL_AVAILABLE_FEATURE_SECOND_PICTURE_CONFIG code" to /system/system/priv-app/SamsungCamera/SamsungCamera.apk
+    - Decoding /system/system/framework/telephony-common.jar
+    - Skipping uicc patch
+    - Replacing "SEC_FLOATING_FEATURE_CAMERA_CONFIG_VENDOR_LIB_INFO" config with "beauty.samsung.v4,face_landmark.arcsoft.v2_1,facial_attribute.samsung.v1,event_detection.samsung.v2,food.samsung.v1,selfie_correction.samsung.v1,mfhdr.arcsoft.v1,llhdr.arcsoft.v1,swuwdc.arcsoft.v1,human_tracking.arcsoft.v2_1,single_bokeh.samsung.v2,human_segmentation.samsung.v2,smart_scan.samsung.v2,dual_bokeh.samsung.v1,image_enhance.arcsoft.v1,scene_detection.samsung.v1,localtm.samsung.v1_1,image_codec.samsung.v1" in /system/system/etc/floating_feature.xml
+    - Deleting /system/system/bin/fabric_crypto
+    - Deleting /system/system/etc/init/fabric_crypto.rc
+    - Deleting /system/system/etc/permissions/FabricCryptoLib.xml
+    - Deleting /system/system/etc/permissions/privapp-permissions-com.samsung.android.kmxservice.xml
+    - Deleting /system/system/etc/vintf/manifest/fabric_crypto_manifest.xml
+    - Deleting /system/system/framework/FabricCryptoLib.jar
+    - Deleting /system/system/lib64/com.samsung.security.fabric.cryptod-V1-cpp.so
+    - Deleting /system/system/lib64/vendor.samsung.hardware.security.fkeymaster-V1-cpp.so
+    - Deleting /system/system/lib64/vendor.samsung.hardware.security.fkeymaster-V1-ndk.so
+    - Deleting /system/system/priv-app/KmxService
+    - Deleting /system/system/bin/heatmap
+    - Deleting /system/system/etc/init/init.sec-heatmap.rc
+[0;33m(unica/patches/legacy/customize.sh:229:DELETE_FROM_WORK_DIR) File not found: /system/system/lib64/libectcore.so[0m
+[0;33m(unica/patches/legacy/customize.sh:230:DELETE_FROM_WORK_DIR) File not found: /system/system/lib64/libparam_A55_250328.so[0m
+    - Adding /system/system/etc/permissions/privapp-permissions-com.samsung.adaptivebrightnessgo.cameralightsensor.xml from unica/patches/legacy
+    - Adding /system/system/etc/ev_lux_map_config.xml from out/fw/SM-M515F_BVO
+    - Adding /system/system/priv-app/CameraLightSensor/CameraLightSensor.apk from unica/patches/legacy
+    - Patching "1f010a6bc8fdfff0" to "1f040071c8fdfff0" in /system/system/bin/netd
+    - Patching "20010054e0fdfff0" to "1f2003d5e0fdfff0" in /system/system/bin/netd
+    - Patching "9f8a00710b020054e1d8ffb0" to "9f8a00711f2003d5e1d8ffb0" in /system/system/bin/surfaceflinger
+    - Adding stune cgroup nodes to /system/system/etc/init/hw/init.rc
+    - Adding nnapi-hal stune group to /system/system/etc/init/hw/init.rc
+    - Adding /system/system/etc/task_profiles/cgroups_28.json from out/fw/SM-M515F_BVO
+    - Adding /system/system/etc/task_profiles/cgroups_29.json from out/fw/SM-M515F_BVO
+    - Adding /system/system/etc/task_profiles/cgroups_30.json from out/fw/SM-M515F_BVO
+    - Adding /system/system/etc/task_profiles/task_profiles_28.json from out/fw/SM-M515F_BVO
+    - Adding /system/system/etc/task_profiles/task_profiles_29.json from out/fw/SM-M515F_BVO
+    - Adding /system/system/etc/task_profiles/task_profiles_30.json from out/fw/SM-M515F_BVO
+    - Replacing return value of method "isPassSupport()Z" in /system/system/framework/services.jar/smali/com/android/server/StorageManagerService.smali to "const/4 p0, 0x0"
+    - Decoding /system/system/app/MotionPhoto/MotionPhoto.apk
+    - Replacing value "const v1, 0x7f420888" of method "getVideoEncodingFormat(Lcom/samsung/android/motionphoto/utils/v2/video/VideoTranscodingTask;)Landroid/media/MediaFormat;" in /system/system/app/MotionPhoto/MotionPhoto.apk/smali/com/samsung/android/motionphoto/utils/v2/video/transcoding/VideoTrackTranscoder.smali with "const v1, 0x7f000789"
+    - Replacing value "const v4, 0x7f420888" of method "configCodec(Lcom/samsung/android/sum/core/message/Message;)V" in /system/system/app/MotionPhoto/MotionPhoto.apk/smali/com/samsung/android/sum/core/filter/EncoderFilter.smali with "const v4, 0x7f000789"
+    - No known patch available for the supplied libstagefright.so
+    - No known patch available for the supplied libstagefright.so
+    - Replacing value "const v4, 0x7f420888" of method "configCodec(Lcom/samsung/android/sum/core/message/Message;)V" in /system/system/priv-app/SamsungCamera/SamsungCamera.apk/smali_classes3/com/samsung/android/sum/core/filter/EncoderFilter.smali with "const v4, 0x7f000789"
+    - Decoding /system/system/priv-app/vexfwk_service/vexfwk_service.apk
+    - Replacing value "const v2, 0x7f420888" of method "configCodec(Lcom/samsung/android/sum/core/message/Message;)V" in /system/system/priv-app/vexfwk_service/vexfwk_service.apk/smali/com/samsung/android/sum/core/filter/EncoderFilter.smali with "const v2, 0x7f000789"
+    - Adding "SEC_FLOATING_FEATURE_BATTERY_DISABLE_ECO_BATTERY" config with "TRUE" in /system/system/etc/floating_feature.xml
+    - Replacing value "SEC_FLOATING_FEATURE_BATTERY_DISABLE_ECO_BATTERY_FEATURE" of method "<clinit>()V" in /system/system/framework/services.jar/smali/com/android/server/battery/BattFeatures.smali with "SEC_FLOATING_FEATURE_BATTERY_DISABLE_ECO_BATTERY"
+    - Replacing value "RAINY_RESTRICT_MODE" of method "isFinishLockTimer()Z" in /system/system/framework/services.jar/smali_classes2/com/android/server/usb/UsbHostRestrictor.smali with "2"
+    - Replacing value "CLOUDY_WORK_MODE" of method "onKeyguardStateChanged(Z)V" in /system/system/framework/services.jar/smali_classes2/com/android/server/usb/UsbHostRestrictor.smali with "1"
+    - Replacing value "CLOUDY_WORK_MODE" of method "onChange(Z)V" in /system/system/framework/services.jar/smali_classes2/com/android/server/usb/UsbHostRestrictor$1.smali with "1"
+    - Replacing value "SUNNY_WORK_MODE" of method "handleMessage(Landroid/os/Message;)V" in /system/system/framework/services.jar/smali_classes2/com/android/server/usb/UsbHostRestrictor$11.smali with "0"
+    - Replacing value "RAINY_RESTRICT_MODE" of method "handleMessage(Landroid/os/Message;)V" in /system/system/framework/services.jar/smali_classes2/com/android/server/usb/UsbHostRestrictor$11.smali with "2"
+    - Replacing value "RAINY_RESTRICT_MODE" of method "onBootPhase(I)V" in /system/system/framework/services.jar/smali_classes2/com/android/server/usb/UsbService$Lifecycle.smali with "2"
+    - Replacing value "CLOUDY_WORK_MODE" of method "onBootPhase(I)V" in /system/system/framework/services.jar/smali_classes2/com/android/server/usb/UsbService$Lifecycle.smali with "1"
+    - Deleting /system/system/cameradata/portrait_data/SRIB_HumanInsSeg_FP16_V008.snf
+    - Adding /system/system/cameradata/portrait_data/SRIB_BanetLite_FP16_V400.snf from prebuilts/samsung/a17xxx
+    - Patching /system/system/cameradata/portrait_data/single_bokeh_feature.json
+grep: /home/arnav/UN1CA-4.0-M51/out/target/m51/work_dir/vendor/etc/midas/midas_config.json: No such file or directory
+[0;33m(unica/patches/legacy/customize.sh:615:DELETE_FROM_WORK_DIR) File not found: /vendor/etc/midas[0m
+    - Adding /vendor/etc/midas from prebuilts/samsung/a73xqxx
+    - Adding /vendor/etc/midas/midas_config.json from out/fw/SM-S911B_INS
+    - Deleting /vendor/etc/singletake/aifilter
+    - Deleting /vendor/etc/singletake/bestmoment
+    - Adding /vendor/etc/singletake/ClarityScorer from out/fw/SM-S911B_INS
+[0;33m(unica/patches/legacy/customize.sh:656:DELETE_FROM_WORK_DIR) File not found: /system/system/bin/heatmap[0m
+[0;33m(unica/patches/legacy/customize.sh:657:DELETE_FROM_WORK_DIR) File not found: /system/system/etc/init/init.sec-heatmap.rc[0m
+[0;33m(unica/patches/legacy/customize.sh:658:DELETE_FROM_WORK_DIR) File not found: /system/system/lib64/libectcore.so[0m
+[0;33m(unica/patches/legacy/customize.sh:659:DELETE_FROM_WORK_DIR) File not found: /system/system/lib64/libparam_A55_250328.so[0m
+  - Processing "Misc patches" by @salvogiangri[0m
+    - Replacing "ro.oem_unlock_supported" prop with "0" in /system/system/build.prop
+    - Replacing "ro.oem_unlock_supported" prop with "0" in /vendor/default.prop
+    - Replacing value "ro.product.model" of method "<clinit>()V" in /system/system/framework/framework.jar/smali_classes6/com/samsung/android/rune/CoreRune.smali with "ro.product.vendor.model"
+    - Replacing value "ro.product.device" of method "<clinit>()V" in /system/system/framework/framework.jar/smali_classes6/com/samsung/android/rune/CoreRune.smali with "ro.product.vendor.device"
+    - Replacing return value of method "-$$Nest$smgetSecRescueLevel(Ljava/lang/String;)I" in /system/system/framework/services.jar/smali/com/android/server/SecRescueParty.smali to "const/4 p0, 0x0"
+    - Replacing value "ro.product.model" of method "<clinit>()V" in /system/system/framework/services.jar/smali/com/android/server/am/FreecessController.smali with "ro.product.vendor.model"
+    - Applying "Disable vendor mismatch warning" to /system/system/framework/services.jar
+  - Processing "NFC patches" by @salvogiangri[0m
+    - Adding /system/system/etc/libnfc-nci.conf from out/fw/SM-M515F_BVO
+    - Deleting /system/system/etc/libnfc-nci_temp.conf
+    - Adding /system/system/lib/libnfc_sec_jni.so from prebuilts/samsung/r11sxxx
+    - Adding /system/system/lib64/libnfc_sec_jni.so from prebuilts/samsung/r11sxxx
+  - Processing "NFC antenna guide compatibility" by @At30c[0m
+    - Matching NFC antenna guide to target position 16[0m
+      - Decoding /system/system/priv-app/SecSettings/SecSettings.apk
+      - Replacing value "1" of method "onCreate(Landroid/os/Bundle;)V" in /system/system/priv-app/SecSettings/SecSettings.apk/smali_classes3/com/samsung/android/settings/nfc/NfcAntennaGuideDialog.smali with "16"
+      - Replacing value "1" of method "populateViewForOrientation(Lcom/android/settingslib/widget/LayoutPreference;)V" in /system/system/priv-app/SecSettings/SecSettings.apk/smali_classes3/com/samsung/android/settings/nfc/NfcSettings.smali with "16"
+  - Processing "PROCA kernel patch" by @salvogiangri[0m
+    - Extracting boot.img
+    - Decompressing kernel image
+    [0;33m! Nothing to do[0m
+  - Processing "/product RRO configs" by @salvogiangri[0m
+    - Decoding /product/overlay/framework-res__dm1qxxx__auto_generated_rro_product.apk
+    - Renaming framework-res__dm1qxxx__auto_generated_rro_product.apk to framework-res__m51nsxx__auto_generated_rro_product.apk[0m
+      - Deleting /product/overlay/framework-res__dm1qxxx__auto_generated_rro_product.apk
+      - Adding metadata for /product/overlay/framework-res__m51nsxx__auto_generated_rro_product.apk (uid:0 gid:0 mode:644 selabel:u:object_r:system_file:s0)
+      - Applying target product overlay[0m
+  - Processing "SAIV patches" by @Fede2782, @salvogiangri[0m
+    - Deleting /system/system/saiv
+    - Adding /system/system/saiv from out/fw/SM-M515F_BVO
+    - Deleting /system/system/saiv/face/cluster_pb
+    - Adding /system/system/saiv/face/cluster_pb from out/fw/SM-S911B_INS
+    - Adding /vendor/etc/midas/moire_detection/moire_detection.tflite from out/fw/SM-S911B_INS
+    - Adding /vendor/etc/midas/SRIBMQA_aiFiQA_V100_FP32.tflite from out/fw/SM-S911B_INS
+    - Adding /vendor/etc/midas/SRIBMQA_aiIQA_V100_FP32.tflite from out/fw/SM-S911B_INS
+    - Adding /vendor/etc/saiv/image_understanding/db/hs_segmenter from out/fw/SM-S911B_INS
+    - Deleting /system/system/saiv/image_understanding/db/slens_classifier
+    - Adding /system/system/saiv/image_understanding/db/slens_classifier/slens_classifier_cnn.sni from prebuilts/samsung/pa2qxxx
+    - Adding /vendor/etc/saiv/image_understanding/db/slens_classifier/slens_classifier_cnn.tflite from prebuilts/samsung/pa2qxxx
+    - Deleting /vendor/saiv/image_understanding/db/slens_classifier
+    - Deleting /system/system/saiv/image_understanding/db/slens_detector
+    - Adding /system/system/saiv/image_understanding/db/slens_detector/slens_detector_cnn.sni from prebuilts/samsung/pa2qxxx
+    - Adding /vendor/etc/saiv/image_understanding/db/slens_detector/slens_detector_cnn.tflite from prebuilts/samsung/pa2qxxx
+    - Deleting /vendor/saiv/image_understanding/db/slens_detector
+    - Adding /system/system/saiv/image_understanding/db/smartscan_rectifier/deep_dewarp_cnn.sni from out/fw/SM-S911B_INS
+    - Deleting /system/system/saiv/textrecognition
+    - Adding /system/system/saiv/textrecognition from out/fw/SM-S911B_INS
+    - Adding /vendor/etc/saiv/image_understanding/db/SS_segmenter/SS_segmenter_cnn.tflite from prebuilts/samsung/a34xxx
+    - Adding /vendor/etc/saiv/image_understanding/db/SS_segmenter/SS_segmenter_cnn.info from prebuilts/samsung/a34xxx
+  - Processing "SELinux fix" by @ShaDisNX255, @Fede2782[0m
+    - "init.svc.vendor.wvkprov_server_hal" SELinux duplicate entry found. Removing
+  - Processing "Platform signature spoof" by @salvogiangri, @ata-kaner[0m
+    - Applying "Allow custom platform signature" to /system/system/framework/services.jar
+  - Processing "S Pen blobs" by @salvogiangri[0m
+    [0;33m! Nothing to do[0m
+  - Processing "Stock blobs" by @salvogiangri[0m
+    - Deleting /system/system/etc/permissions/com.sec.feature.cover.clearcameraviewcover.xml
+    - Deleting /system/system/etc/permissions/com.sec.feature.cover.flip.xml
+    - Deleting /system/system/etc/permissions/com.sec.feature.nfc_authentication.xml
+    - Deleting /system/system/etc/permissions/com.sec.feature.nfc_authentication_cover.xml
+    - Deleting /system/system/etc/permissions/com.sec.feature.nsflp_level_601.xml
+    - Deleting /system/system/etc/permissions/com.sec.feature.pocketsensitivitymode_level1.xml
+    - Deleting /system/system/etc/permissions/com.sec.feature.sensorhub_level29.xml
+    - Deleting /system/system/etc/permissions/com.sec.feature.usb_authentication.xml
+    - Deleting /system/system/etc/permissions/com.sec.feature.wirelesscharger_authentication.xml
+    - Adding /system/system/etc/permissions/com.sec.feature.cover.minisviewwalletcover.xml from out/fw/SM-M515F_BVO
+    - Adding /system/system/etc/permissions/com.sec.feature.nsflp_level_600.xml from out/fw/SM-M515F_BVO
+    - Adding /system/system/etc/permissions/com.sec.feature.pocketmode_level6.xml from out/fw/SM-M515F_BVO
+    - Adding /system/system/etc/permissions/com.sec.feature.sensorhub_level34.xml from out/fw/SM-M515F_BVO
+    - Deleting /system/system/lib64/extractors/libsapeextractor.so
+    - Deleting /system/system/lib64/extractors/libsdffextractor.so
+    - Deleting /system/system/lib64/extractors/libsdsfextractor.so
+    - Deleting /system/system/lib/lib_SoundAlive_play_plus_ver800.so
+    - Adding /system/system/lib/lib_SoundAlive_play_plus_ver400.so from out/fw/SM-M515F_BVO
+    - Adding /system/system/lib/libaudiosaplus_sec_legacy.so from out/fw/SM-M515F_BVO
+    - Deleting /system/system/lib64/lib_SoundAlive_play_plus_ver800.so
+    - Adding /system/system/lib64/lib_SoundAlive_play_plus_ver400.so from out/fw/SM-M515F_BVO
+    - Adding /system/system/lib64/libaudiosaplus_sec_legacy.so from out/fw/SM-M515F_BVO
+    - Deleting /system/system/lib/lib_SoundBooster_ver1100.so
+    - Adding /system/system/lib/lib_SoundBooster_ver1000.so from out/fw/SM-M515F_BVO
+    - Adding /system/system/lib/libsamsungSoundbooster_plus_legacy.so from out/fw/SM-M515F_BVO
+    - Deleting /system/system/lib64/lib_SoundBooster_ver1100.so
+    - Adding /system/system/lib64/lib_SoundBooster_ver1000.so from out/fw/SM-M515F_BVO
+    - Adding /system/system/lib64/libsamsungSoundbooster_plus_legacy.so from out/fw/SM-M515F_BVO
+    - Adding /system/system/lib/libmysound_legacy.so from out/fw/SM-M515F_BVO
+    - Adding /system/system/lib64/libmysound_legacy.so from out/fw/SM-M515F_BVO
+    - Adding /system/system/media/bootsamsung.qmg from out/fw/SM-M515F_BVO
+    - Adding /system/system/media/bootsamsungloop.qmg from out/fw/SM-M515F_BVO
+    - Adding /system/system/media/shutdown.qmg from out/fw/SM-M515F_BVO
+    - Deleting /system/system/priv-app/SohService
+    - Adding /system/system/usr/share/alsa/alsa.conf from out/fw/SM-M515F_BVO
+  - Processing "UWB blobs" by @salvogiangri[0m
+    [0;33m! Nothing to do[0m
+  - Processing "Vendor interface objects blobs" by @salvogiangri[0m
+    - Adding /system/system/etc/vintf/compatibility_matrix.device.xml
+  - Processing "VNDK" by @salvogiangri, @Fede2782[0m
+    - Deleting /system/system/system_ext/apex/com.android.vndk.v33.apex
+    - Adding /system/system/system_ext/apex/com.android.vndk.v30.apex from prebuilts/samsung/a73xqxx
+    - Patching /system/system/system_ext/etc/vintf/manifest.xml
+  - Processing "unlockCeStorage Fix" by @pascua28[0m
+    - Applying "Do not pass GateKeeperHAT to unlockCeStorage" to /system/system/framework/services.jar
+[1;37mApplying ROM mods[0m
+  - Processing "2024 boot animation" by @salvogiangri[0m
+    - Adding 2024 boot animation blobs (1080x2400)
+  - Processing "Custom boot sound" by @salvogiangri[0m
+    - Adding /system/system from unica/mods/bootsound
+    - Adding "persist.sys.unica.bootsound" prop with "true" in /system/system/build.prop
+  - Processing "2018 call sounds" by @salvogiangri[0m
+    - Decoding /system/system/priv-app/Telecom/Telecom.apk
+    - Adding 2018 call connect/disconnect sounds
+  - Processing "UN1CA Updates" by @salvogiangri[0m
+    - Adding /system/system from unica/mods/choidujour
+    - Patching /system/system/etc/security/otacerts.zip
+    - Adding ChoiDujour to allowed-system-preload-apps.xml
+    - Adding ChoiDujour to package-shareduid-allowlist.xml
+    - Adding ChoiDujour platform certificate to plat_mac_permissions.xml
+    - Applying "Launch UN1CA Updates from suggestions" to /system/system/priv-app/SecSettings/SecSettings.apk
+    - Replacing return value of method "getAvailabilityStatus()I" in /system/system/priv-app/SecSettings/SecSettings.apk/smali_classes3/com/samsung/android/settings/homepage/TopLevelSoftwareUpdatePreferenceController.smali to "const/4 p0, 0x3"
+    - Patching "res/xml/sec_top_level_settings.xml" in /system/system/priv-app/SecSettings.apk
+    - Patching "res/values/strings.xml" in /system/system/priv-app/SecSettings.apk
+    - Adding "smali_classes4/io/mesalabs/unica/settings/ChoiDujourPreferenceController.smali" to /system/system/priv-app/SecSettings.apk
+  - Processing "CSC mods" by @salvogiangri[0m
+    - Replacing return value of method "isBrazilianCountryISO()Z" in /system/system/framework/framework.jar/smali_classes6/com/samsung/android/globalactions/util/SystemPropertiesWrapper.smali to "const/4 p0, 0x1"
+    - Decoding /system/system/system_ext/priv-app/SystemUI/SystemUI.apk
+    - Replacing return value of method "isSupportPowerOffLock()Z" in /system_ext/priv-app/SystemUI/SystemUI.apk/smali_classes2/com/android/systemui/bixby2/controller/DeviceController.smali to "const/4 p0, 0x1"
+    - Applying "Introduce CscFeatureHooks" to /system/system/framework/framework.jar
+    - Applying "Enable Power off lock feature" to /system/system/priv-app/SecSettings/SecSettings.apk
+  - Processing "Disable Force Encryption" by @mehedihjoy0[0m
+    - Disabling force encryption
+    - Removing frp props
+    - Deleting "ro.frp.pst" prop in /product/etc/build.prop
+    - Deleting "ro.frp.pst" prop in /vendor/build.prop
+  - Processing "Hide My Applist" by @salvogiangri, @someone5678[0m
+    - Applying "Introduce HideAppListUtils" to /system/system/framework/framework.jar
+    - Applying "Introduce HideAppListUtils" to /system/system/framework/services.jar
+  - Processing "Key attestation spoof" by @salvogiangri, @HELLBOY017[0m
+    - Applying "Introduce KeyboxImitationHooks" to /system/system/framework/framework.jar
+    - Applying "Disable MGF digest param omit" to /system/system/framework/framework.jar
+  - Processing "Play Integrity Fix" by @salvogiangri[0m
+    - Applying "Introduce PlayIntegrityHooks" to /system/system/framework/framework.jar
+    - Applying "Introduce PlayIntegrityHooks" to /system/system/framework/services.jar
+  - Processing "Preloaded apps" by @salvogiangri[0m
+    - Downloading Samsung Internet app
+                                                                           0.3%                                                                           1.3%#                                                                          2.3%##                                                                         3.8%##                                                                         4.1%###                                                                        4.5%###                                                                        4.9%###                                                                        5.3%####                                                                       5.6%####                                                                       6.0%####                                                                       6.4%####                                                                       6.8%#####                                                                      7.2%#####                                                                      7.6%#####                                                                      7.9%#####                                                                      8.3%######                                                                     8.7%######                                                                     9.1%######                                                                     9.5%#######                                                                    9.9%#######                                                                   10.3%#######                                                                   10.7%#######                                                                   11.1%########                                                                  11.5%########                                                                  11.9%########                                                                  12.3%#########                                                                 12.6%#########                                                                 13.0%#########                                                                 13.4%#########                                                                 13.7%##########                                                                14.2%##########                                                                14.6%##########                                                                15.0%###########                                                               15.4%###########                                                               15.7%###########                                                               16.1%###########                                                               16.5%############                                                              17.0%############                                                              17.4%############                                                              17.8%#############                                                             18.2%#############                                                             18.5%#############                                                             18.9%#############                                                             19.2%##############                                                            19.7%##############                                                            20.0%##############                                                            20.5%##############                                                            20.8%###############                                                           21.1%###############                                                           21.5%###############                                                           21.8%###############                                                           22.2%################                                                          22.7%################                                                          23.4%#################                                                         23.8%#################                                                         24.1%#################                                                         24.4%#################                                                         24.8%##################                                                        25.1%##################                                                        25.5%##################                                                        26.1%###################                                                       26.5%###################                                                       26.9%###################                                                       27.3%###################                                                       27.7%####################                                                      28.1%####################                                                      28.5%####################                                                      28.8%#####################                                                     29.2%#####################                                                     29.6%#####################                                                     30.0%#####################                                                     30.4%######################                                                    30.8%######################                                                    31.1%######################                                                    31.5%######################                                                    31.9%#######################                                                   32.3%#######################                                                   32.6%#######################                                                   33.3%########################                                                  33.7%########################                                                  34.1%########################                                                  34.5%#########################                                                 34.8%#########################                                                 35.2%#########################                                                 35.7%#########################                                                 36.1%##########################                                                36.5%##########################                                                36.9%##########################                                                37.2%###########################                                               37.6%###########################                                               38.0%###########################                                               38.4%###########################                                               38.8%############################                                              39.2%############################                                              39.6%############################                                              40.0%#############################                                             40.4%#############################                                             40.7%#############################                                             41.1%#############################                                             41.5%##############################                                            42.1%##############################                                            42.4%##############################                                            42.8%###############################                                           43.2%###############################                                           43.6%###############################                                           44.0%###############################                                           44.3%################################                                          44.8%################################                                          45.2%################################                                          45.7%#################################                                         46.0%#################################                                         46.4%#################################                                         46.8%#################################                                         47.1%##################################                                        47.5%##################################                                        48.0%##################################                                        48.3%###################################                                       48.9%###################################                                       49.2%###################################                                       49.6%####################################                                      50.0%####################################                                      50.4%####################################                                      50.8%####################################                                      51.3%#####################################                                     51.6%#####################################                                     51.9%#####################################                                     52.3%#####################################                                     52.7%######################################                                    53.1%######################################                                    53.5%######################################                                    53.8%#######################################                                   54.5%#######################################                                   54.8%#######################################                                   55.2%########################################                                  55.6%########################################                                  56.0%########################################                                  56.4%########################################                                  56.7%#########################################                                 57.2%#########################################                                 57.5%#########################################                                 57.9%#########################################                                 58.3%##########################################                                58.7%##########################################                                59.1%##########################################                                59.6%###########################################                               60.0%###########################################                               60.4%###########################################                               60.8%############################################                              61.3%############################################                              61.7%############################################                              62.2%#############################################                             62.6%#############################################                             62.9%#############################################                             63.3%#############################################                             63.6%##############################################                            64.1%##############################################                            64.4%##############################################                            65.0%###############################################                           65.4%###############################################                           65.8%###############################################                           66.1%###############################################                           66.6%################################################                          66.9%################################################                          67.3%################################################                          67.7%#################################################                         68.1%#################################################                         68.5%#################################################                         68.9%#################################################                         69.3%##################################################                        69.8%##################################################                        70.1%##################################################                        70.5%###################################################                       70.9%###################################################                       71.2%###################################################                       71.6%###################################################                       72.0%####################################################                      72.5%####################################################                      72.8%####################################################                      73.2%####################################################                      73.6%#####################################################                     74.0%#####################################################                     74.3%#####################################################                     74.6%######################################################                    75.0%######################################################                    75.5%######################################################                    76.0%#######################################################                   76.4%#######################################################                   76.8%#######################################################                   77.2%#######################################################                   77.6%########################################################                  78.0%########################################################                  78.4%########################################################                  78.7%########################################################                  79.2%#########################################################                 79.5%#########################################################                 80.0%#########################################################                 80.3%##########################################################                80.7%##########################################################                81.1%##########################################################                81.5%##########################################################                81.7%##########################################################                81.7%###########################################################               82.1%###########################################################               82.7%############################################################              83.5%############################################################              83.6%############################################################              84.3%############################################################              84.7%#############################################################             85.1%#############################################################             85.5%#############################################################             85.9%#############################################################             86.1%##############################################################            86.6%##############################################################            87.1%###############################################################           87.5%###############################################################           87.9%###############################################################           88.3%###############################################################           88.7%################################################################          89.0%################################################################          89.5%################################################################          89.8%################################################################          90.3%#################################################################         90.7%#################################################################         91.1%#################################################################         91.5%##################################################################        91.9%##################################################################        92.2%##################################################################        92.6%##################################################################        93.0%###################################################################       93.3%###################################################################       93.7%###################################################################       94.0%###################################################################       94.3%####################################################################      94.8%####################################################################      95.3%####################################################################      95.7%#####################################################################     96.1%#####################################################################     96.5%#####################################################################     96.8%#####################################################################     97.2%######################################################################    97.6%######################################################################    98.0%######################################################################    98.4%#######################################################################   98.8%#######################################################################   99.2%#######################################################################   99.5%#######################################################################   99.9%######################################################################## 100.0%
+    - Adding metadata for /system/preload (uid:0 gid:0 mode:755 selabel:u:object_r:system_file:s0)
+    - Adding metadata for /system/preload/SBrowser (uid:0 gid:0 mode:755 selabel:u:object_r:system_file:s0)
+    - Adding metadata for /system/preload/SBrowser/SBrowser.apk (uid:0 gid:0 mode:644 selabel:u:object_r:system_file:s0)
+    - Adding "system/preload/SBrowser/SBrowser.apk" to /system/system/etc/vpl_apks_count_list.txt
+  - Processing "Hide sensitive props" by @salvogiangri[0m
+    - Adding /system/system from unica/mods/prophide
+  - Processing "Settings app mods" by @salvogiangri[0m
+    - Adding /system/system from unica/mods/settings
+    - Adding "SEC_FLOATING_FEATURE_SETTINGS_ENABLE_EU_BATTERY_REGULATORY" config with "TRUE" in /system/system/etc/floating_feature.xml
+    - Smali directory mismatch: using "smali_classes3/com/samsung/android/settings/deviceinfo/softwareinfo/OneUIVersionPreferenceController.smali" instead of "smali_classes4/com/samsung/android/settings/deviceinfo/softwareinfo/OneUIVersionPreferenceController.smali"
+    - Replacing value "move-result p0" of method "isDeviceWithMicroVersion()Z" in /system/system/priv-app/SecSettings/SecSettings.apk/smali_classes3/com/samsung/android/settings/deviceinfo/softwareinfo/OneUIVersionPreferenceController.smali with "const/4 p0, 0x1"
+    - Smali directory mismatch: using "smali_classes3/com/samsung/android/settings/deviceinfo/aboutphone/ModelNameGetter.smali" instead of "smali_classes4/com/samsung/android/settings/deviceinfo/aboutphone/ModelNameGetter.smali"
+    - Replacing value "ro.product.model" of method "getModelName()Ljava/lang/String;" in /system/system/priv-app/SecSettings/SecSettings.apk/smali_classes3/com/samsung/android/settings/deviceinfo/aboutphone/ModelNameGetter.smali with "ro.boot.em.model"
+    - Adding UN1CA Settings[0m
+      - Patching "res/values-uk/strings.xml" in /system/system/priv-app/SecSettings.apk
+      - Patching "res/values-in/strings.xml" in /system/system/priv-app/SecSettings.apk
+      - Patching "res/values-mk-rMK/strings.xml" in /system/system/priv-app/SecSettings.apk
+      - Adding "res/xml/unica_top_settings.xml" to /system/system/priv-app/SecSettings.apk
+      - Patching "res/xml/sec_top_level_settings.xml" in /system/system/priv-app/SecSettings.apk
+      - Adding "res/xml/unica_extra_settings.xml" to /system/system/priv-app/SecSettings.apk
+      - Adding "res/xml/unica_spoof_settings.xml" to /system/system/priv-app/SecSettings.apk
+      - Adding "res/xml/unica_ui_settings.xml" to /system/system/priv-app/SecSettings.apk
+      - Adding "res/xml/carbon_qwen_settings.xml" to /system/system/priv-app/SecSettings.apk
+      - Adding "res/layout/unica_settings_logo_layout.xml" to /system/system/priv-app/SecSettings.apk
+      - Patching "res/values-uz-rUZ/strings.xml" in /system/system/priv-app/SecSettings.apk
+      - Patching "res/values-pt-rBR/strings.xml" in /system/system/priv-app/SecSettings.apk
+      - Patching "res/values-tr/strings.xml" in /system/system/priv-app/SecSettings.apk
+      - Patching "res/values-mr-rIN/strings.xml" in /system/system/priv-app/SecSettings.apk
+      - Patching "res/values-zh-rCN/strings.xml" in /system/system/priv-app/SecSettings.apk
+      - Patching "res/values-fa/strings.xml" in /system/system/priv-app/SecSettings.apk
+      - Patching "res/values-bg/strings.xml" in /system/system/priv-app/SecSettings.apk
+      - Patching "res/values-sr/strings.xml" in /system/system/priv-app/SecSettings.apk
+      - Patching "res/values-zh-rTW/strings.xml" in /system/system/priv-app/SecSettings.apk
+      - Patching "res/values-pt-rPT/strings.xml" in /system/system/priv-app/SecSettings.apk
+      - Patching "res/values-az-rAZ/strings.xml" in /system/system/priv-app/SecSettings.apk
+      - Patching "res/values-it/strings.xml" in /system/system/priv-app/SecSettings.apk
+      - Patching "res/values-hi/strings.xml" in /system/system/priv-app/SecSettings.apk
+      - Patching "res/values-sq-rAL/strings.xml" in /system/system/priv-app/SecSettings.apk
+      - Patching "res/values-hu/strings.xml" in /system/system/priv-app/SecSettings.apk
+      - Patching "res/values-bs/strings.xml" in /system/system/priv-app/SecSettings.apk
+      - Patching "res/values-ko/strings.xml" in /system/system/priv-app/SecSettings.apk
+      - Patching "res/values-vi/strings.xml" in /system/system/priv-app/SecSettings.apk
+      - Patching "res/values-es-rES/strings.xml" in /system/system/priv-app/SecSettings.apk
+      - Patching "res/values-es-rUS/strings.xml" in /system/system/priv-app/SecSettings.apk
+      - Patching "res/values-be-rBY/strings.xml" in /system/system/priv-app/SecSettings.apk
+      - Patching "res/values-de/strings.xml" in /system/system/priv-app/SecSettings.apk
+      - Patching "res/values-th/strings.xml" in /system/system/priv-app/SecSettings.apk
+      - Patching "res/values-ar/strings.xml" in /system/system/priv-app/SecSettings.apk
+      - Patching "res/values-ro/strings.xml" in /system/system/priv-app/SecSettings.apk
+      - Patching "res/values-ru/strings.xml" in /system/system/priv-app/SecSettings.apk
+      - Patching "res/values-el/strings.xml" in /system/system/priv-app/SecSettings.apk
+      - Adding "res/drawable-nodpi/unica_logo.webp" to /system/system/priv-app/SecSettings.apk
+      - Patching "res/values-fr/strings.xml" in /system/system/priv-app/SecSettings.apk
+      - Patching "res/values/ids.xml" in /system/system/priv-app/SecSettings.apk
+      - Patching "res/values/colors.xml" in /system/system/priv-app/SecSettings.apk
+      - Patching "res/values/strings.xml" in /system/system/priv-app/SecSettings.apk
+      - Adding "res/drawable/ic_settings_performance.xml" to /system/system/priv-app/SecSettings.apk
+      - Adding "res/drawable/ic_unica_settings_spoof.xml" to /system/system/priv-app/SecSettings.apk
+      - Adding "res/drawable/ic_unica_menu_reboot.xml" to /system/system/priv-app/SecSettings.apk
+      - Adding "res/drawable/ic_unica_settings_extra.xml" to /system/system/priv-app/SecSettings.apk
+      - Adding "res/drawable/ic_unica_settings_ui.xml" to /system/system/priv-app/SecSettings.apk
+      - Adding "res/drawable/sec_ic_settings_unica.xml" to /system/system/priv-app/SecSettings.apk
+      - Adding "res/drawable/ic_settings_intelligence.xml" to /system/system/priv-app/SecSettings.apk
+      - Patching "res/values-pl/strings.xml" in /system/system/priv-app/SecSettings.apk
+      - Patching "res/values-b+sr+Latn/strings.xml" in /system/system/priv-app/SecSettings.apk
+      - Patching "AndroidManifest.xml" in /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/gpu/GpuActivity$$ExternalSyntheticLambda39.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/gpu/GpuProfile$Row.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/gpu/GpuActivity$$ExternalSyntheticLambda25.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/gpu/GpuActivity$$ExternalSyntheticLambda41.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/gpu/GpuActivity$$ExternalSyntheticLambda16.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/gpu/GpuActivity$$ExternalSyntheticLambda6.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/gpu/GpuTransport.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/gpu/GpuActivity$$ExternalSyntheticLambda9.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/gpu/GpuActivity.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/gpu/KonaProfileImport$Node.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/gpu/GpuActivity$$ExternalSyntheticLambda4.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/gpu/GpuActivity$$ExternalSyntheticLambda47.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/gpu/GpuActivity$$ExternalSyntheticLambda21.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/gpu/GpuActivity$$ExternalSyntheticLambda20.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/gpu/GpuActivity$$ExternalSyntheticLambda28.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/gpu/GpuActivity$$ExternalSyntheticLambda35.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/gpu/GpuActivity$$ExternalSyntheticLambda34.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/gpu/GpuActivity$$ExternalSyntheticLambda10.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/gpu/GpuActivity$$ExternalSyntheticLambda7.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/gpu/GpuActivity$$ExternalSyntheticLambda24.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/gpu/GpuActivity$$ExternalSyntheticLambda49.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/gpu/GpuActivity$$ExternalSyntheticLambda2.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/gpu/KonaProfileImport$1.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/gpu/GpuActivity$$ExternalSyntheticLambda38.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/gpu/GpuActivity$$ExternalSyntheticLambda11.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/gpu/GpuActivity$$ExternalSyntheticLambda23.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/gpu/GpuActivity$$ExternalSyntheticLambda22.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/gpu/GpuActivity$$ExternalSyntheticLambda46.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/gpu/GpuActivity$$ExternalSyntheticLambda50.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/gpu/GpuActivity$$ExternalSyntheticLambda27.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/gpu/GpuActivity$$ExternalSyntheticLambda26.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/gpu/GpuActivity$$ExternalSyntheticLambda36.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/gpu/GpuActivity$$ExternalSyntheticLambda37.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/gpu/GpuProfile.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/gpu/GpuActivity$$ExternalSyntheticLambda0.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/gpu/GpuActivity$$ExternalSyntheticLambda45.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/gpu/GpuActivity$$ExternalSyntheticLambda43.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/gpu/GpuActivity$1.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/gpu/GpuActivity$$ExternalSyntheticLambda3.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/gpu/GpuActivity$$ExternalSyntheticLambda1.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/gpu/GpuActivity$$ExternalSyntheticLambda18.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/gpu/StockTables.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/gpu/GpuActivity$$ExternalSyntheticLambda44.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/gpu/GpuActivity$$ExternalSyntheticLambda14.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/gpu/GpuActivity$$ExternalSyntheticLambda48.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/gpu/GpuActivity$$ExternalSyntheticLambda13.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/gpu/GpuActivity$$ExternalSyntheticLambda29.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/gpu/GpuActivity$$ExternalSyntheticLambda32.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/gpu/GpuActivity$$ExternalSyntheticLambda30.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/gpu/GpuActivity$$ExternalSyntheticLambda12.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/gpu/GpuActivity$$ExternalSyntheticLambda40.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/gpu/GpuActivity$$ExternalSyntheticLambda42.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/gpu/GpuActivity$$ExternalSyntheticLambda33.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/gpu/GpuProfile$Bin.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/gpu/GpuActivity$$ExternalSyntheticLambda19.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/gpu/GpuActivity$$ExternalSyntheticLambda31.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/gpu/GpuActivity$$ExternalSyntheticLambda8.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/gpu/GpuActivity$$ExternalSyntheticLambda5.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/gpu/GpuActivity$$ExternalSyntheticLambda15.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/gpu/KonaProfileImport.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/gpu/GpuActivity$$ExternalSyntheticLambda17.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/utils/Utils.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/utils/Utils$$ExternalSyntheticLambda0.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/UnicaBaseSettingsActivity.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/search/UnicaSearchIndexableResources.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/qwen/QwenSettingsFragment$$ExternalSyntheticLambda3.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/qwen/QwenSettingsFragment.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/qwen/QwenSettingsFragment$$ExternalSyntheticLambda1.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/qwen/QwenSettingsFragment$$ExternalSyntheticLambda4.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/qwen/QwenSettingsFragment$$ExternalSyntheticLambda0.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/qwen/QwenSettingsFragment$$ExternalSyntheticLambda2.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/pif/PIFUtils$$ExternalSyntheticLambda1.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/pif/PIFUtils$$ExternalSyntheticLambda2.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/pif/PIFUtils.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/pif/PIFPreferenceController.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/pif/PIFUtils$$ExternalSyntheticLambda0.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/pif/PIFUpdatePreferenceController.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/pif/PIFCustomPreferenceController$$ExternalSyntheticLambda0.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/pif/PIFCustomPreferenceController.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/wm/CaptureDetectionPreferenceController.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/wm/SecureScreenshotPreferenceController.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/TopLevelUnicaSettingsPreferenceController.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/ROMVersionPreferenceController.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/UnicaSettingsFragment.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/pm/AppDowngradePreferenceController.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/pm/ASKSPreferenceController.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/pm/AppTargetSDKBypassPreferenceController.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/keybox/KeyboxUtils.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/keybox/KeyboxLoadPreferenceController$$ExternalSyntheticLambda0.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/keybox/KeyboxPreferenceController.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/keybox/KeyboxPreferenceController$1.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/keybox/KeyboxClearPreferenceController.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/keybox/KeyboxLoadPreferenceController.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/keybox/KeyboxUtils$$ExternalSyntheticLambda1.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/keybox/KeyboxUtils$$ExternalSyntheticLambda0.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/hma/HideMyApplistFragment.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/hma/HideMyApplistFragment$$ExternalSyntheticLambda1.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/hma/HideMyApplistFragment$1.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/hma/HideMyApplistFragment$$ExternalSyntheticLambda0.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/hma/HideMyApplistPreferenceController$$ExternalSyntheticLambda0.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/hma/HideMyApplistPreferenceController.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/ui/BootSoundPreferenceController$$ExternalSyntheticLambda0.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/ui/BootSoundPreferenceController.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/ui/UISettingsFragment.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/ui/ForceMaxRefreshRatePreferenceController.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/ui/LauncherAnimationTypePreferenceController.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/ui/LiveBlurPreferenceController.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/ui/ForceMaxRefreshRatePreferenceController$1.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/ui/VulkanPreferenceController.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/ui/UISettingsPreferenceController.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/extra/ExtraSettingsPreferenceController.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/extra/GamesPropsPreferenceController.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/extra/ExtraSettingsFragment.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/extra/GooglePhotosPreferenceController.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/perf/CarbonPerformancePreferenceController.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/spoof/SpoofSettingsFragment.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatusPreferenceController.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatusPreferenceController$$ExternalSyntheticLambda0.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$1.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/spoof/SpoofSettingsPreferenceController.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$$ExternalSyntheticLambda0.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/spoof/SpoofSettingsFragment$1.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$$ExternalSyntheticLambda1.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/DeviceNamePreferenceController.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/preference/IconPreference.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/io/mesalabs/unica/settings/UnicaSettingsFragment$1.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/com/android/settings/Settings$UnicaHideDevSettingsActivity.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/com/android/settings/Settings$UnicaSettingsActivity.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/com/android/settings/Settings$UnicaSpoofSettingsActivity.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/com/android/settings/Settings$UnicaUISettingsActivity.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/com/android/settings/Settings$UnicaQwenSettingsActivity.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/com/android/settings/Settings$UnicaHMASettingsActivity.smali" to /system/system/priv-app/SecSettings.apk
+      - Adding "smali_classes4/com/android/settings/Settings$UnicaExtraSettingsActivity.smali" to /system/system/priv-app/SecSettings.apk
+      - Patching "smali/com/android/settingslib/search/SearchIndexableResourcesMobile.smali" in /system/system/priv-app/SecSettings.apk
+      - Patching "smali/com/android/settings/search/SearchFeatureProviderImpl$$ExternalSyntheticLambda0.smali" in /system/system/priv-app/SecSettings.apk
+      - Decoding /system/system/priv-app/SecSettingsIntelligence/SecSettingsIntelligence.apk
+      - Patching "smali_classes2/com/samsung/android/settings/intelligence/search/categorizing/TopLevelKeysCollector.smali" in /system/system/priv-app/SecSettingsIntelligence/SecSettingsIntelligence.apk
+      - Adding "persist.sys.unica.vulkan" prop with "false" in /system/system/build.prop
+    - Applying "Allow unlimited storage for Google Photos" to /system/system/framework/framework.jar
+    - Applying "Introduce SamsungPropsHooks" to /system/system/framework/framework.jar
+    - Applying "Introduce FloatingFeatureHooks" to /system/system/framework/framework.jar
+    - Applying "Introduce HideDeveloperStatusUtils" to /system/system/framework/framework.jar
+    - Applying "Allow disabling secure windows" to /system/system/framework/services.jar
+    - Applying "Allow app downgrade" to /system/system/framework/services.jar
+    - Applying "Allow app target SDK bypass" to /system/system/framework/services.jar
+    - Applying "Allow disable screen capture detection" to /system/system/framework/services.jar
+    - Applying "Allow disable ASKS" to /system/system/framework/services.jar
+    - Decoding /system/system/priv-app/MultiSoundSetting/MultiSoundSetting.apk
+    - Applying "Allow more than five apps" to /system/system/priv-app/MultiSoundSetting/MultiSoundSetting.apk
+[1;37mBuilding APKs/JARs[0m
+  - Building /system/system/framework/ssrm.jar
+  - Building /system/system/framework/framework.jar
+  - Building /system/system/framework/services.jar
+  - Building /system/system/priv-app/vexfwk_service/vexfwk_service.apk
+  - Building /product/overlay/framework-res__m51nsxx__auto_generated_rro_product.apk
+  - Building /system/system/priv-app/SecSettings/SecSettings.apk
+  - Building /system/system/framework/telephony-common.jar
+  - Building /system/system/priv-app/MultiSoundSetting/MultiSoundSetting.apk
+  - Signing /product/overlay/framework-res__m51nsxx__auto_generated_rro_product.apk
+  - Zipaligning /system/system/framework/ssrm.jar
+  - Building /system/system/priv-app/SamsungDeviceHealthManagerService/SamsungDeviceHealthManagerService.apk
+  - Building /system/system/priv-app/SecureFolder/SecureFolder.apk
+  - Signing /system/system/priv-app/SamsungDeviceHealthManagerService/SamsungDeviceHealthManagerService.apk
+  - Building /system/system/priv-app/SecSettingsIntelligence/SecSettingsIntelligence.apk
+  - Zipaligning /system/system/framework/telephony-common.jar
+  - Building /system/system/priv-app/SamsungCamera/SamsungCamera.apk
+  - Signing /system/system/priv-app/vexfwk_service/vexfwk_service.apk
+  - Building /system/system/priv-app/Telecom/Telecom.apk
+  - Signing /system/system/priv-app/MultiSoundSetting/MultiSoundSetting.apk
+  - Building /system/system/app/MotionPhoto/MotionPhoto.apk
+  - Signing /system/system/app/MotionPhoto/MotionPhoto.apk
+  - Building /system/system/system_ext/priv-app/SystemUI/SystemUI.apk
+  - Zipaligning /system/system/framework/services.jar
+  - Deleting /system/system/framework/services.jar.prof
+  - Signing /system/system/priv-app/Telecom/Telecom.apk
+  - Signing /system/system/priv-app/SecSettingsIntelligence/SecSettingsIntelligence.apk
+  - Signing /system/system/priv-app/SecureFolder/SecureFolder.apk
+  - Zipaligning /system/system/framework/framework.jar
+  - Signing /system/system/priv-app/SamsungCamera/SamsungCamera.apk
+  - Deleting /system/system/priv-app/SamsungCamera/SamsungCamera.apk.prof
+  - Signing /system/system/system_ext/priv-app/SystemUI/SystemUI.apk
+  - Signing /system/system/priv-app/SecSettings/SecSettings.apk
+[1;37mCreating target-files zip[0m
+  - Building OS partitions[0m
+    - Starting build_fs_image for vendor.img (erofs+sparse)...[0m
+      ! Partition size is not set, detecting minimum size[0m
+        - The tree size of vendor.img is 683917312 bytes (652 MB)
+        - Allocating 685969408 bytes (654 MB) for vendor.img
+      - Building image
+    - Starting build_fs_image for product.img (erofs+sparse)...[0m
+      ! Partition size is not set, detecting minimum size[0m
+        - The tree size of product.img is 915423232 bytes (873 MB)
+        - Allocating 918171648 bytes (875 MB) for product.img
+      - Building image
+    - Starting build_fs_image for system.img (erofs+sparse)...[0m
+      ! Partition size is not set, detecting minimum size[0m
+        - The tree size of system.img is 5497413632 bytes (5242 MB)
+        - Allocating 5513908224 bytes (5258 MB) for system.img
+      - Building image
+    - Starting build_fs_image for odm.img (erofs+sparse)...[0m
+      ! Partition size is not set, detecting minimum size[0m
+        - The tree size of odm.img is 606208 bytes (0 MB)
+        - Allocating 610304 bytes (0 MB) for odm.img
+      - Building image
+  - Building unsparse_super_empty.img
+  - Copying boot.img[0m
+  - Copying dtbo.img[0m
+  - Generating build_info.txt
+  - Creating zip
+[1;37mCreating flashable zip[0m
+  - Extracting target files
+  - Generating dynamic_partitions_op_list
+  - Converting system.img to system.new.dat
+  - Compressing system.new.dat
+  - Converting vendor.img to vendor.new.dat
+  - Compressing vendor.new.dat
+  - Converting product.img to product.new.dat
+  - Compressing product.new.dat
+  - Converting odm.img to odm.new.dat
+  - Compressing odm.new.dat
+  - Generating updater-script
+  - Generating build_info.txt
+  - Generating OTA metadata
+  - Running target custom install script[0m
+    - Adding latest modified firmwares for Galaxy M51[0m
+      - Successfully patched vbmeta.img with AVB flag 0x03 (verification disabled)
+  - Creating zip
+  - Signing zip
+
+[1;32mBuild completed in 0hrs 18min 55sec.[0m
+
+=========================================
+ROM Build Complete. Generating Incremental OTAs...
+=========================================
+Building incremental from 5.2.2-b7dc51bd -> 5.3.0-7ecef670...
+- Extracting source files
+- Extracting target files
+- Generating dynamic_partitions_op_list
+- Generating system.img block diff
+- Generating vendor.img block diff
+- Generating product.img block diff
+- Generating odm.img block diff
+- Copying dtbo.img from target files
+- Copying boot.img from target files
+- Copying unsparse_super_empty.img from target files
+- Generating updater-script
+- Generating build_info.txt
+- Generating OTA metadata
+- Running target custom install script[0m
+  - Adding latest modified firmwares for Galaxy M51[0m
+    - Successfully patched vbmeta.img with AVB flag 0x03 (verification disabled)
+- Creating zip
+- Signing zip
+Building incremental from 5.3.0-e49e2684 -> 5.3.0-7ecef670...
+- Extracting source files
+- Extracting target files
+- Generating dynamic_partitions_op_list
+- Generating system.img block diff
+- Generating vendor.img block diff
+- Generating product.img block diff
+- Generating odm.img block diff
+- Copying dtbo.img from target files
+- Copying boot.img from target files
+- Copying unsparse_super_empty.img from target files
+- Generating updater-script
+- Generating build_info.txt
+- Generating OTA metadata
+- Running target custom install script[0m
+  - Adding latest modified firmwares for Galaxy M51[0m
+    - Successfully patched vbmeta.img with AVB flag 0x03 (verification disabled)
+- Creating zip
+- Signing zip
+=========================================
+ALL BUILDS COMPLETED SUCCESSFULLY AT Mon Nov 16 18:08:45 UTC 2026
+=========================================
