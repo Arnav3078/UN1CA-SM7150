@@ -108,19 +108,36 @@ case "$MODE" in
         ;;
 
     boot)
-        # 1. Start UN1CA GPU daemon immediately
-        pkill -f unica-gpu 2>/dev/null || true
-        nohup /system/bin/sh /system/bin/unica-gpu </dev/null >/dev/null 2>&1 &
+        # 1. Ensure GPU IPC directories have full rwx permissions for Settings
+        mkdir -p /data/misc/unica_gpu/requests /data/misc/unica_gpu/responses /data/misc/unica_gpu/archives /cache/unica-gpu 2>/dev/null
+        chmod 0777 /data/misc/unica_gpu /data/misc/unica_gpu/requests /data/misc/unica_gpu/responses /data/misc/unica_gpu/archives /cache/unica-gpu 2>/dev/null
 
-        # 2. Apply kernel VM sysctls
+        # 2. Start UN1CA GPU daemon via setsid daemon detach
+        if ! pgrep -f "/system/bin/unica-gpu" >/dev/null 2>&1; then
+            pkill -f unica-gpu 2>/dev/null || true
+            setsid /system/bin/sh /system/bin/unica-gpu </dev/null >/dev/null 2>&1 &
+        fi
+
+        # 3. Deploy fallback starter to KernelSU/Magisk service.d if present
+        if [ -d /data/adb/service.d ]; then
+            cat << 'SVCEOF' > /data/adb/service.d/unica-gpu.sh
+#!/system/bin/sh
+pkill -f unica-gpu 2>/dev/null || true
+setsid /system/bin/sh /system/bin/unica-gpu </dev/null >/dev/null 2>&1 &
+SVCEOF
+            chmod 755 /data/adb/service.d/unica-gpu.sh
+            chown 0:0 /data/adb/service.d/unica-gpu.sh 2>/dev/null
+        fi
+
+        # 4. Apply kernel VM sysctls
         apply_zram
 
-        # 3. Apply persistent performance mode
+        # 5. Apply persistent performance mode
         CURRENT=$(getprop persist.sys.carbon.power_mode)
         [ -z "$CURRENT" ] && CURRENT="normal"
         /system/bin/carbon_power_engine "$CURRENT"
 
-        # 4. Ensure system AI SmartSuggestions is never overridden by generic store updates
+        # 6. Ensure system AI SmartSuggestions is never overridden by generic store updates
         if [ -d /data/app ]; then
             find /data/app -type d -name "*com.samsung.android.smartsuggestions*" -exec rm -rf {} + 2>/dev/null
         fi
