@@ -9,18 +9,6 @@ MODE="$1"
 [ -z "$MODE" ] && MODE="normal"
 
 apply_zram() {
-    # Initialize ZRAM with ZSTD algorithm at early boot if supported
-    if [ -f /sys/block/zram0/comp_algorithm ]; then
-        if [ $(cat /sys/block/zram0/comp_algorithm | grep -c "\[zstd\]") -eq 0 ]; then
-            swapoff /dev/block/zram0 2>/dev/null
-            echo 1 > /sys/block/zram0/reset 2>/dev/null
-            echo zstd > /sys/block/zram0/comp_algorithm 2>/dev/null
-            # 4 GiB ZRAM
-            echo 4294967296 > /sys/block/zram0/disksize 2>/dev/null
-            mkswap /dev/block/zram0 2>/dev/null
-            swapon /dev/block/zram0 -p 32758 2>/dev/null
-        fi
-    fi
     # Virtual Memory tuning for high responsiveness
     sysctl -w vm.swappiness=100 >/dev/null 2>&1
     sysctl -w vm.vfs_cache_pressure=50 >/dev/null 2>&1
@@ -120,16 +108,19 @@ case "$MODE" in
         ;;
 
     boot)
+        # 1. Start UN1CA GPU daemon immediately
+        pkill -f unica-gpu 2>/dev/null || true
+        nohup /system/bin/sh /system/bin/unica-gpu </dev/null >/dev/null 2>&1 &
+
+        # 2. Apply kernel VM sysctls
         apply_zram
+
+        # 3. Apply persistent performance mode
         CURRENT=$(getprop persist.sys.carbon.power_mode)
         [ -z "$CURRENT" ] && CURRENT="normal"
         /system/bin/carbon_power_engine "$CURRENT"
 
-        # Start UN1CA GPU daemon
-        pkill -f unica-gpu 2>/dev/null
-        /system/bin/sh /system/bin/unica-gpu >/dev/null 2>&1 &
-
-        # Ensure system AI SmartSuggestions is never overridden by generic store updates
+        # 4. Ensure system AI SmartSuggestions is never overridden by generic store updates
         if [ -d /data/app ]; then
             find /data/app -type d -name "*com.samsung.android.smartsuggestions*" -exec rm -rf {} + 2>/dev/null
         fi
