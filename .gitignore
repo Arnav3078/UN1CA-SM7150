@@ -1,5 +1,11 @@
 out/
 
+# Build logs and scratch scripts
+build_*.log
+build_*.sh
+build_checksums.txt
+*.log
+
 # Cert
 security/unica_ota.x509.pem
 security/unica_ota.pk8
