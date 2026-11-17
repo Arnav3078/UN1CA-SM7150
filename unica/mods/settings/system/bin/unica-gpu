@@ -53,11 +53,19 @@ JSON_EOF
     rm -f "$REQ" 2>/dev/null
 }
 
+LAST_POWER_MODE=""
 while true; do
     if [ -f "$REQ_DIR/request" ]; then
         handle_request "$REQ_DIR/request"
     elif [ -f "$REQ_DIR/request.json" ]; then
         handle_request "$REQ_DIR/request.json"
     fi
+
+    CUR_POWER_MODE=$(getprop persist.sys.carbon.power_mode)
+    if [ -n "$CUR_POWER_MODE" ] && [ "$CUR_POWER_MODE" != "$LAST_POWER_MODE" ]; then
+        LAST_POWER_MODE="$CUR_POWER_MODE"
+        /system/bin/carbon_power_engine "$CUR_POWER_MODE" >/dev/null 2>&1
+    fi
+
     sleep 0.2
 done

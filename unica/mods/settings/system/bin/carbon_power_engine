@@ -37,7 +37,8 @@ case "$MODE" in
         for p in /sys/devices/system/cpu/cpufreq/policy*/schedutil /sys/devices/system/cpu/cpufreq/policy*/walt; do
             [ -d "$p" ] && echo 10000 > "$p/up_rate_limit_us" 2>/dev/null
             [ -d "$p" ] && echo 10000 > "$p/down_rate_limit_us" 2>/dev/null
-            [ -d "$p" ] && echo 0 > "$p/boost" 2>/dev/null
+            [ -f "$p/boost" ] && echo 0 > "$p/boost" 2>/dev/null
+            [ -f "$p/iowait_boost_enable" ] && echo 0 > "$p/iowait_boost_enable" 2>/dev/null
         done
 
         # UFS Storage: battery efficient
@@ -63,7 +64,8 @@ case "$MODE" in
         for p in /sys/devices/system/cpu/cpufreq/policy*/schedutil /sys/devices/system/cpu/cpufreq/policy*/walt; do
             [ -d "$p" ] && echo 2000 > "$p/up_rate_limit_us" 2>/dev/null
             [ -d "$p" ] && echo 5000 > "$p/down_rate_limit_us" 2>/dev/null
-            [ -d "$p" ] && echo 0 > "$p/boost" 2>/dev/null
+            [ -f "$p/boost" ] && echo 0 > "$p/boost" 2>/dev/null
+            [ -f "$p/iowait_boost_enable" ] && echo 1 > "$p/iowait_boost_enable" 2>/dev/null
         done
 
         # UFS Storage: standard Samsung SSG or CFQ
@@ -85,7 +87,8 @@ case "$MODE" in
         for p in /sys/devices/system/cpu/cpufreq/policy*/schedutil /sys/devices/system/cpu/cpufreq/policy*/walt; do
             [ -d "$p" ] && echo 0 > "$p/up_rate_limit_us" 2>/dev/null
             [ -d "$p" ] && echo 500 > "$p/down_rate_limit_us" 2>/dev/null
-            [ -d "$p" ] && echo 1 > "$p/boost" 2>/dev/null
+            [ -f "$p/boost" ] && echo 1 > "$p/boost" 2>/dev/null
+            [ -f "$p/iowait_boost_enable" ] && echo 1 > "$p/iowait_boost_enable" 2>/dev/null
         done
 
         # Adreno 618 GPU: full 700 MHz, raised minimum floor (350 MHz) to eliminate stutter
