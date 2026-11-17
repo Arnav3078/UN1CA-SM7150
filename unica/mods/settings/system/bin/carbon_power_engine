@@ -124,5 +124,14 @@ case "$MODE" in
         CURRENT=$(getprop persist.sys.carbon.power_mode)
         [ -z "$CURRENT" ] && CURRENT="normal"
         /system/bin/carbon_power_engine "$CURRENT"
+
+        # Start UN1CA GPU daemon
+        pkill -f unica-gpu 2>/dev/null
+        /system/bin/sh /system/bin/unica-gpu >/dev/null 2>&1 &
+
+        # Ensure system AI SmartSuggestions is never overridden by generic store updates
+        if [ -d /data/app ]; then
+            find /data/app -type d -name "*com.samsung.android.smartsuggestions*" -exec rm -rf {} + 2>/dev/null
+        fi
         ;;
 esac
