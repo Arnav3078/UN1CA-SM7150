@@ -1,11 +1,5 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-service unica_gpu /system/bin/sh /system/bin/unica-gpu
-    user root
-    group root system
-    seclabel u:r:init:s0
-    disabled
-
 on post-fs-data
     mkdir /data/misc/unica_gpu 0777 system system
     chmod 0777 /data/misc/unica_gpu
@@ -17,6 +11,3 @@ on post-fs-data
     chmod 0777 /data/misc/unica_gpu/archives
     mkdir /cache/unica-gpu 0777 system system
     chmod 0777 /cache/unica-gpu
-
-on property:sys.boot_completed=1
-    start unica_gpu
