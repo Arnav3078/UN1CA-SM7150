@@ -11,3 +11,6 @@ on post-fs-data
     chmod 0777 /data/misc/unica_gpu/archives
     mkdir /cache/unica-gpu 0777 system system
     chmod 0777 /cache/unica-gpu
+    mkdir /cache/recovery 0777 system cache
+    chmod 0777 /cache
+    chmod 0777 /cache/recovery
