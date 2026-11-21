@@ -5,6 +5,8 @@ build_*.log
 build_*.sh
 build_checksums.txt
 *.log
+__pycache__/
+*.pyc
 
 # Cert
 security/unica_ota.x509.pem
