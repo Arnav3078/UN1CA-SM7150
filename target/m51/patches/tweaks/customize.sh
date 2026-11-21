@@ -243,10 +243,17 @@ for f in "$WORK_DIR/vendor/etc"/media_codecs*.xml; do
 done
 LOG_STEP_OUT
 
-LOG_STEP_IN "- Fixing NFC auto-enabling on reboot in APEX"
-if [ -f "$WORK_DIR/system/system/apex/com.android.nfcservices.capex" ]; then
-    python3 "$MODPATH/patch_nfc_apex.py" "$WORK_DIR/system/system/apex/com.android.nfcservices.capex" || true
-fi
+LOG_STEP_IN "- Fixing NFC persistence across reboot"
+mkdir -p "$WORK_DIR/system/system/etc/init"
+cat << 'EOF' > "$WORK_DIR/system/system/etc/init/nfc_persist.rc"
+on boot
+    setprop persist.device_config.nfc.nfc_default_on false
+    setprop persist.device_config.nfc.nfc_state_change_during_boot_completed_enabled false
+
+on property:sys.boot_completed=1
+    exec_background - system system -- /system/bin/sh -c "if [ \"\$(settings get global nfc_on 2>/dev/null)\" = \"0\" ]; then svc nfc disable; fi"
+EOF
+SET_METADATA "system" "system/etc/init/nfc_persist.rc" "0" "0" "0644" "u:object_r:system_file:s0"
 LOG_STEP_OUT
 
 LOG_STEP_IN "- Removing Bixby Wakeup to eliminate crashes and battery drain"
