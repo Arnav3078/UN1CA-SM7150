@@ -96,6 +96,21 @@ def patch_nfc_capex(capex_path):
         f.write(code_dcf)
     print("Patched DeviceConfigFacade.smali (NFC default state -> false)")
 
+    # 6b. Patch NfcService$NfcAdapterService.smali for unconditional saveNfcOnSetting(0)
+    nas = f"{work}/smali/com/android/nfc/NfcService$NfcAdapterService.smali"
+    if os.path.exists(nas):
+        with open(nas, "r", encoding="utf-8") as f:
+            code_nas = f.read()
+        import re
+        m = re.search(r'(if-eqz p1, :cond_[a-zA-Z0-9_]+\s+)(?=\.line \d+\s+iget-object p1, p0, Lcom/android/nfc/NfcService\$NfcAdapterService;->this\$0:Lcom/android/nfc/NfcService;\s+invoke-virtual \{p1, v0\}, Lcom/android/nfc/NfcService;->saveNfcOnSetting\(Z\)V)', code_nas)
+        if m:
+            code_nas = code_nas[:m.start()] + "nop\n\n    " + code_nas[m.end():]
+            with open(nas, "w", encoding="utf-8") as f:
+                f.write(code_nas)
+            print("Patched NfcService$NfcAdapterService.smali (saveNfcOnSetting unconditionally on disable)")
+        else:
+            print("Notice: branch in NfcService$NfcAdapterService.smali not found or already patched")
+
     # 7. Patch NfcService.smali for DE storage context
     nfc_svc = f"{work}/smali/com/android/nfc/NfcService.smali"
     with open(nfc_svc, "r", encoding="utf-8") as f:
@@ -135,7 +150,21 @@ def patch_nfc_capex(capex_path):
     update_zip_entry(apk_path, "classes.dex", new_dex, compress_type=zipfile.ZIP_STORED)
     print("Updated NfcNciApex.apk with new classes.dex")
 
-    # 10. Rebuild apex_payload.img with mke2fs -F
+    
+    # Bump version code in apex_manifest.pb from 370399999 to 370400000
+    OLD_VARINT = bytes.fromhex("10ffb5cfb001")
+    NEW_VARINT = bytes.fromhex("1080b6cfb001")
+    payload_pb = f"{work}/payload_files/apex_manifest.pb"
+    if os.path.exists(payload_pb):
+        with open(payload_pb, "rb") as f:
+            pb_data = f.read()
+        if OLD_VARINT in pb_data:
+            pb_data = pb_data.replace(OLD_VARINT, NEW_VARINT, 1)
+            with open(payload_pb, "wb") as f:
+                f.write(pb_data)
+            print("Bumped version in payload_files/apex_manifest.pb to 370400000")
+
+# 10. Rebuild apex_payload.img with mke2fs -F
     os.remove(f"{work}/apex_payload.img")
     subprocess.run(["mke2fs", "-F", "-t", "ext4", "-b", "4096", "-O", "^has_journal", f"{work}/apex_payload.img", "3000"],
                    check=True)
@@ -148,10 +177,26 @@ def patch_nfc_capex(capex_path):
         new_payload = f.read()
     update_zip_entry(f"{work}/original_apex", "apex_payload.img", new_payload, compress_type=zipfile.ZIP_STORED)
 
+    
+    # Bump version in original_apex apex_manifest.pb
+    with zipfile.ZipFile(f"{work}/original_apex", "r") as zin:
+        orig_pb = zin.read("apex_manifest.pb")
+    if OLD_VARINT in orig_pb:
+        orig_pb = orig_pb.replace(OLD_VARINT, NEW_VARINT, 1)
+        update_zip_entry(f"{work}/original_apex", "apex_manifest.pb", orig_pb, compress_type=zipfile.ZIP_STORED)
+        print("Bumped version in original_apex apex_manifest.pb to 370400000")
+
     # 12. Update original_apex inside capex using update_zip_entry
     with open(f"{work}/original_apex", "rb") as f:
         new_orig = f.read()
     update_zip_entry(capex_path, "original_apex", new_orig, compress_type=zipfile.ZIP_STORED)
+    
+    with zipfile.ZipFile(capex_path, "r") as zin:
+        capex_pb = zin.read("apex_manifest.pb")
+    if OLD_VARINT in capex_pb:
+        capex_pb = capex_pb.replace(OLD_VARINT, NEW_VARINT, 1)
+        update_zip_entry(capex_path, "apex_manifest.pb", capex_pb, compress_type=zipfile.ZIP_STORED)
+        print("Bumped version in capex apex_manifest.pb to 370400000")
     print(f"Successfully patched and repacked {capex_path}!")
 
     shutil.rmtree(work, ignore_errors=True)
