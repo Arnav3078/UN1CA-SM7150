@@ -229,6 +229,26 @@ if [ -f "$WORK_DIR/vendor/etc/seccomp_policy/samsung.software.media.c2-base-poli
 fi
 LOG_STEP_OUT
 
+LOG_STEP_IN "- Enabling Codec2 software decoders for media playback"
+for f in "$WORK_DIR/vendor/etc"/media_codecs*.xml; do
+    [ -f "$f" ] || continue
+    if grep -q "</MediaCodecs>" "$f"; then
+        if ! grep -q "media_codecs_google_c2.xml" "$f"; then
+            sed -i '/<\/MediaCodecs>/i \    <Include href="media_codecs_google_c2.xml" />' "$f"
+        fi
+        if ! grep -q "media_codecs_c2_sec.xml" "$f"; then
+            sed -i '/<\/MediaCodecs>/i \    <Include href="media_codecs_c2_sec.xml" />' "$f"
+        fi
+    fi
+done
+LOG_STEP_OUT
+
+LOG_STEP_IN "- Fixing NFC auto-enabling on reboot in APEX"
+if [ -f "$WORK_DIR/system/system/apex/com.android.nfcservices.capex" ]; then
+    python3 "$MODPATH/patch_nfc_apex.py" "$WORK_DIR/system/system/apex/com.android.nfcservices.capex" || true
+fi
+LOG_STEP_OUT
+
 LOG_STEP_IN "- Removing Bixby Wakeup to eliminate crashes and battery drain"
 DELETE_FROM_WORK_DIR "system" "system/app/BixbyWakeup" || true
 DELETE_FROM_WORK_DIR "system" "system/etc/permissions/privapp-permissions-com.samsung.android.bixby.wakeup.xml" || true
