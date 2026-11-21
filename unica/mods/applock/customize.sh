@@ -1,5 +1,8 @@
 LOG_STEP_IN "- Adding Samsung AppLock support"
 
+# Ensure framework.jar is decoded before patching CoreRune
+DECODE_APK "system" "system/framework/framework.jar"
+
 # Enable AppLock in framework CoreRune
 if [ -f "$APKTOOL_DIR/system/framework/framework.jar/smali_classes6/com/samsung/android/rune/CoreRune.smali" ]; then
     sed -i 's/sput-boolean v2, Lcom\/samsung\/android\/rune\/CoreRune;->FW_SUPPORT_APPLOCK:Z/const\/4 v2, 0x1\n\n    sput-boolean v2, Lcom\/samsung\/android\/rune\/CoreRune;->FW_SUPPORT_APPLOCK:Z/' \
