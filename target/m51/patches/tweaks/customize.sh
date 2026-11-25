@@ -229,19 +229,10 @@ if [ -f "$WORK_DIR/vendor/etc/seccomp_policy/samsung.software.media.c2-base-poli
 fi
 LOG_STEP_OUT
 
-LOG_STEP_IN "- Enabling Codec2 software decoders for media playback"
-for f in "$WORK_DIR/vendor/etc"/media_codecs*.xml; do
-    [ -f "$f" ] || continue
-    if grep -q "</MediaCodecs>" "$f"; then
-        if ! grep -q "media_codecs_google_c2.xml" "$f"; then
-            sed -i '/<\/MediaCodecs>/i \    <Include href="media_codecs_google_c2.xml" />' "$f"
-        fi
-        if ! grep -q "media_codecs_c2_sec.xml" "$f"; then
-            sed -i '/<\/MediaCodecs>/i \    <Include href="media_codecs_c2_sec.xml" />' "$f"
-        fi
-    fi
-done
-LOG_STEP_OUT
+# Stock vendor/etc already ships standalone <MediaCodecs> manifests for
+# media_codecs_google_c2.xml and media_codecs_c2_sec.xml; injecting circular
+# <Include> tags across all media_codecs*.xml causes MediaCodecListGenerator to
+# fail (empty 16-byte codec list), breaking playback, thumbnails, and video uploads.
 
 LOG_STEP_IN "- Fixing NFC persistence across reboot"
 mkdir -p "$WORK_DIR/system/system/etc/init"

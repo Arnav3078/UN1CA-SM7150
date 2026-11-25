@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:layout_width="match_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <FrameLayout android:layout_gravity="center_horizontal" android:layout_width="76.0dp" android:layout_height="76.0dp" android:layout_marginTop="32.0dp" android:importantForAccessibility="noHideDescendants" android:layoutDirection="ltr">
+        <ImageView android:layout_gravity="left|top" android:id="@id/sem_app_lock_user_education_app_icon" android:layout_width="68.0dp" android:layout_height="68.0dp" android:scaleType="fitCenter" android:contentDescription="@null" />
+        <FrameLayout android:layout_gravity="left|top" android:background="@drawable/sem_app_lock_badge_background" android:layout_width="36.0dp" android:layout_height="36.0dp" android:layout_marginLeft="40.0dp" android:layout_marginTop="40.0dp">
+            <ImageView android:layout_gravity="center" android:layout_width="24.0dp" android:layout_height="24.0dp" android:src="@drawable/sem_app_lock_badge_lock" android:contentDescription="@null" />
+        </FrameLayout>
+    </FrameLayout>
+    <com.android.internal.widget.DialogTitle android:ellipsize="end" android:id="@id/app_lock_edu_dialog_title" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="24.0dp" android:singleLine="true" android:textAlignment="viewStart" android:paddingStart="@dimen/sem_dialog_padding_horizontal" android:paddingEnd="@dimen/sem_dialog_padding_horizontal" style="?windowTitleStyle" />
+</LinearLayout>

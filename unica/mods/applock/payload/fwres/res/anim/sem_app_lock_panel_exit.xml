@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="utf-8"?>
+<translate android:interpolator="@interpolator/sem_app_lock_panel_exit_interpolator" android:duration="330" android:fromYDelta="0.0" android:toYDelta="100.0%"
+  xmlns:android="http://schemas.android.com/apk/res/android" />

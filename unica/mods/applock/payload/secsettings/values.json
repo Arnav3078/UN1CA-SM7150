@@ -1,0 +1,39 @@
+{
+  "dimen": [
+    "<dimen name=\"sec_applock_description_bullet_margin\">6.0dp</dimen>",
+    "<dimen name=\"sec_applock_description_bullet_padding\">8.0dp</dimen>",
+    "<dimen name=\"sec_applock_description_padding_bottom\">16.0dp</dimen>",
+    "<dimen name=\"sec_applock_gallery_confirm_list_margin_bottom\">16.0dp</dimen>",
+    "<dimen name=\"sec_applock_gallery_confirm_list_margin_horizontal\">6.0dp</dimen>",
+    "<dimen name=\"sec_applock_gallery_confirm_list_margin_top\">12.0dp</dimen>"
+  ],
+  "string": [
+    "<string name=\"sec_applock_cant_lock_home\">\"Can't lock this app because it's not on your Home screen.\"</string>",
+    "<string name=\"sec_applock_gallery_confirm_continue\">Continue</string>",
+    "<string name=\"sec_applock_gallery_confirm_dialog_main_title\">Lock %s</string>",
+    "<string name=\"sec_applock_gallery_confirm_dialog_title\">Apps with the Photos and videos permission can still access your data.</string>",
+    "<string name=\"sec_applock_gallery_confirm_view_all\">View all in settings</string>",
+    "<string name=\"sec_applock_header_apps\">Apps</string>",
+    "<string name=\"sec_applock_header_locked_apps\">Locked apps</string>",
+    "<string name=\"sec_applock_no_apps\">@string/sec_applock_search_no_results</string>",
+    "<string name=\"sec_applock_search_no_results\">No results found</string>",
+    "<string name=\"sec_applock_set_screen_lock_dialog_message\">To lock this app, you first need to set a PIN, password, or pattern for your phone in Settings.</string>",
+    "<string name=\"sec_applock_set_screen_lock_dialog_title\">Set secure screen lock</string>",
+    "<string name=\"sec_applock_settings_description_data_access\">\"However, photos, videos, contacts, and other data will remain accessible to any apps you've granted access to.\"</string>",
+    "<string name=\"sec_applock_settings_description_locked_items_notifications\">Notification content is hidden.</string>",
+    "<string name=\"sec_applock_settings_description_locked_items_widgets\">Widgets are removed from your Home screen.</string>",
+    "<string name=\"sec_applock_settings_description_require_lock\">Apps will require your biometrics or screen lock to open. App content will also be hidden in several places.</string>",
+    "<string name=\"sec_applock_settings_description_while_locked\">While this app is locked:</string>",
+    "<string name=\"sec_applock_title\">App lock</string>"
+  ],
+  "style": [
+    "<style name=\"sec_applock_description_bullet_text\" parent=\"@style/description_text\">\n        <item name=\"android:fontFamily\">sec</item>\n        <item name=\"android:textFontWeight\">600</item>\n    </style>"
+  ],
+  "id": [
+    "<id name=\"description_intro\" />",
+    "<id name=\"description_locked_items\" />",
+    "<id name=\"gallery_confirm_app_list\" />",
+    "<id name=\"gallery_confirm_view_all\" />",
+    "<id name=\"menu_applock_search\" />"
+  ]
+}

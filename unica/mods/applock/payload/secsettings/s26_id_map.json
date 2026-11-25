@@ -1,0 +1,174 @@
+{
+  "0x7f060ab1": [
+    "color",
+    "sec_widget_round_and_bgcolor"
+  ],
+  "0x7f070e30": [
+    "dimen",
+    "sec_search_bar_height"
+  ],
+  "0x7f070fdc": [
+    "dimen",
+    "sec_widget_inset_category_height"
+  ],
+  "0x7f0712a8": [
+    "dimen",
+    "sesl_figma_elevation_md"
+  ],
+  "0x7f0712a9": [
+    "dimen",
+    "sesl_figma_elevation_sm"
+  ],
+  "0x7f0b0142": [
+    "id",
+    "app_bar"
+  ],
+  "0x7f0b0164": [
+    "id",
+    "app_picker_view"
+  ],
+  "0x7f0b0568": [
+    "id",
+    "description_intro"
+  ],
+  "0x7f0b056b": [
+    "id",
+    "description_locked_items"
+  ],
+  "0x7f0b0745": [
+    "id",
+    "floating_bottom_container"
+  ],
+  "0x7f0b07b0": [
+    "id",
+    "gallery_confirm_app_list"
+  ],
+  "0x7f0b0c1a": [
+    "id",
+    "loading_container"
+  ],
+  "0x7f0b0ca0": [
+    "id",
+    "menu_applock_search"
+  ],
+  "0x7f0b105f": [
+    "id",
+    "recycler_view"
+  ],
+  "0x7f0b116b": [
+    "id",
+    "search_close_btn"
+  ],
+  "0x7f0b1172": [
+    "id",
+    "search_plate"
+  ],
+  "0x7f0b1174": [
+    "id",
+    "search_plate_frame"
+  ],
+  "0x7f0b1175": [
+    "id",
+    "search_src_text"
+  ],
+  "0x7f0b125d": [
+    "id",
+    "sesl_floating_toolbar_layout"
+  ],
+  "0x7f0e07f2": [
+    "layout",
+    "sec_app_lock_gallery_confirm_description"
+  ],
+  "0x7f0e07f3": [
+    "layout",
+    "sec_app_lock_gallery_confirm_dialog"
+  ],
+  "0x7f0e07f4": [
+    "layout",
+    "sec_app_lock_gallery_confirm_view_all"
+  ],
+  "0x7f0e07f5": [
+    "layout",
+    "sec_app_lock_settings"
+  ],
+  "0x7f0e07f6": [
+    "layout",
+    "sec_app_lock_settings_description"
+  ],
+  "0x7f0e07fb": [
+    "layout",
+    "sec_app_searchbar"
+  ],
+  "0x7f100019": [
+    "menu",
+    "sec_app_lock_menu"
+  ],
+  "0x7f150bee": [
+    "string",
+    "cancel"
+  ],
+  "0x7f151237": [
+    "string",
+    "dlg_ok"
+  ],
+  "0x7f152be1": [
+    "string",
+    "sec_applock_cant_lock_home"
+  ],
+  "0x7f152be2": [
+    "string",
+    "sec_applock_gallery_confirm_continue"
+  ],
+  "0x7f152be3": [
+    "string",
+    "sec_applock_gallery_confirm_dialog_main_title"
+  ],
+  "0x7f152be6": [
+    "string",
+    "sec_applock_header_apps"
+  ],
+  "0x7f152be7": [
+    "string",
+    "sec_applock_header_locked_apps"
+  ],
+  "0x7f152be8": [
+    "string",
+    "sec_applock_no_apps"
+  ],
+  "0x7f152be9": [
+    "string",
+    "sec_applock_search_no_results"
+  ],
+  "0x7f152bea": [
+    "string",
+    "sec_applock_set_screen_lock_dialog_message"
+  ],
+  "0x7f152beb": [
+    "string",
+    "sec_applock_set_screen_lock_dialog_title"
+  ],
+  "0x7f152bed": [
+    "string",
+    "sec_applock_settings_description_locked_items_notifications"
+  ],
+  "0x7f152bee": [
+    "string",
+    "sec_applock_settings_description_locked_items_widgets"
+  ],
+  "0x7f152bef": [
+    "string",
+    "sec_applock_settings_description_require_lock"
+  ],
+  "0x7f152bf0": [
+    "string",
+    "sec_applock_settings_description_while_locked"
+  ],
+  "0x7f152bf4": [
+    "string",
+    "sec_applock_title"
+  ],
+  "0x7f15387b": [
+    "string",
+    "settings_label"
+  ]
+}

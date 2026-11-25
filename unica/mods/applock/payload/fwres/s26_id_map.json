@@ -1,0 +1,946 @@
+{
+  "0x01020002": [
+    "id",
+    "content"
+  ],
+  "0x01020006": [
+    "id",
+    "icon"
+  ],
+  "0x01020219": [
+    "id",
+    "alertTitle"
+  ],
+  "0x01020234": [
+    "id",
+    "app_lock_activity_layout"
+  ],
+  "0x01020235": [
+    "id",
+    "app_lock_add_screen_lock_bottom_sheet_divider"
+  ],
+  "0x01020236": [
+    "id",
+    "app_lock_add_screen_lock_button_layout"
+  ],
+  "0x01020237": [
+    "id",
+    "app_lock_add_screen_lock_scroll_view"
+  ],
+  "0x01020238": [
+    "id",
+    "app_lock_dialog_add_screen_lock_button"
+  ],
+  "0x01020239": [
+    "id",
+    "app_lock_dialog_cancel_button"
+  ],
+  "0x0102023a": [
+    "id",
+    "app_lock_dialog_lock_icon"
+  ],
+  "0x0102023b": [
+    "id",
+    "app_lock_dialog_message"
+  ],
+  "0x0102023c": [
+    "id",
+    "app_lock_dialog_title"
+  ],
+  "0x0102023d": [
+    "id",
+    "app_lock_edu_bottom_sheet_divider"
+  ],
+  "0x0102023e": [
+    "id",
+    "app_lock_edu_dialog"
+  ],
+  "0x0102023f": [
+    "id",
+    "app_lock_edu_dialog_btn_cancel"
+  ],
+  "0x01020240": [
+    "id",
+    "app_lock_edu_dialog_btn_lock_app"
+  ],
+  "0x01020241": [
+    "id",
+    "app_lock_edu_dialog_desc"
+  ],
+  "0x01020242": [
+    "id",
+    "app_lock_edu_dialog_info_ai_text"
+  ],
+  "0x01020243": [
+    "id",
+    "app_lock_edu_dialog_title"
+  ],
+  "0x01020244": [
+    "id",
+    "app_lock_edu_layout"
+  ],
+  "0x01020245": [
+    "id",
+    "app_lock_edu_scroll_view"
+  ],
+  "0x01020246": [
+    "id",
+    "app_lock_permission_review_app_list_recycler_view"
+  ],
+  "0x01020247": [
+    "id",
+    "app_lock_permission_review_bottom_sheet_divider"
+  ],
+  "0x01020248": [
+    "id",
+    "app_lock_permission_review_btn_cancel"
+  ],
+  "0x01020249": [
+    "id",
+    "app_lock_permission_review_btn_continue"
+  ],
+  "0x0102024a": [
+    "id",
+    "app_lock_permission_review_btn_view_all"
+  ],
+  "0x0102024b": [
+    "id",
+    "app_lock_permission_review_dialog_subtitle"
+  ],
+  "0x0102024c": [
+    "id",
+    "app_lock_permission_review_dialog_title"
+  ],
+  "0x0102024d": [
+    "id",
+    "app_lock_permission_review_list_app_icon"
+  ],
+  "0x0102024e": [
+    "id",
+    "app_lock_permission_review_list_app_name"
+  ],
+  "0x0102024f": [
+    "id",
+    "app_lock_permission_review_scroll_view"
+  ],
+  "0x01020250": [
+    "id",
+    "app_lock_promo_activity_layout"
+  ],
+  "0x01020251": [
+    "id",
+    "app_lock_promo_description"
+  ],
+  "0x01020252": [
+    "id",
+    "app_lock_promo_dialog_bottom_sheet_divider"
+  ],
+  "0x01020253": [
+    "id",
+    "app_lock_promo_dialog_scroll_view"
+  ],
+  "0x01020254": [
+    "id",
+    "app_lock_promo_title"
+  ],
+  "0x01020255": [
+    "id",
+    "app_lock_settings_promo_dialog_negative_button"
+  ],
+  "0x01020256": [
+    "id",
+    "app_lock_settings_promo_dialog_positive_button"
+  ],
+  "0x01020446": [
+    "id",
+    "locked_app_activity_external_display_message_id"
+  ],
+  "0x01020447": [
+    "id",
+    "locked_app_activity_root_id"
+  ],
+  "0x01020448": [
+    "id",
+    "locked_app_activity_sec_background"
+  ],
+  "0x010205d8": [
+    "id",
+    "sem_app_lock_permission_review_app_list"
+  ],
+  "0x010205d9": [
+    "id",
+    "sem_app_lock_permission_review_message"
+  ],
+  "0x010205da": [
+    "id",
+    "sem_app_lock_permission_review_scroll_divider_bottom"
+  ],
+  "0x010205db": [
+    "id",
+    "sem_app_lock_permission_review_scroll_divider_top"
+  ],
+  "0x010205dc": [
+    "id",
+    "sem_app_lock_permission_review_scroll_view"
+  ],
+  "0x010205dd": [
+    "id",
+    "sem_app_lock_permission_review_view_all"
+  ],
+  "0x010205de": [
+    "id",
+    "sem_app_lock_settings_promotion_button"
+  ],
+  "0x010205df": [
+    "id",
+    "sem_app_lock_settings_promotion_message"
+  ],
+  "0x010205e0": [
+    "id",
+    "sem_app_lock_user_education_app_icon"
+  ],
+  "0x010205e1": [
+    "id",
+    "sem_app_lock_user_education_cn_legal"
+  ],
+  "0x010205e2": [
+    "id",
+    "sem_app_lock_user_education_message"
+  ],
+  "0x010205e3": [
+    "id",
+    "sem_app_lock_user_education_notification_bullet"
+  ],
+  "0x010205e4": [
+    "id",
+    "sem_app_lock_user_education_scroll_divider_bottom"
+  ],
+  "0x010205e5": [
+    "id",
+    "sem_app_lock_user_education_scroll_divider_top"
+  ],
+  "0x010205e6": [
+    "id",
+    "sem_app_lock_user_education_scroll_view"
+  ],
+  "0x010205e7": [
+    "id",
+    "sem_app_lock_user_education_when_locked"
+  ],
+  "0x010205e8": [
+    "id",
+    "sem_app_lock_user_education_widget_bullet"
+  ],
+  "0x01030129": [
+    "style",
+    "Theme.DeviceDefault.NoActionBar"
+  ],
+  "0x0103013a": [
+    "style",
+    "Theme.DeviceDefault.Panel"
+  ],
+  "0x0103032e": [
+    "style",
+    "AppLockInfoItemStyle"
+  ],
+  "0x010303ba": [
+    "style",
+    "TextAppearance.DeviceDefault.AppLock.AppItemText"
+  ],
+  "0x010303bb": [
+    "style",
+    "TextAppearance.DeviceDefault.AppLock.Body"
+  ],
+  "0x010303bc": [
+    "style",
+    "TextAppearance.DeviceDefault.AppLock.InfoHeader"
+  ],
+  "0x010303bd": [
+    "style",
+    "TextAppearance.DeviceDefault.AppLock.ItemText"
+  ],
+  "0x010303be": [
+    "style",
+    "TextAppearance.DeviceDefault.AppLock.Subtitle"
+  ],
+  "0x010303bf": [
+    "style",
+    "TextAppearance.DeviceDefault.AppLock.Title"
+  ],
+  "0x01030443": [
+    "style",
+    "Theme.DeviceDefault.AppLockActivity"
+  ],
+  "0x01030444": [
+    "style",
+    "Theme.DeviceDefault.AppLockSettingsPromotion"
+  ],
+  "0x01040000": [
+    "string",
+    "cancel"
+  ],
+  "0x0104000a": [
+    "string",
+    "ok"
+  ],
+  "0x01040023": [
+    "string",
+    "config_defaultDialer"
+  ],
+  "0x0104020d": [
+    "string",
+    "app_blocked_message"
+  ],
+  "0x0104020e": [
+    "string",
+    "app_blocked_title"
+  ],
+  "0x01040221": [
+    "string",
+    "app_lock_add_screen_lock_button_text"
+  ],
+  "0x01040222": [
+    "string",
+    "app_lock_add_screen_lock_message"
+  ],
+  "0x01040223": [
+    "string",
+    "app_lock_add_screen_lock_title"
+  ],
+  "0x01040224": [
+    "string",
+    "app_lock_edu_dialog_button_lock"
+  ],
+  "0x01040225": [
+    "string",
+    "app_lock_edu_dialog_description_face_password"
+  ],
+  "0x01040226": [
+    "string",
+    "app_lock_edu_dialog_description_face_pattern"
+  ],
+  "0x01040227": [
+    "string",
+    "app_lock_edu_dialog_description_face_pin"
+  ],
+  "0x01040228": [
+    "string",
+    "app_lock_edu_dialog_description_fp_face_password"
+  ],
+  "0x01040229": [
+    "string",
+    "app_lock_edu_dialog_description_fp_face_pattern"
+  ],
+  "0x0104022a": [
+    "string",
+    "app_lock_edu_dialog_description_fp_face_pin"
+  ],
+  "0x0104022b": [
+    "string",
+    "app_lock_edu_dialog_description_fp_password"
+  ],
+  "0x0104022c": [
+    "string",
+    "app_lock_edu_dialog_description_fp_pattern"
+  ],
+  "0x0104022d": [
+    "string",
+    "app_lock_edu_dialog_description_fp_pin"
+  ],
+  "0x0104022e": [
+    "string",
+    "app_lock_edu_dialog_description_password"
+  ],
+  "0x0104022f": [
+    "string",
+    "app_lock_edu_dialog_description_pattern"
+  ],
+  "0x01040230": [
+    "string",
+    "app_lock_edu_dialog_description_pin"
+  ],
+  "0x01040231": [
+    "string",
+    "app_lock_edu_dialog_enable_app_lock_title"
+  ],
+  "0x01040232": [
+    "string",
+    "app_lock_edu_dialog_info_ai_disclaimer"
+  ],
+  "0x01040233": [
+    "string",
+    "app_lock_edu_dialog_info_header"
+  ],
+  "0x01040234": [
+    "string",
+    "app_lock_edu_dialog_info_notifications"
+  ],
+  "0x01040235": [
+    "string",
+    "app_lock_edu_dialog_info_widgets"
+  ],
+  "0x01040236": [
+    "string",
+    "app_lock_feature_label"
+  ],
+  "0x01040237": [
+    "string",
+    "app_lock_permission_review_continue_button"
+  ],
+  "0x01040238": [
+    "string",
+    "app_lock_permission_review_dialog_subtitle_files"
+  ],
+  "0x01040239": [
+    "string",
+    "app_lock_permission_review_dialog_subtitle_messages"
+  ],
+  "0x0104023a": [
+    "string",
+    "app_lock_permission_review_dialog_subtitle_photos"
+  ],
+  "0x0104023b": [
+    "string",
+    "app_lock_permission_review_dialog_title_files"
+  ],
+  "0x0104023c": [
+    "string",
+    "app_lock_permission_review_dialog_title_messages"
+  ],
+  "0x0104023d": [
+    "string",
+    "app_lock_permission_review_dialog_title_photos"
+  ],
+  "0x0104023e": [
+    "string",
+    "app_lock_permission_review_expand_app_list_button"
+  ],
+  "0x0104023f": [
+    "string",
+    "app_lock_settings_promo_dialog_description"
+  ],
+  "0x01040240": [
+    "string",
+    "app_lock_settings_promo_dialog_title"
+  ],
+  "0x01040241": [
+    "string",
+    "app_locked_new_notification"
+  ],
+  "0x01040242": [
+    "string",
+    "app_locked_notification_message"
+  ],
+  "0x0104024a": [
+    "string",
+    "app_streaming_blocked_message"
+  ],
+  "0x0104024c": [
+    "string",
+    "app_streaming_blocked_message_for_permission_request"
+  ],
+  "0x0104024d": [
+    "string",
+    "app_streaming_blocked_message_for_settings_dialog"
+  ],
+  "0x01040252": [
+    "string",
+    "app_streaming_blocked_title_for_permission_dialog"
+  ],
+  "0x01040253": [
+    "string",
+    "app_streaming_blocked_title_for_playstore_dialog"
+  ],
+  "0x01040254": [
+    "string",
+    "app_streaming_blocked_title_for_settings_dialog"
+  ],
+  "0x010402af": [
+    "string",
+    "biometric_dialog_default_title"
+  ],
+  "0x01040392": [
+    "string",
+    "config_appLockHelpLink"
+  ],
+  "0x0104057e": [
+    "string",
+    "disable_app_lock_biometric_prompt_subtitle"
+  ],
+  "0x0104057f": [
+    "string",
+    "disable_app_lock_success_toast_message"
+  ],
+  "0x010405eb": [
+    "string",
+    "enable_app_lock_biometric_prompt_subtitle"
+  ],
+  "0x010405ec": [
+    "string",
+    "enable_app_lock_failure_toast_message"
+  ],
+  "0x010405ed": [
+    "string",
+    "enable_app_lock_success_toast_message"
+  ],
+  "0x01040890": [
+    "string",
+    "locked_app_biometric_prompt_desc_four_or_more_apps"
+  ],
+  "0x01040891": [
+    "string",
+    "locked_app_biometric_prompt_desc_one_app"
+  ],
+  "0x01040892": [
+    "string",
+    "locked_app_biometric_prompt_desc_three_apps"
+  ],
+  "0x01040893": [
+    "string",
+    "locked_app_biometric_prompt_desc_two_apps"
+  ],
+  "0x01040894": [
+    "string",
+    "locked_app_external_display_message"
+  ],
+  "0x010409bd": [
+    "string",
+    "mime_type_folder"
+  ],
+  "0x01040f77": [
+    "string",
+    "sem_app_lock_dialog_button_add"
+  ],
+  "0x01040f78": [
+    "string",
+    "sem_app_lock_dialog_button_lock"
+  ],
+  "0x01040f79": [
+    "string",
+    "sem_app_lock_dialog_cn_legal"
+  ],
+  "0x01040f7a": [
+    "string",
+    "sem_app_lock_dialog_locked_notification_bullet"
+  ],
+  "0x01040f7b": [
+    "string",
+    "sem_app_lock_dialog_locked_widget_bullet"
+  ],
+  "0x01040f7c": [
+    "string",
+    "sem_app_lock_dialog_message_folder"
+  ],
+  "0x01040f7d": [
+    "string",
+    "sem_app_lock_dialog_message_folder_item"
+  ],
+  "0x01040f7e": [
+    "string",
+    "sem_app_lock_dialog_message_folder_items"
+  ],
+  "0x01040f7f": [
+    "string",
+    "sem_app_lock_dialog_message_single"
+  ],
+  "0x01040f80": [
+    "string",
+    "sem_app_lock_dialog_title_add_app"
+  ],
+  "0x01040f81": [
+    "string",
+    "sem_app_lock_dialog_title_lock"
+  ],
+  "0x01040f82": [
+    "string",
+    "sem_app_lock_dialog_when_locked"
+  ],
+  "0x01040f83": [
+    "string",
+    "sem_app_lock_disable_success_toast_message"
+  ],
+  "0x01040f84": [
+    "string",
+    "sem_app_lock_folder_lock_removed"
+  ],
+  "0x01040f85": [
+    "string",
+    "sem_app_lock_folder_locked"
+  ],
+  "0x01040f86": [
+    "string",
+    "sem_app_lock_permission_review_message_photos"
+  ],
+  "0x01040f87": [
+    "string",
+    "sem_app_lock_permission_review_title_photos"
+  ],
+  "0x01040f88": [
+    "string",
+    "sem_app_lock_permission_review_view_all_in_settings"
+  ],
+  "0x01040f89": [
+    "string",
+    "sem_app_lock_pin_item_blocked_toast_message"
+  ],
+  "0x01040f8a": [
+    "string",
+    "sem_app_lock_settings_promotion_message"
+  ],
+  "0x01040f8b": [
+    "string",
+    "sem_app_lock_setup_screen_lock_button_settings"
+  ],
+  "0x01040f8c": [
+    "string",
+    "sem_app_lock_setup_screen_lock_message"
+  ],
+  "0x01040f8d": [
+    "string",
+    "sem_app_lock_setup_screen_lock_message_folder"
+  ],
+  "0x01040f8e": [
+    "string",
+    "sem_app_lock_setup_screen_lock_title"
+  ],
+  "0x01040f8f": [
+    "string",
+    "sem_applock_default_home_app_exempt_toast_message"
+  ],
+  "0x01040f90": [
+    "string",
+    "sem_applock_default_phone_app_exempt_toast_message"
+  ],
+  "0x01040f91": [
+    "string",
+    "sem_applock_default_search_engine_app_exempt_toast_message"
+  ],
+  "0x01040f95": [
+    "string",
+    "sem_biometric_prompt_default_title"
+  ],
+  "0x01041128": [
+    "string",
+    "supervision_blocked_app_content"
+  ],
+  "0x0104112d": [
+    "string",
+    "supervision_unblocked_app_content"
+  ],
+  "0x0105006b": [
+    "dimen",
+    "app_lock_button_padding"
+  ],
+  "0x0105006c": [
+    "dimen",
+    "app_lock_dialog_max_width"
+  ],
+  "0x0105006d": [
+    "dimen",
+    "app_lock_edu_button_min_height"
+  ],
+  "0x0105006e": [
+    "dimen",
+    "app_lock_edu_dialog_max_collapsed_height"
+  ],
+  "0x0105006f": [
+    "dimen",
+    "app_lock_font_size_large"
+  ],
+  "0x01050070": [
+    "dimen",
+    "app_lock_font_size_medium"
+  ],
+  "0x01050071": [
+    "dimen",
+    "app_lock_font_size_small"
+  ],
+  "0x01050072": [
+    "dimen",
+    "app_lock_icon_size_small"
+  ],
+  "0x01050073": [
+    "dimen",
+    "app_lock_item_icon_size"
+  ],
+  "0x01050074": [
+    "dimen",
+    "app_lock_margin_bottom"
+  ],
+  "0x01050075": [
+    "dimen",
+    "app_lock_min_top_padding"
+  ],
+  "0x01050076": [
+    "dimen",
+    "app_lock_permission_app_item_min_height"
+  ],
+  "0x01050077": [
+    "dimen",
+    "app_lock_permission_review_app_list_expanded_height"
+  ],
+  "0x01050078": [
+    "dimen",
+    "app_lock_pill_radius"
+  ],
+  "0x01050079": [
+    "dimen",
+    "app_lock_spacing_l"
+  ],
+  "0x0105007a": [
+    "dimen",
+    "app_lock_spacing_m"
+  ],
+  "0x0105007b": [
+    "dimen",
+    "app_lock_spacing_s"
+  ],
+  "0x0105007c": [
+    "dimen",
+    "app_lock_spacing_xl"
+  ],
+  "0x0105007d": [
+    "dimen",
+    "app_lock_spacing_xs"
+  ],
+  "0x010502d5": [
+    "dimen",
+    "locked_app_activity_sec_background_image_icon_height"
+  ],
+  "0x010502d6": [
+    "dimen",
+    "locked_app_activity_sec_background_image_icon_width"
+  ],
+  "0x0105044a": [
+    "dimen",
+    "sem_app_lock_settings_promotion_action_area_height"
+  ],
+  "0x0105044b": [
+    "dimen",
+    "sem_app_lock_settings_promotion_action_corner_radius"
+  ],
+  "0x0105044c": [
+    "dimen",
+    "sem_app_lock_settings_promotion_action_height"
+  ],
+  "0x0105044d": [
+    "dimen",
+    "sem_app_lock_settings_promotion_action_horizontal_padding"
+  ],
+  "0x0105044e": [
+    "dimen",
+    "sem_app_lock_settings_promotion_action_margin_end"
+  ],
+  "0x0105044f": [
+    "dimen",
+    "sem_app_lock_settings_promotion_action_min_width"
+  ],
+  "0x01050450": [
+    "dimen",
+    "sem_app_lock_settings_promotion_action_text_size"
+  ],
+  "0x01050451": [
+    "dimen",
+    "sem_app_lock_settings_promotion_corner_radius"
+  ],
+  "0x01050452": [
+    "dimen",
+    "sem_app_lock_settings_promotion_horizontal_padding"
+  ],
+  "0x01050453": [
+    "dimen",
+    "sem_app_lock_settings_promotion_message_padding_top"
+  ],
+  "0x01050454": [
+    "dimen",
+    "sem_app_lock_settings_promotion_min_height"
+  ],
+  "0x01050455": [
+    "dimen",
+    "sem_app_lock_settings_promotion_text_size"
+  ],
+  "0x010504c0": [
+    "dimen",
+    "sem_dialog_predictive_back_translation_y"
+  ],
+  "0x010504c4": [
+    "dimen",
+    "sem_dialog_title_text_size"
+  ],
+  "0x01060311": [
+    "color",
+    "locked_app_activity_background"
+  ],
+  "0x0106032f": [
+    "color",
+    "materialColorOnSurface"
+  ],
+  "0x0106033d": [
+    "color",
+    "materialColorPrimary"
+  ],
+  "0x010603ed": [
+    "color",
+    "sem_app_lock_permission_review_link_text_color"
+  ],
+  "0x010603ee": [
+    "color",
+    "sem_app_lock_settings_promotion_action_background_color"
+  ],
+  "0x010603ef": [
+    "color",
+    "sem_app_lock_settings_promotion_action_ripple_color"
+  ],
+  "0x010603f0": [
+    "color",
+    "sem_app_lock_settings_promotion_action_text_color"
+  ],
+  "0x010603f1": [
+    "color",
+    "sem_app_lock_settings_promotion_background_color"
+  ],
+  "0x010603f2": [
+    "color",
+    "sem_app_lock_settings_promotion_text_color"
+  ],
+  "0x0107000a": [
+    "array",
+    "app_lock_calling_bypass"
+  ],
+  "0x0107000b": [
+    "array",
+    "app_lock_exception_activity_list"
+  ],
+  "0x01080113": [
+    "drawable",
+    "$sem_app_lock_badge_background__0"
+  ],
+  "0x01080160": [
+    "drawable",
+    "app_lock_btn_pill_background"
+  ],
+  "0x01080161": [
+    "drawable",
+    "app_lock_btn_pill_outline"
+  ],
+  "0x01080162": [
+    "drawable",
+    "app_lock_scrollbar_handle"
+  ],
+  "0x0108068d": [
+    "drawable",
+    "ic_suggestion_lightbulb_sparkle"
+  ],
+  "0x010807be": [
+    "drawable",
+    "locked_app_activity_sec_background_image_icon"
+  ],
+  "0x01080a7a": [
+    "drawable",
+    "sem_app_lock_badge_background"
+  ],
+  "0x01080a7b": [
+    "drawable",
+    "sem_app_lock_badge_lock"
+  ],
+  "0x01080a7c": [
+    "drawable",
+    "sem_app_lock_permission_review_link_arrow"
+  ],
+  "0x01080a7d": [
+    "drawable",
+    "sem_app_lock_settings_promotion_action_background"
+  ],
+  "0x01080a7e": [
+    "drawable",
+    "sem_app_lock_settings_promotion_background"
+  ],
+  "0x0109004a": [
+    "layout",
+    "app_lock_add_screen_lock_dialog"
+  ],
+  "0x0109004b": [
+    "layout",
+    "app_lock_edu_activity"
+  ],
+  "0x0109004c": [
+    "layout",
+    "app_lock_edu_dialog"
+  ],
+  "0x0109004d": [
+    "layout",
+    "app_lock_permission_app_item"
+  ],
+  "0x0109004e": [
+    "layout",
+    "app_lock_permission_review_sheet"
+  ],
+  "0x0109004f": [
+    "layout",
+    "app_lock_settings_promo_dialog"
+  ],
+  "0x010900d3": [
+    "layout",
+    "locked_app_activity_layout"
+  ],
+  "0x010900d4": [
+    "layout",
+    "locked_app_activity_sec_layout"
+  ],
+  "0x01090174": [
+    "layout",
+    "sem_app_lock_permission_review_dialog"
+  ],
+  "0x01090175": [
+    "layout",
+    "sem_app_lock_settings_promotion"
+  ],
+  "0x01090176": [
+    "layout",
+    "sem_app_lock_user_education_dialog"
+  ],
+  "0x01090177": [
+    "layout",
+    "sem_app_lock_user_education_icon_title"
+  ],
+  "0x010a00e8": [
+    "anim",
+    "sem_app_lock_panel_exit"
+  ],
+  "0x010a0145": [
+    "anim",
+    "sem_resolver_panel_enter"
+  ],
+  "0x010c003d": [
+    "interpolator",
+    "sem_app_lock_panel_exit_interpolator"
+  ],
+  "0x010e0010": [
+    "integer",
+    "app_lock_font_weight_medium"
+  ],
+  "0x010e0049": [
+    "integer",
+    "config_appLockGracePeriodMs"
+  ],
+  "0x01110199": [
+    "bool",
+    "config_enableAppLock"
+  ],
+  "0x01150010": [
+    "plurals",
+    "sem_app_lock_apps_summary"
+  ],
+  "0x01150011": [
+    "plurals",
+    "sem_app_lock_dialog_title_add_more_apps"
+  ],
+  "0x01150012": [
+    "plurals",
+    "sem_app_lock_folder_items_added"
+  ],
+  "0x01150013": [
+    "plurals",
+    "sem_applock_prompt_title"
+  ]
+}

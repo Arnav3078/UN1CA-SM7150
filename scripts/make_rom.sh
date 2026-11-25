@@ -160,6 +160,10 @@ if $BUILD_ROM; then
         LOG_STEP_OUT
     fi
 
+    if [ -f "$SRC_DIR/unica/mods/applock/finalize_secsettings.sh" ]; then
+        . "$SRC_DIR/unica/mods/applock/finalize_secsettings.sh" || exit 1
+    fi
+
     BUILD_APKS
 
     echo -n "$(GET_WORK_DIR_HASH)" > "$WORK_DIR/.completed"

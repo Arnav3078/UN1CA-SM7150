@@ -1,0 +1,4 @@
+system 0 0 755 capabilities=0x0
+system/etc 0 0 755 capabilities=0x0
+system/etc/sysconfig 0 0 755 capabilities=0x0
+system/etc/sysconfig/app-lock-exempt.xml 0 0 644 capabilities=0x0

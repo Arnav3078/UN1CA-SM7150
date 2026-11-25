@@ -5,76 +5,70 @@ import zipfile
 import subprocess
 import tempfile
 
-def patch_launcher(apk_path, launcher_smali_dir, sec_dir):
+
+def patch_launcher(apk_path, sec_dir):
     if not os.path.isfile(apk_path):
-        print('Error: ' + apk_path + ' not found')
+        print(f"Error: {apk_path} not found")
         sys.exit(1)
 
-    print('- Patching One UI Home Launcher for AppLock: ' + apk_path)
-    temp_dir = tempfile.mkdtemp(prefix='launcher_patch_')
+    print("- Enabling native One UI 9.5 AppLock in TouchWizHome_2017: " + apk_path)
+    temp_dir = tempfile.mkdtemp(prefix="launcher_applock_")
     try:
-        classes1_dex = os.path.join(temp_dir, 'classes.dex')
-        classes4_dex = os.path.join(temp_dir, 'classes4.dex')
+        classes1_dex = os.path.join(temp_dir, "classes.dex")
+        with zipfile.ZipFile(apk_path, "r") as z:
+            z.extract("classes.dex", temp_dir)
 
-        with zipfile.ZipFile(apk_path, 'r') as z:
-            z.extract('classes.dex', temp_dir)
-            z.extract('classes4.dex', temp_dir)
+        smali1_dir = os.path.join(temp_dir, "smali1")
+        subprocess.check_call(["baksmali", "d", classes1_dex, "-o", smali1_dir])
 
-        # 1. Patch classes.dex (Rune.smali)
-        smali1_dir = os.path.join(temp_dir, 'smali1')
-        subprocess.check_call(['baksmali', 'd', classes1_dex, '-o', smali1_dir])
-        rune_target = os.path.join(smali1_dir, 'com', 'honeyspace', 'common', 'Rune.smali')
-        shutil.copy2(os.path.join(launcher_smali_dir, 'smali1', 'Rune.smali'), rune_target)
-        subprocess.check_call(['smali', 'a', smali1_dir, '-o', classes1_dex])
+        rune_path = os.path.join(smali1_dir, "com", "honeyspace", "common", "Rune.smali")
+        with open(rune_path, "r", encoding="utf-8") as f:
+            rune = f.read()
 
-        # 2. Patch classes4.dex (AppLock quickoption smali files)
-        smali4_dir = os.path.join(temp_dir, 'smali4')
-        subprocess.check_call(['baksmali', 'd', classes4_dex, '-o', smali4_dir])
-        quickoption_dir = os.path.join(smali4_dir, 'com', 'honeyspace', 'ui', 'common', 'quickoption')
-        os.makedirs(quickoption_dir, exist_ok=True)
-        smali4_src = os.path.join(launcher_smali_dir, 'smali4')
-        for f in os.listdir(smali4_src):
-            shutil.copy2(os.path.join(smali4_src, f), os.path.join(quickoption_dir, f))
-        subprocess.check_call(['smali', 'a', smali4_dir, '-o', classes4_dex])
+        old_field = ".field private static final SUPPORT_APP_LOCK:Z = false"
+        new_field = ".field private static final SUPPORT_APP_LOCK:Z = true"
+        if old_field not in rune:
+            raise RuntimeError("SUPPORT_APP_LOCK field not found in Rune.smali")
+        rune = rune.replace(old_field, new_field, 1)
 
-        # 3. Update APK
-        subprocess.check_call(['zip', '-j', '-u', apk_path, classes1_dex, classes4_dex])
-        subprocess.call(['zip', '-d', apk_path, 'META-INF/*.SF', 'META-INF/*.RSA', 'META-INF/*.MF'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        with open(rune_path, "w", encoding="utf-8") as f:
+            f.write(rune)
 
-        # 4. Zipalign
-        aligned_apk = os.path.join(temp_dir, 'aligned.apk')
-        subprocess.check_call(['zipalign', '-f', '-p', '4', apk_path, aligned_apk])
+        subprocess.check_call(["smali", "a", smali1_dir, "-o", classes1_dex])
+        subprocess.check_call(["zip", "-j", "-u", apk_path, classes1_dex])
+        subprocess.call(
+            ["zip", "-d", apk_path, "META-INF/*.SF", "META-INF/*.RSA", "META-INF/*.MF"],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
 
-        # 5. Sign with platform key
-        key_path = os.path.join(sec_dir, 'aosp_platform.pk8')
-        cert_path = os.path.join(sec_dir, 'aosp_platform.x509.pem')
+        aligned_apk = os.path.join(temp_dir, "aligned.apk")
+        subprocess.check_call(["zipalign", "-f", "-p", "4", apk_path, aligned_apk])
         subprocess.check_call([
-            'apksigner', 'sign',
-            '--key', key_path,
-            '--cert', cert_path,
-            aligned_apk
+            "apksigner", "sign",
+            "--key", os.path.join(sec_dir, "aosp_platform.pk8"),
+            "--cert", os.path.join(sec_dir, "aosp_platform.x509.pem"),
+            aligned_apk,
         ])
-
-        # Move aligned & signed apk over original
         shutil.copy2(aligned_apk, apk_path)
 
-        # Clean up idsig and any oat cache
-        idsig = apk_path + '.idsig'
+        idsig = apk_path + ".idsig"
         if os.path.isfile(idsig):
             os.remove(idsig)
-        oat_dir = os.path.join(os.path.dirname(apk_path), 'oat')
+        oat_dir = os.path.join(os.path.dirname(apk_path), "oat")
         if os.path.isdir(oat_dir):
             shutil.rmtree(oat_dir, ignore_errors=True)
-        for prof in [apk_path.replace('.apk', '.prof'), apk_path.replace('.apk', '.bprof')]:
+        for prof in (apk_path.replace(".apk", ".prof"), apk_path.replace(".apk", ".bprof")):
             if os.path.isfile(prof):
                 os.remove(prof)
 
-        print('- TouchWizHome_2017 patched and signed successfully')
+        print("- TouchWizHome_2017 patched and signed cleanly")
     finally:
         shutil.rmtree(temp_dir, ignore_errors=True)
 
-if __name__ == '__main__':
-    if len(sys.argv) < 4:
-        print('Usage: patch_launcher.py <apk_path> <launcher_smali_dir> <sec_dir>')
+
+if __name__ == "__main__":
+    if len(sys.argv) < 3:
+        print("Usage: patch_launcher.py <apk_path> <sec_dir>")
         sys.exit(1)
-    patch_launcher(sys.argv[1], sys.argv[2], sys.argv[3])
+    patch_launcher(sys.argv[1], sys.argv[2])
