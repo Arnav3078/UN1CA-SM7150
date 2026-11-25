@@ -538,9 +538,13 @@
     move-result-object v4
 
     :goto_store
-    const-string/jumbo v5, "applock_enabled"
+    const-string/jumbo v5, "app_lock_enabled"
 
     const/4 v6, 0x1
+
+    invoke-static {v2, v5, v6}, Landroid/provider/Settings$Secure;->putInt(Landroid/content/ContentResolver;Ljava/lang/String;I)Z
+
+    const-string/jumbo v5, "applock_enabled"
 
     invoke-static {v2, v5, v6}, Landroid/provider/Settings$Secure;->putInt(Landroid/content/ContentResolver;Ljava/lang/String;I)Z
 
@@ -549,6 +553,8 @@
     const-string/jumbo v3, "applock_locked_apps_packages"
 
     invoke-static {v2, v3, v4}, Landroid/provider/Settings$Secure;->putString(Landroid/content/ContentResolver;Ljava/lang/String;Ljava/lang/String;)Z
+
+    const/4 v5, 0x0
 
     :try_start_1
     invoke-static {}, Landroid/app/ActivityTaskManager;->getService()Landroid/app/IActivityTaskManager;
@@ -562,6 +568,14 @@
     invoke-interface {v2, v3}, Landroid/app/IActivityTaskManager;->setApplockEnabled(Z)V
 
     invoke-interface {v2, v4}, Landroid/app/IActivityTaskManager;->setApplockLockedAppsPackage(Ljava/lang/String;)V
+
+    invoke-interface {v2}, Landroid/app/IActivityTaskManager;->getApplockType()I
+
+    move-result v3
+
+    if-nez v3, :cond_9
+
+    const/4 v5, 0x1
     :try_end_1
     .catch Ljava/lang/Exception; {:try_start_1 .. :try_end_1} :catch_1
 
@@ -609,6 +623,31 @@
 
     invoke-virtual {v0}, Landroid/widget/Toast;->show()V
 
+    if-eqz v5, :cond_next_done
+
+    :try_start_setup
+    new-instance v0, Landroid/content/Intent;
+
+    const-string v2, "android.intent.action.MAIN"
+
+    invoke-direct {v0, v2}, Landroid/content/Intent;-><init>(Ljava/lang/String;)V
+
+    const-string v2, "com.samsung.android.applock"
+
+    const-string v3, "com.samsung.android.applock.settings.AppLockSettingsActivity"
+
+    invoke-virtual {v0, v2, v3}, Landroid/content/Intent;->setClassName(Ljava/lang/String;Ljava/lang/String;)Landroid/content/Intent;
+
+    const/high16 v2, 0x10000000
+
+    invoke-virtual {v0, v2}, Landroid/content/Intent;->addFlags(I)Landroid/content/Intent;
+
+    invoke-virtual {v1, v0}, Landroid/content/Context;->startActivity(Landroid/content/Intent;)V
+    :try_end_setup
+    .catch Ljava/lang/Exception; {:try_start_setup .. :try_end_setup} :catch_setup
+
+    :catch_setup
+    :cond_next_done
     :goto_0
     return-void
 .end method
