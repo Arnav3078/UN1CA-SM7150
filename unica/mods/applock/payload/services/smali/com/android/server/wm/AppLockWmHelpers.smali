@@ -1544,7 +1544,7 @@
 
     if-eqz v11, :cond_25_b
 
-    invoke-virtual {v4, v5}, Landroid/app/ActivityOptions;->setStartedFromWindowTypeLauncher(Z)Landroid/app/ActivityOptions;
+    invoke-virtual {v4, v5}, Landroid/app/ActivityOptions;->setStartedFromWindowTypeLauncher(Z)V
 
     :cond_25_b
     new-array v14, v5, [Landroid/content/Intent;
@@ -1641,6 +1641,8 @@
     move-object v6, v10
 
     move-object v10, v3
+
+    move v13, v5
 
     invoke-static/range {v10 .. v21}, Lcom/android/server/wm/AppLockWmHelpers;->createInterceptorPendingIntent(Lcom/android/server/wm/ActivityTaskManagerService;IIIILandroid/os/Bundle;Landroid/os/IBinder;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;[Landroid/content/Intent;[Ljava/lang/String;)Lcom/android/server/am/PendingIntentRecord;
 
@@ -1941,13 +1943,39 @@
 .end method
 
 .method private static createInterceptorPendingIntent(Lcom/android/server/wm/ActivityTaskManagerService;IIIILandroid/os/Bundle;Landroid/os/IBinder;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;[Landroid/content/Intent;[Ljava/lang/String;)Lcom/android/server/am/PendingIntentRecord;
-    .locals 0
+    .locals 13
 
-    invoke-virtual/range {p0 .. p11}, Lcom/android/server/wm/ActivityTaskManagerService;->getIntentSenderLocked(IIIIILandroid/os/Bundle;Landroid/os/IBinder;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;[Landroid/content/Intent;[Ljava/lang/String;)Lcom/android/server/am/PendingIntentRecord;
+    move-object/from16 v0, p0
 
-    move-result-object p0
+    move/from16 v1, p1
 
-    return-object p0
+    move/from16 v2, p2
+
+    move/from16 v3, p3
+
+    const/4 v4, 0x0
+
+    move/from16 v5, p4
+
+    move-object/from16 v6, p5
+
+    move-object/from16 v7, p6
+
+    move-object/from16 v8, p7
+
+    move-object/from16 v9, p8
+
+    move-object/from16 v10, p9
+
+    move-object/from16 v11, p10
+
+    move-object/from16 v12, p11
+
+    invoke-virtual/range {v0 .. v12}, Lcom/android/server/wm/ActivityTaskManagerService;->getIntentSenderLocked(IIIIILandroid/os/Bundle;Landroid/os/IBinder;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;[Landroid/content/Intent;[Ljava/lang/String;)Lcom/android/server/am/PendingIntentRecord;
+
+    move-result-object v0
+
+    return-object v0
 .end method
 
 .method public static isActivityAppLockOverlay(Lcom/android/server/wm/WindowManagerService;Lcom/android/server/wm/ActivityRecord;)Z

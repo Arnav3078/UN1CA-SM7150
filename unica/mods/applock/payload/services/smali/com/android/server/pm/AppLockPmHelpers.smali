@@ -181,7 +181,7 @@
 
     if-eqz p0, :cond_0
 
-    invoke-virtual {p0}, Lcom/android/server/pm/AppLockPackageHelper;->onSystemReady()V
+    invoke-virtual {p0}, Lcom/android/server/pm/AppLockPackageHelper;->systemReady()V
 
     :cond_0
     return-void

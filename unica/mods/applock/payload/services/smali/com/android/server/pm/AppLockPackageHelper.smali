@@ -16,6 +16,8 @@
 
 .field public static volatile sAppLockInternal:Landroid/app/AppLockInternal;
 
+.field public static volatile sIsSupportedDeviceForAppLock:Ljava/lang/Boolean;
+
 .field public static volatile sResourcesForTesting:Landroid/content/res/Resources;
 
 .field public static volatile sSystemDialerPackage:Ljava/lang/String;
@@ -3719,4 +3721,31 @@
 
     :cond_1
     return-void
+.end method
+
+.method public static hasSystemFeature(Ljava/lang/String;)Z
+    .locals 1
+
+    invoke-static {}, Lcom/android/server/SystemConfig;->getInstance()Lcom/android/server/SystemConfig;
+
+    move-result-object v0
+
+    if-eqz v0, :cond_0
+
+    invoke-virtual {v0}, Lcom/android/server/SystemConfig;->getAvailableFeatures()Landroid/util/ArrayMap;
+
+    move-result-object v0
+
+    if-eqz v0, :cond_0
+
+    invoke-virtual {v0, p0}, Landroid/util/ArrayMap;->containsKey(Ljava/lang/Object;)Z
+
+    move-result p0
+
+    return p0
+
+    :cond_0
+    const/4 p0, 0x0
+
+    return p0
 .end method
