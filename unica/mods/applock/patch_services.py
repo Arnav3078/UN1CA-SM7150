@@ -808,28 +808,16 @@ def patch_am(srv_dir):
             "AMS.<init>(Injector,...) initAppLockLocalService",
             guard="invoke-static {p0}, Lcom/android/server/am/AppLockAmHelpers;->initAppLockLocalService",
         )
-    # Preserve p0/p1 across :cond_14 inside enqueueUidChangeLocked before invoking onAmsUidChangeLocked
+    # Call onAmsUidChangeLocked before mPowerManagerBatch clobbers p1/p0
     txt = replace_once(
         txt,
-        "    :cond_14\n"
-        "    const/high16 p1, -0x80000000\n\n"
-        "    and-int/2addr p1, p3\n\n"
-        "    if-eqz p1, :cond_15\n\n"
-        "    iget-object p0, p0, Lcom/android/server/am/ActivityManagerService;->mPowerManagerBatch:Landroid/os/PowerManagerInternal$UidChangesBatch;\n\n"
-        "    invoke-interface {p0, p2, v0}, Landroid/os/PowerManagerInternal$UidChangesBatch;->updateUidProcState(II)V\n\n"
-        "    :cond_15\n"
-        "    :goto_9\n"
-        "    return-void",
-        "    :cond_14\n"
-        "    const/high16 v1, -0x80000000\n\n"
-        "    and-int/2addr v1, p3\n\n"
-        "    if-eqz v1, :cond_15\n\n"
-        "    iget-object v1, p0, Lcom/android/server/am/ActivityManagerService;->mPowerManagerBatch:Landroid/os/PowerManagerInternal$UidChangesBatch;\n\n"
-        "    invoke-interface {v1, p2, v0}, Landroid/os/PowerManagerInternal$UidChangesBatch;->updateUidProcState(II)V\n\n"
-        "    :cond_15\n"
-        "    :goto_9\n"
+        "    iput p3, p1, Lcom/android/server/am/UidRecord;->mLastReportedChange:I\n\n"
+        "    :cond_11\n"
+        "    iget-object p1, p0, Lcom/android/server/am/ActivityManagerService;->mPowerManagerBatch:Landroid/os/PowerManagerInternal$UidChangesBatch;",
+        "    iput p3, p1, Lcom/android/server/am/UidRecord;->mLastReportedChange:I\n\n"
+        "    :cond_11\n"
         "    invoke-static {p0, p1, p2, p3}, Lcom/android/server/am/AppLockAmHelpers;->onAmsUidChangeLocked(Lcom/android/server/am/ActivityManagerService;Lcom/android/server/am/UidRecord;II)V\n\n"
-        "    return-void",
+        "    iget-object p1, p0, Lcom/android/server/am/ActivityManagerService;->mPowerManagerBatch:Landroid/os/PowerManagerInternal$UidChangesBatch;",
         "AMS.enqueueUidChangeLocked",
         guard="AppLockAmHelpers;->onAmsUidChangeLocked",
     )
@@ -958,6 +946,7 @@ def patch_notif(srv_dir):
         "    move-result-object v0\n\n"
         "    iget-boolean v1, p1, Lcom/android/server/notification/NotificationRecord;->mAppLockRedacted:Z\n\n"
         "    if-eqz v1, :cond_app_lock_a11y\n\n"
+        "    const/4 v3, 0x1\n\n"
         "    invoke-virtual {v2, v0}, Landroid/view/accessibility/AccessibilityEvent;->setParcelableData(Landroid/os/Parcelable;)V\n\n"
         "    goto :goto_0\n\n"
         "    :cond_app_lock_a11y\n"
@@ -1766,13 +1755,17 @@ def patch_wm(srv_dir):
     p, txt = read_smali(srv_dir, "com/android/server/wm/ChangeTransitionController.smali")
     txt = replace_once(
         txt,
-        "    const-string/jumbo v7, \"restoreLastParentBeforePip\"\n\n"
-        "    if-eq v1, v10, :cond_8",
-        "    invoke-static {p0, v0, v6, v5}, Lcom/android/server/wm/AppLockWmHelpers;->handlePipTransitionTask(Lcom/android/server/wm/ChangeTransitionController;Lcom/android/server/wm/ActivityTaskManagerService;Lcom/android/server/wm/Task;Lcom/android/server/wm/TaskDisplayArea;)Z\n\n"
-        "    move-result v7\n\n"
-        "    if-nez v7, :cond_8\n\n"
-        "    const-string/jumbo v7, \"restoreLastParentBeforePip\"\n\n"
-        "    if-eq v1, v10, :cond_8",
+        "    invoke-virtual {v6}, Lcom/android/server/wm/WindowContainer;->getTaskDisplayArea()Lcom/android/server/wm/TaskDisplayArea;\n\n"
+        "    move-result-object v7\n\n"
+        "    invoke-virtual {v6, v5, v4}, Lcom/android/server/wm/Task;->getTopVisibleActivity(ZZ)Lcom/android/server/wm/ActivityRecord;",
+        "    invoke-virtual {v6}, Lcom/android/server/wm/WindowContainer;->getTaskDisplayArea()Lcom/android/server/wm/TaskDisplayArea;\n\n"
+        "    move-result-object v7\n\n"
+        "    invoke-static {p0, v0, v6, v7}, Lcom/android/server/wm/AppLockWmHelpers;->handlePipTransitionTask(Lcom/android/server/wm/ChangeTransitionController;Lcom/android/server/wm/ActivityTaskManagerService;Lcom/android/server/wm/Task;Lcom/android/server/wm/TaskDisplayArea;)Z\n\n"
+        "    move-result v8\n\n"
+        "    if-eqz v8, :cond_app_lock_pip\n\n"
+        "    goto/16 :goto_4\n\n"
+        "    :cond_app_lock_pip\n"
+        "    invoke-virtual {v6, v5, v4}, Lcom/android/server/wm/Task;->getTopVisibleActivity(ZZ)Lcom/android/server/wm/ActivityRecord;",
         "CTC.onTransitionFinished handlePipTransitionTask",
         guard="AppLockWmHelpers;->handlePipTransitionTask",
     )
