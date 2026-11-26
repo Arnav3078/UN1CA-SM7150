@@ -232,6 +232,10 @@ def apply_snippets_and_interfaces(srv_dir, fw_remap):
     write_smali(p, txt)
 
     p, txt = read_smali(srv_dir, "com/android/server/am/ActivityManagerService.smali")
+    txt = txt.replace(
+        ".field public final mCurResumedAppLock:Ljava/lang/Object;",
+        ".field public mCurResumedAppLock:Ljava/lang/Object;",
+    )
     txt = add_fields(
         txt,
         [
