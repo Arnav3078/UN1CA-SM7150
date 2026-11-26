@@ -62,4 +62,19 @@ python3 "$MODPATH/patch_launcher.py" \
     "$WORK_DIR/system/system/priv-app/TouchWizHome_2017/TouchWizHome_2017.apk" \
     "$SRC_DIR/security"
 
+# 6. Register app_lock binder service in platform SELinux policy (S26 parity)
+if ! grep -q "^app_lock[[:space:]]" "$WORK_DIR/system/system/etc/selinux/plat_service_contexts"; then
+    echo "app_lock                                  u:object_r:app_lock_service:s0" \
+        >> "$WORK_DIR/system/system/etc/selinux/plat_service_contexts"
+fi
+if ! grep -q "(type app_lock_service)" "$WORK_DIR/system/system/etc/selinux/plat_sepolicy.cil"; then
+    cat << 'EOF' >> "$WORK_DIR/system/system/etc/selinux/plat_sepolicy.cil"
+(type app_lock_service)
+(roletype object_r app_lock_service)
+(typeattributeset system_server_service (app_lock_service))
+(typeattributeset system_api_service (app_lock_service))
+(typeattributeset service_manager_type (app_lock_service))
+EOF
+fi
+
 unset _APPLOCK_JOBS _APPLOCK_FW_TAG _APPLOCK_FWRES_DIR _APPLOCK_FW_PUB
