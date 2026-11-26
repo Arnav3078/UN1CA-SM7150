@@ -112,7 +112,13 @@
     if-eqz v9, :cond_3
 
     :cond_2
-    invoke-virtual {v5, v8}, Landroidx/recyclerview/widget/RecyclerView;->removeItemDecorationAt(I)V
+    invoke-virtual {v5, v8}, Landroidx/recyclerview/widget/RecyclerView;->getItemDecorationAt(I)Landroidx/recyclerview/widget/RecyclerView$ItemDecoration;
+
+    move-result-object v9
+
+    if-eqz v9, :cond_3
+
+    invoke-virtual {v5, v9}, Landroidx/recyclerview/widget/RecyclerView;->removeItemDecoration(Landroidx/recyclerview/widget/RecyclerView$ItemDecoration;)V
 
     :cond_3
     add-int/lit8 v8, v8, -0x1
@@ -121,22 +127,6 @@
 
     :cond_4
     iput-boolean v7, v5, Landroidx/recyclerview/widget/RecyclerView;->mDrawLastRoundedCorner:Z
-
-    iget-object v8, v5, Landroidx/picker/widget/SeslAppPickerView;->mAdapter:Landroidx/picker/adapter/HeaderFooterAdapter;
-
-    new-instance v9, Lcom/samsung/android/settings/privacy/applock/GalleryLockConfirmDialogHelper$$ExternalSyntheticLambda2;
-
-    invoke-direct {v9}, Ljava/lang/Object;-><init>()V
-
-    iput-object v5, v9, Lcom/samsung/android/settings/privacy/applock/GalleryLockConfirmDialogHelper$$ExternalSyntheticLambda2;->f$0:Landroidx/picker/widget/SeslAppPickerListView;
-
-    invoke-static {}, Ljava/lang/invoke/VarHandle;->storeStoreFence()V
-
-    invoke-virtual {v8}, Ljava/lang/Object;->getClass()Ljava/lang/Class;
-
-    iget-object v8, v8, Landroidx/picker/adapter/HeaderFooterAdapter;->wrappedAdapter:Landroidx/picker/adapter/AbsAdapter;
-
-    iput-object v9, v8, Landroidx/picker/adapter/AbsAdapter;->mOnBindListener:Landroidx/picker/adapter/AppPickerAdapter$OnBindListener;
 
     invoke-static {v0}, Landroid/view/LayoutInflater;->from(Landroid/content/Context;)Landroid/view/LayoutInflater;
 
@@ -170,7 +160,7 @@
 
     invoke-virtual {v8, v9}, Landroid/view/View;->setOnClickListener(Landroid/view/View$OnClickListener;)V
 
-    invoke-virtual {v5, v7, v8}, Landroidx/picker/widget/SeslAppPickerView;->addFooter(ILandroid/view/View;)V
+    invoke-virtual {v5, v8}, Landroidx/picker/widget/SeslAppPickerView;->addFooter(Landroid/view/View;)V
 
     invoke-virtual {v5, v1}, Landroidx/picker/widget/SeslAppPickerView;->submitList(Ljava/util/List;)V
 

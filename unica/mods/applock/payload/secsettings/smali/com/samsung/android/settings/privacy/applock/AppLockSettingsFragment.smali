@@ -1305,11 +1305,15 @@
 
     const-class v2, Lcom/samsung/android/settings/privacy/applock/AppLockViewModel;
 
-    invoke-static {v2}, Lkotlin/jvm/internal/Reflection;->getOrCreateKotlinClass(Ljava/lang/Class;)Lkotlin/jvm/internal/ClassReference;
+    sget-object v0, Lkotlin/jvm/internal/Reflection;->factory:Lkotlin/jvm/internal/ReflectionFactory;
+
+    invoke-virtual {v0, v2}, Lkotlin/jvm/internal/ReflectionFactory;->getOrCreateKotlinClass(Ljava/lang/Class;)Lkotlin/reflect/KClass;
 
     move-result-object v2
 
-    invoke-virtual {v1, v2}, Landroidx/lifecycle/ViewModelProvider;->get(Lkotlin/jvm/internal/ClassReference;)Landroidx/lifecycle/ViewModel;
+    invoke-virtual {v1, v2}, Landroidx/lifecycle/ViewModelProvider;->get(Lkotlin/reflect/KClass;)Landroidx/lifecycle/ViewModel;
+
+    const/4 v0, 0x0
 
     move-result-object v1
 
@@ -1754,122 +1758,6 @@
 
     iget-object p1, p0, Lcom/samsung/android/settings/privacy/applock/AppLockSettingsFragment;->mSearchView:Landroidx/appcompat/widget/SearchView;
 
-    invoke-virtual {p1}, Ljava/lang/Object;->getClass()Ljava/lang/Class;
-
-    invoke-static {}, Landroidx/reflect/os/SeslBuildReflector$SeslVersionReflector;->getField_SEM_PLATFORM_INT()I
-
-    move-result p3
-
-    const v0, 0x1ae14
-
-    const-string/jumbo v2, "SearchView"
-
-    goto :goto_3
-
-    if-ge p3, v0, :cond_0
-
-    const-string/jumbo p1, "seslSetSviEnabled: SEP Version is not supported"
-
-    invoke-static {v2, p1}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;)I
-
-    goto :goto_3
-
-    :cond_0
-    iput-boolean v6, p1, Landroidx/appcompat/widget/SearchView;->mUseSVI:Z
-
-    :try_start_0
-    invoke-virtual {p1}, Landroid/view/ViewGroup;->getContext()Landroid/content/Context;
-
-    move-result-object p3
-
-    invoke-virtual {p3}, Landroid/content/Context;->getPackageManager()Landroid/content/pm/PackageManager;
-
-    move-result-object p3
-
-    sget-object v0, Landroidx/appcompat/widget/SearchView;->SVI_PACKAGE:Ljava/lang/String;
-
-    invoke-virtual {p3, v0, v1}, Landroid/content/pm/PackageManager;->getPackageInfo(Ljava/lang/String;I)Landroid/content/pm/PackageInfo;
-
-    move-result-object p3
-
-    if-eqz p3, :cond_1
-
-    invoke-virtual {p3}, Landroid/content/pm/PackageInfo;->getLongVersionCode()J
-
-    move-result-wide v3
-
-    goto :goto_0
-
-    :catch_0
-    move-exception p3
-
-    goto :goto_1
-
-    :cond_1
-    const-wide/16 v3, -0x1
-
-    :goto_0
-    const-wide/32 v7, 0xd1cf6d1
-
-    cmp-long p3, v3, v7
-
-    if-gez p3, :cond_2
-
-    const-string/jumbo p3, "seslSetSviEnabled: not supported SVI version"
-
-    invoke-static {v2, p3}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;)I
-
-    iput-boolean v1, p1, Landroidx/appcompat/widget/SearchView;->mUseSVI:Z
-
-    :cond_2
-    invoke-virtual {p1}, Landroidx/appcompat/widget/SearchView;->isSystemLocaleSupported()Z
-
-    move-result p3
-
-    if-nez p3, :cond_3
-
-    const-string/jumbo p3, "seslSetSviEnabled: not supported system locale"
-
-    invoke-static {v2, p3}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;)I
-
-    iput-boolean v1, p1, Landroidx/appcompat/widget/SearchView;->mUseSVI:Z
-    :try_end_0
-    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
-
-    goto :goto_2
-
-    :goto_1
-    new-instance v0, Ljava/lang/StringBuilder;
-
-    const-string v3, "Exception "
-
-    invoke-direct {v0, v3}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
-
-    invoke-virtual {v0, p3}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
-
-    invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
-
-    move-result-object p3
-
-    invoke-static {v2, p3}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;)I
-
-    iput-boolean v1, p1, Landroidx/appcompat/widget/SearchView;->mUseSVI:Z
-
-    :cond_3
-    :goto_2
-    new-instance p3, Landroidx/appcompat/widget/SearchView$$ExternalSyntheticLambda0;
-
-    invoke-direct {p3, v6}, Landroidx/appcompat/widget/SearchView$$ExternalSyntheticLambda0;-><init>(B)V
-
-    iput-object p1, p3, Landroidx/appcompat/widget/SearchView$$ExternalSyntheticLambda0;->f$0:Landroidx/appcompat/widget/SearchView;
-
-    invoke-static {}, Ljava/lang/invoke/VarHandle;->storeStoreFence()V
-
-    invoke-virtual {p1, p3}, Landroid/view/ViewGroup;->post(Ljava/lang/Runnable;)Z
-
-    :goto_3
-    iget-object p1, p0, Lcom/samsung/android/settings/privacy/applock/AppLockSettingsFragment;->mSearchView:Landroidx/appcompat/widget/SearchView;
-
     new-instance p3, Lcom/samsung/android/settings/privacy/applock/AppLockSettingsFragment$3;
 
     invoke-direct {p3}, Ljava/lang/Object;-><init>()V
@@ -1878,7 +1766,7 @@
 
     invoke-static {}, Ljava/lang/invoke/VarHandle;->storeStoreFence()V
 
-    invoke-virtual {p1, p3}, Landroidx/appcompat/widget/SearchView;->setOnQueryTextListener(Landroidx/appcompat/widget/SearchView$OnQueryTextListener;)V
+    iput-object p3, p1, Landroidx/appcompat/widget/SearchView;->mOnQueryChangeListener:Landroidx/appcompat/widget/SearchView$OnQueryTextListener;
 
     iget-object p1, p0, Lcom/samsung/android/settings/privacy/applock/AppLockSettingsFragment;->mSearchView:Landroidx/appcompat/widget/SearchView;
 

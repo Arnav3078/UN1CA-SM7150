@@ -16,8 +16,6 @@
 
     iget-object p0, p0, Lcom/samsung/android/settings/privacy/applock/GalleryLockConfirmDialogHelper$$ExternalSyntheticLambda2;->f$0:Landroidx/picker/widget/SeslAppPickerListView;
 
-    invoke-virtual {p0, p1, p2}, Landroidx/picker/widget/SeslAppPickerView;->onBindViewHolder(Landroidx/picker/adapter/viewholder/PickerViewHolder;Landroidx/picker/model/viewdata/ViewData;)V
-
     iget-object p0, p1, Landroidx/picker/adapter/viewholder/PickerViewHolder;->item:Landroid/view/View;
 
     const/4 p1, 0x0

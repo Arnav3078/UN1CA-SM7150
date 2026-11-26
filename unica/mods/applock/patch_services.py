@@ -212,38 +212,20 @@ def apply_snippets_and_interfaces(srv_dir, fw_remap):
         txt,
         [
             ".field public mAppLockInternal:Landroid/app/AppLockInternal;",
-            ".field public final mAppLockLockedPackages:Landroid/util/SparseArray;",
-            ".field public final mPackageLockedStateListener:Lcom/android/server/notification/NotificationManagerService$26;",
+            ".field public mAppLockLockedPackages:Landroid/util/SparseArray;",
+            ".field public mPackageLockedStateListener:Lcom/android/server/notification/NotificationManagerService$26;",
         ],
     )
     txt = append_methods(
         txt,
         [(
             "findAppNotificationByListLocked(ILjava/lang/String;Ljava/util/ArrayList;)Ljava/util/List;",
-            ".method public final findAppNotificationByListLocked(ILjava/lang/String;Ljava/util/ArrayList;)Ljava/util/List;\n"
-            "    .locals 6\n\n"
-            "    new-instance v0, Ljava/util/ArrayList;\n\n"
-            "    invoke-direct {v0}, Ljava/util/ArrayList;-><init>()V\n\n"
-            "    invoke-virtual {p3}, Ljava/util/ArrayList;->size()I\n\n"
-            "    move-result v1\n\n"
-            "    const/4 v2, 0x0\n\n"
-            "    :goto_0\n"
-            "    if-ge v2, v1, :cond_1\n\n"
-            "    invoke-virtual {p3, v2}, Ljava/util/ArrayList;->get(I)Ljava/lang/Object;\n\n"
-            "    move-result-object v3\n\n"
-            "    add-int/lit8 v2, v2, 0x1\n\n"
-            "    check-cast v3, Lcom/android/server/notification/NotificationRecord;\n\n"
-            "    iget-object v4, v3, Lcom/android/server/notification/NotificationRecord;->sbn:Landroid/service/notification/StatusBarNotification;\n\n"
-            "    invoke-virtual {p0}, Lcom/android/server/SystemService;->getContext()Landroid/content/Context;\n\n"
-            "    move-result-object v5\n\n"
-            "    invoke-static {v5, p1, p2, v4}, Lcom/android/server/notification/NotificationManagerService;->doesNotificationMatchPackage(Landroid/content/Context;ILjava/lang/String;Landroid/service/notification/StatusBarNotification;)Z\n\n"
-            "    move-result v4\n\n"
-            "    if-eqz v4, :cond_0\n\n"
-            "    invoke-virtual {v0, v3}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z\n\n"
-            "    :cond_0\n"
-            "    goto :goto_0\n\n"
-            "    :cond_1\n"
-            "    return-object v0\n"
+            ".method public static findAppNotificationByListLocked(ILjava/lang/String;Ljava/util/ArrayList;)Ljava/util/List;\n"
+            "    .locals 1\n\n"
+            "    const/4 v0, 0x0\n\n"
+            "    invoke-static {v0, p2, p1, p0}, Lcom/android/server/notification/NotificationManagerService;->-$$Nest$mfindAppNotificationByListLocked(Lcom/android/server/notification/NotificationManagerService;Ljava/util/ArrayList;Ljava/lang/String;I)Ljava/util/List;\n\n"
+            "    move-result-object p0\n\n"
+            "    return-object p0\n"
             ".end method",
         )],
     )
@@ -253,22 +235,22 @@ def apply_snippets_and_interfaces(srv_dir, fw_remap):
     txt = add_fields(
         txt,
         [
-            ".field public final mAppLockLocalService:Lcom/android/server/am/AppLockLocalService;",
-            ".field public final mCurResumedAppLock:Ljava/lang/Object;",
+            ".field public mAppLockLocalService:Lcom/android/server/am/AppLockLocalService;",
+            ".field public mCurResumedAppLock:Ljava/lang/Object;",
         ],
     )
     write_smali(p, txt)
 
     p, txt = read_smali(srv_dir, "com/android/server/pm/PackageManagerService.smali")
-    txt = add_fields(txt, [".field public final mAppLockPackageHelper:Lcom/android/server/pm/AppLockPackageHelper;"])
+    txt = add_fields(txt, [".field public mAppLockPackageHelper:Lcom/android/server/pm/AppLockPackageHelper;"])
     write_smali(p, txt)
 
     p, txt = read_smali(srv_dir, "com/android/server/wm/WindowManagerService.smali")
     txt = add_fields(
         txt,
         [
-            ".field public final mAppLockBiometricFocusController:Lcom/android/server/wm/AppLockBiometricFocusController;",
-            ".field public final mAppLockController:Lcom/android/server/wm/AppLockController;",
+            ".field public mAppLockBiometricFocusController:Lcom/android/server/wm/AppLockBiometricFocusController;",
+            ".field public mAppLockController:Lcom/android/server/wm/AppLockController;",
         ],
     )
     write_smali(p, txt)
@@ -296,16 +278,16 @@ def apply_snippets_and_interfaces(srv_dir, fw_remap):
             "removeTask(Lcom/android/server/wm/Task;ZZLjava/lang/String;)V",
             ".method public final removeTask(Lcom/android/server/wm/Task;ZZLjava/lang/String;)V\n"
             "    .locals 9\n\n"
-            "    const/16 v5, 0x3e8\n\n"
+            "    const/4 v5, 0x0\n\n"
+            "    const/16 v6, 0x3e8\n\n"
+            "    const/4 v7, -0x1\n\n"
             "    const/4 v8, 0x0\n\n"
-            "    const/4 v6, 0x0\n\n"
-            "    const/4 v7, 0x0\n\n"
             "    move-object v0, p0\n\n"
             "    move-object v1, p1\n\n"
             "    move v2, p2\n\n"
             "    move v3, p3\n\n"
             "    move-object v4, p4\n\n"
-            "    invoke-virtual/range {v0 .. v8}, Lcom/android/server/wm/ActivityTaskSupervisor;->removeTask(Lcom/android/server/wm/Task;ZZLjava/lang/String;IILjava/lang/String;Z)V\n\n"
+            "    invoke-virtual/range {v0 .. v8}, Lcom/android/server/wm/ActivityTaskSupervisor;->removeTask(Lcom/android/server/wm/Task;ZZLjava/lang/String;ZIILjava/lang/String;)V\n\n"
             "    return-void\n"
             ".end method",
         )],
@@ -313,6 +295,10 @@ def apply_snippets_and_interfaces(srv_dir, fw_remap):
     write_smali(p, txt)
 
     p, txt = read_smali(srv_dir, "com/android/server/wm/ActivityRecord.smali")
+    txt = txt.replace(
+        ".field public final mNotToBeTopForAppLockException:Z",
+        ".field public mNotToBeTopForAppLockException:Z",
+    )
     txt = add_fields(
         txt,
         [
@@ -355,8 +341,10 @@ def apply_snippets_and_interfaces(srv_dir, fw_remap):
             "    :cond_1\n"
             "    iget-object p0, p0, Lcom/android/server/wm/ActivityStartInterceptor;->mService:Lcom/android/server/wm/ActivityTaskManagerService;\n\n"
             "    iget-object p0, p0, Lcom/android/server/wm/ActivityTaskManagerService;->mWindowOrganizerController:Lcom/android/server/wm/WindowOrganizerController;\n\n"
-            "    invoke-virtual {p0, v0}, Lcom/android/server/wm/WindowOrganizerController;->getTaskFragment(Landroid/os/IBinder;)Lcom/android/server/wm/TaskFragment;\n\n"
+            "    iget-object p0, p0, Lcom/android/server/wm/WindowOrganizerController;->mLaunchTaskFragments:Landroid/util/ArrayMap;\n\n"
+            "    invoke-virtual {p0, v0}, Landroid/util/ArrayMap;->get(Ljava/lang/Object;)Ljava/lang/Object;\n\n"
             "    move-result-object p0\n\n"
+            "    check-cast p0, Lcom/android/server/wm/TaskFragment;\n\n"
             "    return-object p0\n\n"
             "    :cond_2\n"
             "    return-object v1\n"
