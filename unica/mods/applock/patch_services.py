@@ -614,6 +614,26 @@ def patch_pm(srv_dir):
     )
     write_smali(p, txt)
 
+    # 5b. ScanPackageUtils.setCustomSignatures (normalize modified framework-res back to stock platform cert)
+    p, txt = read_smali(srv_dir, "com/android/server/pm/ScanPackageUtils.smali")
+    if ".method public static setCustomSignatures(" in txt:
+        txt = replace_once(
+            txt,
+            ".method public static setCustomSignatures(Lcom/android/internal/pm/parsing/pkg/ParsedPackage;Lcom/android/server/pm/pkg/AndroidPackage;[Landroid/content/pm/Signature;[Landroid/content/pm/Signature;)V\n"
+            "    .locals 0\n\n"
+            "    invoke-static {p2, p3}, Lcom/android/server/pm/ScanPackageUtils;->signedWithCustomSignatures([Landroid/content/pm/Signature;[Landroid/content/pm/Signature;)Z",
+            ".method public static setCustomSignatures(Lcom/android/internal/pm/parsing/pkg/ParsedPackage;Lcom/android/server/pm/pkg/AndroidPackage;[Landroid/content/pm/Signature;[Landroid/content/pm/Signature;)V\n"
+            "    .locals 0\n\n"
+            "    if-nez p1, :cond_app_lock_non_plat\n\n"
+            "    invoke-static {p0, p1, p2, p3}, Lcom/android/server/pm/AppLockPmHelpers;->maybeNormalizePlatformPkgSignature(Lcom/android/internal/pm/parsing/pkg/ParsedPackage;Lcom/android/server/pm/pkg/AndroidPackage;[Landroid/content/pm/Signature;[Landroid/content/pm/Signature;)Z\n\n"
+            "    return-void\n\n"
+            "    :cond_app_lock_non_plat\n"
+            "    invoke-static {p2, p3}, Lcom/android/server/pm/ScanPackageUtils;->signedWithCustomSignatures([Landroid/content/pm/Signature;[Landroid/content/pm/Signature;)Z",
+            "ScanPackageUtils.setCustomSignatures normalize platform",
+            guard="maybeNormalizePlatformPkgSignature",
+        )
+        write_smali(p, txt)
+
     # 6. LauncherAppsService$LauncherAppsImpl
     p, txt = read_smali(srv_dir, "com/android/server/pm/LauncherAppsService$LauncherAppsImpl.smali")
     if "->getAppLockInfoFlag(" not in txt:
