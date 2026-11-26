@@ -116,11 +116,11 @@
 
     iget-object v1, p0, Lcom/android/server/wm/RootWindowContainer$$AppLockLambda1;->f$1:Ljava/lang/Object;
 
-    check-cast v1, Lcom/android/server/wm/RootWindowContainer$$ExternalSyntheticLambda16;
+    check-cast v1, Lcom/android/server/wm/RootWindowContainer$$AppLockLambda0;
 
     iget-object p0, p0, Lcom/android/server/wm/RootWindowContainer$$AppLockLambda1;->f$2:Ljava/lang/Object;
 
-    check-cast p0, Lcom/android/server/wm/RootWindowContainer$$ExternalSyntheticLambda16;
+    check-cast p0, Lcom/android/server/wm/RootWindowContainer$$AppLockLambda0;
 
     check-cast p1, Lcom/android/server/wm/Task;
 

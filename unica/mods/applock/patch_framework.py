@@ -1911,6 +1911,42 @@ def patch_package_managers(fw_dir):
             f.write(px)
 
 
+def patch_phone_window(fw_dir):
+    p = find_smali_file(fw_dir, "com/android/internal/policy/PhoneWindow.smali")
+    if not p:
+        raise RuntimeError("PhoneWindow.smali not found")
+    with open(p, "r", encoding="utf-8") as f:
+        txt = f.read()
+    old_method = (
+        ".method public whitelist getInsetsController()Landroid/view/WindowInsetsController;\n"
+        "    .locals 0\n\n"
+        "    iget-object p0, p0, Lcom/android/internal/policy/PhoneWindow;->mDecor:Lcom/android/internal/policy/DecorView;\n\n"
+        "    invoke-virtual {p0}, Lcom/android/internal/policy/DecorView;->getWindowInsetsController()Landroid/view/WindowInsetsController;\n\n"
+        "    move-result-object p0\n\n"
+        "    return-object p0\n"
+        ".end method"
+    )
+    new_method = (
+        ".method public whitelist getInsetsController()Landroid/view/WindowInsetsController;\n"
+        "    .locals 1\n\n"
+        "    iget-object v0, p0, Lcom/android/internal/policy/PhoneWindow;->mDecor:Lcom/android/internal/policy/DecorView;\n\n"
+        "    if-nez v0, :cond_0\n\n"
+        "    invoke-direct {p0}, Lcom/android/internal/policy/PhoneWindow;->installDecor()V\n\n"
+        "    :cond_0\n"
+        "    iget-object p0, p0, Lcom/android/internal/policy/PhoneWindow;->mDecor:Lcom/android/internal/policy/DecorView;\n\n"
+        "    invoke-virtual {p0}, Lcom/android/internal/policy/DecorView;->getWindowInsetsController()Landroid/view/WindowInsetsController;\n\n"
+        "    move-result-object p0\n\n"
+        "    return-object p0\n"
+        ".end method"
+    )
+    if "invoke-direct {p0}, Lcom/android/internal/policy/PhoneWindow;->installDecor()V" not in txt or new_method not in txt:
+        if old_method not in txt:
+            raise RuntimeError("PhoneWindow.getInsetsController() anchor not found")
+        txt = txt.replace(old_method, new_method, 1)
+        with open(p, "w", encoding="utf-8") as f:
+            f.write(txt)
+
+
 def patch_system_service_registry(fw_dir):
     p = find_smali_file(fw_dir, "android/app/SystemServiceRegistry.smali")
     with open(p, "r", encoding="utf-8") as f:
@@ -2069,6 +2105,7 @@ def main():
     patch_iactivity_task_manager(fw_dir)
     patch_ivold(fw_dir)
     patch_package_managers(fw_dir)
+    patch_phone_window(fw_dir)
     patch_system_service_registry(fw_dir)
     print(f"- Patched framework.jar cleanly (remapped {len(remap)} fwres IDs)")
 
