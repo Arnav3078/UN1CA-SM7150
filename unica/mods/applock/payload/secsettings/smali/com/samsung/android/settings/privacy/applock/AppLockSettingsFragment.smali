@@ -1313,9 +1313,9 @@
 
     invoke-virtual {v1, v2}, Landroidx/lifecycle/ViewModelProvider;->get(Lkotlin/reflect/KClass;)Landroidx/lifecycle/ViewModel;
 
-    const/4 v0, 0x0
-
     move-result-object v1
+
+    const/4 v0, 0x0
 
     check-cast v1, Lcom/samsung/android/settings/privacy/applock/AppLockViewModel;
 

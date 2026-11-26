@@ -505,19 +505,11 @@ def patch_pm(srv_dir):
         "    iget-object v0, v7, Lcom/android/server/pm/PackageSetting;->installSource:Lcom/android/server/pm/InstallSource;",
         "    invoke-static {}, Lcom/android/server/pm/PackageManagerService;->traceAfterPmsUnlock()V\n\n"
         "    iget-object v0, v1, Lcom/android/server/pm/InstallPackageHelper;->mPm:Lcom/android/server/pm/PackageManagerService;\n\n"
-        "    const/4 v8, 0x1\n\n"
-        "    new-array v8, v8, [I\n\n"
-        "    const/4 v9, 0x0\n\n"
-        "    aput p2, v8, v9\n\n"
-        "    move-object/from16 v9, p1\n\n"
-        "    if-eqz v2, :cond_app_lock_existing_sync\n\n"
-        "    invoke-virtual {v0, v9, v8}, Lcom/android/server/pm/PackageManagerService;->maybeRestoreAppLockState(Ljava/lang/String;[I)V\n\n"
-        "    :cond_app_lock_existing_sync\n"
-        "    invoke-virtual {v0, v9, v8}, Lcom/android/server/pm/PackageManagerService;->maybeSyncAppLockGroup(Ljava/lang/String;[I)V\n\n"
+        "    invoke-static {v0, v4, v3, v2}, Lcom/android/server/pm/AppLockPmHelpers;->onPmsExistingPackageInstalled(Lcom/android/server/pm/PackageManagerService;Ljava/lang/String;IZ)V\n\n"
         "    if-eqz v2, :cond_27\n\n"
         "    iget-object v0, v7, Lcom/android/server/pm/PackageSetting;->installSource:Lcom/android/server/pm/InstallSource;",
         "InstallPackageHelper.installExistingPackageAsUser",
-        guard="maybeRestoreAppLockState",
+        guard="onPmsExistingPackageInstalled",
     )
     write_smali(p, txt)
 
@@ -1217,9 +1209,9 @@ def patch_wm(srv_dir):
         b2 = replace_once(
             b,
             "    iput-object p1, p0, Lcom/android/server/wm/DisplayContent;->mFocusedApp:Lcom/android/server/wm/ActivityRecord;",
-            "    iget-object v1, p0, Lcom/android/server/wm/DisplayContent;->mFocusedApp:Lcom/android/server/wm/ActivityRecord;\n\n"
+            "    iget-object v4, p0, Lcom/android/server/wm/DisplayContent;->mFocusedApp:Lcom/android/server/wm/ActivityRecord;\n\n"
             "    iput-object p1, p0, Lcom/android/server/wm/DisplayContent;->mFocusedApp:Lcom/android/server/wm/ActivityRecord;\n\n"
-            "    invoke-static {p0, p1, v1}, Lcom/android/server/wm/AppLockWmHelpers;->onDisplayFocusedAppChanged(Lcom/android/server/wm/DisplayContent;Lcom/android/server/wm/ActivityRecord;Lcom/android/server/wm/ActivityRecord;)V",
+            "    invoke-static {p0, p1, v4}, Lcom/android/server/wm/AppLockWmHelpers;->onDisplayFocusedAppChanged(Lcom/android/server/wm/DisplayContent;Lcom/android/server/wm/ActivityRecord;Lcom/android/server/wm/ActivityRecord;)V",
             "DisplayContent.setFocusedApp",
         )
         txt = txt.replace(b, b2, 1)
@@ -1353,10 +1345,10 @@ def patch_wm(srv_dir):
         "    invoke-virtual {v0, v3}, Lcom/android/server/wm/TransitionController;->isTransientHide(Lcom/android/server/wm/Task;)Z\n\n"
         "    move-result v0\n\n"
         "    if-eqz v0, :cond_6\n\n"
-        "    invoke-static {p3}, Lcom/android/server/wm/Task;->isAppLockOverlay(Lcom/android/server/wm/ActivityRecord;)Z\n\n"
+        "    invoke-static {p2}, Lcom/android/server/wm/Task;->isAppLockOverlay(Lcom/android/server/wm/ActivityRecord;)Z\n\n"
         "    move-result v0\n\n"
         "    if-eqz v0, :cond_app_lock_pip\n\n"
-        "    iput-boolean v2, p1, Lcom/android/server/wm/ActivityRecord;->mEnterPipOnStopForAppLock:Z\n\n"
+        "    iput-boolean v2, p0, Lcom/android/server/wm/ActivityRecord;->mEnterPipOnStopForAppLock:Z\n\n"
         "    return-void\n\n"
         "    :cond_app_lock_pip\n"
         "    move v0, v2\n\n"

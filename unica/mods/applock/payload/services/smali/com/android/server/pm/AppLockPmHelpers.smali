@@ -235,3 +235,29 @@
 
     return p0
 .end method
+
+.method public static onPmsExistingPackageInstalled(Lcom/android/server/pm/PackageManagerService;Ljava/lang/String;IZ)V
+    .locals 2
+
+    if-eqz p0, :cond_1
+
+    if-eqz p1, :cond_1
+
+    const/4 v0, 0x1
+
+    new-array v0, v0, [I
+
+    const/4 v1, 0x0
+
+    aput p2, v0, v1
+
+    if-eqz p3, :cond_0
+
+    invoke-virtual {p0, p1, v0}, Lcom/android/server/pm/PackageManagerService;->maybeRestoreAppLockState(Ljava/lang/String;[I)V
+
+    :cond_0
+    invoke-virtual {p0, p1, v0}, Lcom/android/server/pm/PackageManagerService;->maybeSyncAppLockGroup(Ljava/lang/String;[I)V
+
+    :cond_1
+    return-void
+.end method

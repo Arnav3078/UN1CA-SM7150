@@ -1116,7 +1116,7 @@
 
     if-eq v9, v6, :cond_10
 
-    invoke-virtual {v7}, Lcom/android/server/wm/TaskFragment;->getDisplayId()I
+    invoke-virtual {v7}, Lcom/android/server/wm/ActivityRecord;->getDisplayId()I
 
     move-result v10
 
@@ -1146,7 +1146,7 @@
 
     iget-object v8, v0, Lcom/android/server/wm/ActivityStartInterceptor;->mActivityOptions:Landroid/app/ActivityOptions;
 
-    invoke-virtual {v7}, Lcom/android/server/wm/TaskFragment;->getDisplayId()I
+    invoke-virtual {v7}, Lcom/android/server/wm/ActivityRecord;->getDisplayId()I
 
     move-result v7
 
