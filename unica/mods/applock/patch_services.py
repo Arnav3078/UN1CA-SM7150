@@ -639,6 +639,9 @@ def patch_pm(srv_dir):
     if "->getAppLockInfoFlag(" not in txt:
         txt = replace_once(
             txt,
+            "    invoke-virtual {p0}, Lcom/android/server/pm/LauncherAppsService$LauncherAppsImpl;->injectBinderCallingPid()I\n\n"
+            "    invoke-static {}, Landroid/os/Binder;->clearCallingIdentity()J\n\n"
+            "    move-result-wide v6\n\n"
             "    :try_start_0\n"
             "    iget-object v0, p0, Lcom/android/server/pm/LauncherAppsService$LauncherAppsImpl;->mPackageManagerInternal:Landroid/content/pm/PackageManagerInternal;\n\n"
             "    int-to-long v3, p3\n\n"
@@ -646,10 +649,12 @@ def patch_pm(srv_dir):
             "    move-result v2\n\n"
             "    move-object v5, p2\n\n"
             "    invoke-virtual/range {v0 .. v5}, Landroid/content/pm/PackageManagerInternal;->getApplicationInfo(IIJLjava/lang/String;)Landroid/content/pm/ApplicationInfo;",
+            "    invoke-virtual {p0}, Lcom/android/server/pm/LauncherAppsService$LauncherAppsImpl;->injectBinderCallingPid()I\n\n"
+            "    move-result v2\n\n"
+            "    invoke-static {}, Landroid/os/Binder;->clearCallingIdentity()J\n\n"
+            "    move-result-wide v6\n\n"
             "    :try_start_0\n"
             "    iget-object v0, p0, Lcom/android/server/pm/LauncherAppsService$LauncherAppsImpl;->mPackageManagerInternal:Landroid/content/pm/PackageManagerInternal;\n\n"
-            "    invoke-static {}, Landroid/os/Binder;->getCallingPid()I\n\n"
-            "    move-result v2\n\n"
             "    invoke-virtual {p0, v1, v2}, Lcom/android/server/pm/LauncherAppsService$LauncherAppsImpl;->getAppLockInfoFlag(II)J\n\n"
             "    move-result-wide v2\n\n"
             "    int-to-long v4, p3\n\n"
@@ -734,7 +739,7 @@ def patch_pm(srv_dir):
             "    invoke-virtual {p1, v1}, Landroid/content/Intent;->resolveTypeIfNeeded(Landroid/content/ContentResolver;)Ljava/lang/String;\n\n"
             "    move-result-object v2\n\n"
             "    const-wide/32 v3, 0xc0000\n\n"
-            "    invoke-virtual {p0, p3, p2}, Lcom/android/server/pm/LauncherAppsService$LauncherAppsImpl;->getAppLockInfoFlag(II)J\n\n"
+            "    invoke-virtual {p0, p2, p3}, Lcom/android/server/pm/LauncherAppsService$LauncherAppsImpl;->getAppLockInfoFlag(II)J\n\n"
             "    move-result-wide v5\n\n"
             "    or-long/2addr v3, v5\n\n"
             "    invoke-virtual {p4}, Landroid/os/UserHandle;->getIdentifier()I\n\n"
@@ -772,6 +777,46 @@ def patch_pm(srv_dir):
             "    invoke-virtual/range {v3 .. v8}, Landroid/content/pm/PackageManagerInternal;->getActivityInfo(Landroid/content/ComponentName;JII)Landroid/content/pm/ActivityInfo;",
             "LAI.resolveLauncherActivityInternal",
         )
+    # Fix already-patched apktool trees cleanly (pre-clearCallingIdentity pid + consistent (uid,pid) -> checkPermission(pid,uid))
+    broken_get_app_info = (
+        "    invoke-virtual {p0}, Lcom/android/server/pm/LauncherAppsService$LauncherAppsImpl;->injectBinderCallingPid()I\n\n"
+        "    invoke-static {}, Landroid/os/Binder;->clearCallingIdentity()J\n\n"
+        "    move-result-wide v6\n\n"
+        "    :try_start_0\n"
+        "    iget-object v0, p0, Lcom/android/server/pm/LauncherAppsService$LauncherAppsImpl;->mPackageManagerInternal:Landroid/content/pm/PackageManagerInternal;\n\n"
+        "    invoke-static {}, Landroid/os/Binder;->getCallingPid()I\n\n"
+        "    move-result v2"
+    )
+    if broken_get_app_info in txt:
+        txt = txt.replace(
+            broken_get_app_info,
+            "    invoke-virtual {p0}, Lcom/android/server/pm/LauncherAppsService$LauncherAppsImpl;->injectBinderCallingPid()I\n\n"
+            "    move-result v2\n\n"
+            "    invoke-static {}, Landroid/os/Binder;->clearCallingIdentity()J\n\n"
+            "    move-result-wide v6\n\n"
+            "    :try_start_0\n"
+            "    iget-object v0, p0, Lcom/android/server/pm/LauncherAppsService$LauncherAppsImpl;->mPackageManagerInternal:Landroid/content/pm/PackageManagerInternal;",
+            1,
+        )
+    txt = txt.replace(
+        "    invoke-virtual {p0, p3, p2}, Lcom/android/server/pm/LauncherAppsService$LauncherAppsImpl;->getAppLockInfoFlag(II)J",
+        "    invoke-virtual {p0, p2, p3}, Lcom/android/server/pm/LauncherAppsService$LauncherAppsImpl;->getAppLockInfoFlag(II)J",
+    )
+    txt = replace_once(
+        txt,
+        ".method public hasLockAppsPermission(II)Z\n"
+        "    .locals 1\n\n"
+        "    iget-object p0, p0, Lcom/android/server/pm/LauncherAppsService$LauncherAppsImpl;->mContext:Landroid/content/Context;\n\n"
+        "    const-string/jumbo v0, \"android.permission.LOCK_APPS\"\n\n"
+        "    invoke-virtual {p0, v0, p1, p2}, Landroid/content/Context;->checkPermission(Ljava/lang/String;II)I",
+        ".method public hasLockAppsPermission(II)Z\n"
+        "    .locals 1\n\n"
+        "    iget-object p0, p0, Lcom/android/server/pm/LauncherAppsService$LauncherAppsImpl;->mContext:Landroid/content/Context;\n\n"
+        "    const-string/jumbo v0, \"android.permission.LOCK_APPS\"\n\n"
+        "    invoke-virtual {p0, v0, p2, p1}, Landroid/content/Context;->checkPermission(Ljava/lang/String;II)I",
+        "LAI.hasLockAppsPermission(uid,pid)",
+        guard="    invoke-virtual {p0, v0, p2, p1}, Landroid/content/Context;->checkPermission(Ljava/lang/String;II)I",
+    )
     write_smali(p, txt)
 
     # 7. ShortcutService.<init> passes this to ShortcutService$3.<init>(ShortcutService)V
@@ -828,13 +873,23 @@ def patch_am(srv_dir):
     write_smali(p, txt)
 
     p, txt = read_smali(srv_dir, "com/android/server/am/ActivityManagerService$Lifecycle.smali")
+    txt = txt.replace(
+        "    invoke-static {v0}, Lcom/android/server/am/AppLockAmHelpers;->onAmsBootPhase500(Lcom/android/server/am/ActivityManagerService;)V\n\n"
+        "    :cond_8",
+        "    :cond_8",
+    )
     txt = replace_once(
         txt,
-        "    :cond_8\n    const/16 v1, 0x226\n\n    if-ne p1, v1, :cond_9",
-        "    invoke-static {v0}, Lcom/android/server/am/AppLockAmHelpers;->onAmsBootPhase500(Lcom/android/server/am/ActivityManagerService;)V\n\n"
-        "    :cond_8\n    const/16 v1, 0x226\n\n    if-ne p1, v1, :cond_9",
+        "    iget-object p0, p0, Lcom/android/server/am/ActivityManagerService$Lifecycle;->mService:Lcom/android/server/am/ActivityManagerService;\n\n"
+        "    invoke-virtual {p0}, Ljava/lang/Object;->getClass()Ljava/lang/Class;\n\n"
+        "    return-void\n\n"
+        "    :goto_5",
+        "    iget-object p0, p0, Lcom/android/server/am/ActivityManagerService$Lifecycle;->mService:Lcom/android/server/am/ActivityManagerService;\n\n"
+        "    invoke-static {p0}, Lcom/android/server/am/AppLockAmHelpers;->onAmsBootPhase500(Lcom/android/server/am/ActivityManagerService;)V\n\n"
+        "    return-void\n\n"
+        "    :goto_5",
         "AMS$Lifecycle.onBootPhase(500)",
-        guard="AppLockAmHelpers;->onAmsBootPhase500",
+        guard="invoke-static {p0}, Lcom/android/server/am/AppLockAmHelpers;->onAmsBootPhase500",
     )
     txt = replace_once(
         txt,
