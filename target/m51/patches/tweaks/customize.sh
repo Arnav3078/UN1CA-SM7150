@@ -382,10 +382,6 @@ SET_PROP "product" "ro.build.version.sep" "180500"
 SET_PROP "vendor" "ro.build.version.oneui" "90500"
 SET_PROP "vendor" "ro.build.version.sep" "180500"
 
-SET_PROP "system" "debug.stagefright.c2inputsurface" "-1"
-SET_PROP "vendor" "debug.stagefright.c2inputsurface" "-1"
-SET_PROP "system" "debug.stagefright.ccodec" "1"
-SET_PROP "vendor" "debug.stagefright.ccodec" "1"
 SET_PROP "system" "media.stagefright.thumbnail.prefer_hw_codecs" "true"
 SET_PROP "vendor" "media.stagefright.thumbnail.prefer_hw_codecs" "true"
 LOG_STEP_OUT
