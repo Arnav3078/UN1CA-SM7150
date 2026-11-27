@@ -95,6 +95,22 @@ for e in $DUPLICATES; do
     fi
 done
 
+if ! grep -qE '^[[:space:]]*/dev/ion[[:space:]]+u:object_r:ion_device:s0([[:space:]]|$)' \
+    "$WORK_DIR/vendor/etc/selinux/vendor_file_contexts"; then
+    sed -i -E '/^[[:space:]]*\/dev\/ion([[:space:]]|$)/d' \
+        "$WORK_DIR/vendor/etc/selinux/vendor_file_contexts"
+    printf '%s\n' '/dev/ion    u:object_r:ion_device:s0' \
+        >> "$WORK_DIR/vendor/etc/selinux/vendor_file_contexts"
+    PATCHED=true
+fi
+
+if ! grep -qF "(allow hal_graphics_allocator ion_device_${CIL_NAME//./_} (chr_file (ioctl read write getattr lock append map open watch watch_reads)))" \
+    "$WORK_DIR/vendor/etc/selinux/vendor_sepolicy.cil"; then
+    printf '%s\n' "(allow hal_graphics_allocator ion_device_${CIL_NAME//./_} (chr_file (ioctl read write getattr lock append map open watch watch_reads)))" \
+        >> "$WORK_DIR/vendor/etc/selinux/vendor_sepolicy.cil"
+    PATCHED=true
+fi
+
 if ! $PATCHED; then
     LOG "\033[0;33m! Nothing to do\033[0m"
 fi
