@@ -1,6 +1,80 @@
-LOG_STEP_IN "- Removing performance capping"
-DELETE_FROM_WORK_DIR "vendor" "etc/hyper"
-DELETE_FROM_WORK_DIR "vendor" "etc/perf"
+LOG_STEP_IN "- Retaining and optimizing Qualcomm perf and Samsung hyper configurations"
+if [ ! -d "$WORK_DIR/vendor/etc/perf" ] && [ -d "$SRC_DIR/out/fw/SM-M515F_BVO/vendor/etc/perf" ]; then
+    mkdir -p "$WORK_DIR/vendor/etc"
+    cp -r "$SRC_DIR/out/fw/SM-M515F_BVO/vendor/etc/perf" "$WORK_DIR/vendor/etc/"
+fi
+if [ ! -d "$WORK_DIR/vendor/etc/hyper" ] && [ -d "$SRC_DIR/out/fw/SM-M515F_BVO/vendor/etc/hyper" ]; then
+    mkdir -p "$WORK_DIR/vendor/etc"
+    cp -r "$SRC_DIR/out/fw/SM-M515F_BVO/vendor/etc/hyper" "$WORK_DIR/vendor/etc/"
+fi
+
+python3 - << 'EOF'
+import os
+import xml.etree.ElementTree as ET
+import json
+
+work_dir = os.environ.get("WORK_DIR", "")
+if not work_dir:
+    for candidate in ["/home/arnav/UN1CA-4.0-M51/out/target/m51/work_dir", "out/target/m51/work_dir"]:
+        if os.path.exists(candidate):
+            work_dir = candidate
+            break
+
+# 1. Optimize perfboostsconfig.xml (add Drag boost for msmsteppe if missing)
+perf_xml = os.path.join(work_dir, "vendor/etc/perf/perfboostsconfig.xml")
+if os.path.exists(perf_xml):
+    try:
+        tree = ET.parse(perf_xml)
+        root = tree.getroot()
+        perf_boost = root.find("PerfBoost")
+        if perf_boost is not None:
+            has_drag_steppe = False
+            for c in perf_boost.findall("Config"):
+                if c.get("Id") == "0x00001087" and c.get("Target") == "msmsteppe":
+                    has_drag_steppe = True
+                    break
+            if not has_drag_steppe:
+                new_cfg = ET.Element("Config", {
+                    "Id": "0x00001087",
+                    "Type": "1",
+                    "Enable": "true",
+                    "Timeout": "0",
+                    "Target": "msmsteppe",
+                    "Resources": "0x40800000, 1324, 0x40800100, 1248"
+                })
+                inserted = False
+                for idx, c in enumerate(perf_boost):
+                    if c.get("Id") == "0x00001087" and c.get("Target") == "sdmmagpie":
+                        perf_boost.insert(idx, new_cfg)
+                        inserted = True
+                        break
+                if not inserted:
+                    perf_boost.append(new_cfg)
+                tree.write(perf_xml, encoding="utf-8", xml_declaration=True)
+                print("Optimized perfboostsconfig.xml: added msmsteppe drag boost")
+    except Exception as e:
+        print(f"Notice: perfboostsconfig optimization: {e}")
+
+# 2. Optimize config_vendor.json (uncap GPUMaxFreq in IMS_VIDEO_ENGINE_AI_SCALER)
+hyper_json = os.path.join(work_dir, "vendor/etc/hyper/config_vendor.json")
+if os.path.exists(hyper_json):
+    try:
+        with open(hyper_json, "r") as f:
+            data = json.load(f)
+        modified = False
+        for hint in data.get("Hints", []):
+            if hint.get("Hint") == "IMS_VIDEO_ENGINE_AI_SCALER":
+                for res in hint.get("ResoureList", []):
+                    if res.get("Resource") == "GPUMaxFreq" and res.get("Value") == "377":
+                        res["Value"] = "700"
+                        modified = True
+        if modified:
+            with open(hyper_json, "w") as f:
+                json.dump(data, f, indent=2)
+            print("Optimized config_vendor.json: uncapped video engine GPUMaxFreq to 700MHz")
+    except Exception as e:
+        print(f"Notice: config_vendor.json optimization: {e}")
+EOF
 LOG_STEP_OUT
 
 LOG_STEP_IN "- Removing WAV 32-bit PCM support"
