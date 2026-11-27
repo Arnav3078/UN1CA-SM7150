@@ -76,9 +76,9 @@
     <components>
 
         <component name="AP" tempType="LRP" >
-            <limiter name="CPUFreqMax" step="0" temp="350:380" value="-1:1708800"   />
-            <limiter name="GPUFreqMax" step="0" temp="350:380" value="-1:565" />
-            <limiter name="AppInstallDelay" value="5000" />
+            <limiter name="CPUFreqMax" step="0" temp="480:520" value="-1:2208000" />
+            <limiter name="GPUFreqMax" step="0" temp="480:520" value="-1:700" />
+            <limiter name="AppInstallDelay" value="0" />
         </component>
 
         <component name="DISPLAY" tempType="LRP">
@@ -90,23 +90,23 @@
     <scenarios>
 
         <scenario name="SIPStart" tempType="AP" priority="2" >
-            <limiter name="CPUFreqMax" cond="for_temporary" temp="550:600:620" value="-1:1708800:1555200" />
-            <limiter name="GPUFreqMax" cond="for_temporary" temp="550:600"     value="-1:565" />
+            <limiter name="CPUFreqMax" cond="for_temporary" temp="650:700:750" value="-1:2208000:2208000" />
+            <limiter name="GPUFreqMax" cond="for_temporary" temp="650:700"     value="-1:700" />
         </scenario>
 
         <scenario name="AppStart" tempType="AP" priority="2" >
-            <limiter name="CPUFreqMax" cond="for_temporary" temp="550:600:620" value="-1:1708800:1555200" />
-            <limiter name="GPUFreqMax" cond="for_temporary" temp="550:600"     value="-1:565" />
+            <limiter name="CPUFreqMax" cond="for_temporary" temp="650:700:750" value="-1:2208000:2208000" />
+            <limiter name="GPUFreqMax" cond="for_temporary" temp="650:700"     value="-1:700" />
         </scenario>
 
         <scenario name="Badge" tempType="AP" priority="2" >
-            <limiter name="CPUFreqMax" cond="for_temporary" temp="550:600:620" value="-1:1708800:1555200" />
-            <limiter name="GPUFreqMax" cond="for_temporary" temp="550:600"     value="-1:565" />
+            <limiter name="CPUFreqMax" cond="for_temporary" temp="650:700:750" value="-1:2208000:2208000" />
+            <limiter name="GPUFreqMax" cond="for_temporary" temp="650:700"     value="-1:700" />
         </scenario>
 
         <scenario name="WakeUp" tempType="AP" priority="2" >
-            <limiter name="CPUFreqMax" cond="for_temporary" temp="550:600:620" value="-1:1708800:1555200" />
-            <limiter name="GPUFreqMax" cond="for_temporary" temp="550:600"     value="-1:565" />
+            <limiter name="CPUFreqMax" cond="for_temporary" temp="650:700:750" value="-1:2208000:2208000" />
+            <limiter name="GPUFreqMax" cond="for_temporary" temp="650:700"     value="-1:700" />
         </scenario>
 
         <scenario name="ScreenOnUsbPowerShare" tempType="LRP" priority="1">
@@ -132,21 +132,21 @@
         </scenario>
 
         <scenario_group name="GameThermalCpuControl" tempType="LRP" >
-            <scenario id="-3"  limiter="CPUFreqMax" step="0" temp="360:370:390" value="-1:1708800:1324800" />
-            <scenario id="-2"  limiter="CPUFreqMax" step="0" temp="360:370:390" value="-1:1708800:1324800" />
-            <scenario id="-1"  limiter="CPUFreqMax" step="0" temp="360:370:390" value="-1:1708800:1555200" />
-            <scenario id="0"   limiter="CPUFreqMax" step="0" temp="360:370:390" value="-1:1843200:1708800" />
-            <scenario id="1"   limiter="CPUFreqMax" step="0" temp="360:370:390" value="-1:1939200:1843200" />
+            <scenario id="-3"  limiter="CPUFreqMax" step="0" temp="480:500:520" value="-1:2208000:1939200" />
+            <scenario id="-2"  limiter="CPUFreqMax" step="0" temp="480:500:520" value="-1:2208000:1939200" />
+            <scenario id="-1"  limiter="CPUFreqMax" step="0" temp="480:500:520" value="-1:2208000:2169600" />
+            <scenario id="0"   limiter="CPUFreqMax" step="0" temp="480:500:520" value="-1:2208000:2208000" />
+            <scenario id="1"   limiter="CPUFreqMax" step="0" temp="480:500:520" value="-1:2208000:2208000" />
             <scenario id="2"   limiter="CPUFreqMax" step="0" temp="360:370:390" value="-1:2169600:1939200" />
             <scenario id="3"   limiter="CPUFreqMax" step="0" temp="360:370:390" value="-1:2208000:2169600" />
             <scenario id="4"   limiter="CPUFreqMax"                             value="-1" />
         </scenario_group>
 
         <scenario_group name="GameThermalGpuControl" tempType="LRP" >
-            <scenario id="-3" limiter="GPUFreqMax" step="0" temp="360:370:390" value="-1:565:267" />
-            <scenario id="-2" limiter="GPUFreqMax" step="0" temp="360:370:390" value="-1:565:355" />
-            <scenario id="-1" limiter="GPUFreqMax" step="0" temp="360:370:390" value="-1:565:430" />
-            <scenario id="0"  limiter="GPUFreqMax" step="0" temp="360:370:390" value="-1:650:565" />
+            <scenario id="-3" limiter="GPUFreqMax" step="0" temp="480:500:520" value="-1:700:565" />
+            <scenario id="-2" limiter="GPUFreqMax" step="0" temp="480:500:520" value="-1:700:565" />
+            <scenario id="-1" limiter="GPUFreqMax" step="0" temp="480:500:520" value="-1:700:650" />
+            <scenario id="0"  limiter="GPUFreqMax" step="0" temp="480:500:520" value="-1:700:700" />
             <scenario id="1"  limiter="GPUFreqMax" step="0" temp="360:370:390" value="-1:700:650" />
             <scenario id="2"  limiter="GPUFreqMax" step="0" temp="360:370:390" value="-1:700:700" />
             <scenario id="3"  limiter="GPUFreqMax"                             value="-1" />
