@@ -139,6 +139,26 @@ if [[ "$(GET_PROP "ro.hwui.use_vulkan")" != "true" ]]; then
     SET_PROP "system" "persist.sys.unica.vulkan" "false"
 fi
 
+# Auto-hide Developer/ADB status for Secure Folder and secondary profiles (userId >= 100)
+if [ -f "$APKTOOL_DIR/system/framework/framework.jar/smali_classes6/io/mesalabs/unica/HideDeveloperStatusUtils.smali" ]; then
+    SMALI_PATCH "system" "system/framework/framework.jar" \
+        "smali_classes6/io/mesalabs/unica/HideDeveloperStatusUtils.smali" "replace" \
+        'shouldHideDevStatus(Landroid/content/ContentResolver;Ljava/lang/String;Ljava/lang/String;)Z' \
+        'sget-object v1, Lio/mesalabs/unica/HideDeveloperStatusUtils;->settingsToHide:Ljava/util/Set;' \
+        'invoke-virtual {p0}, Landroid/content/ContentResolver;->getUserId()I\n\n    move-result v1\n\n    const/16 v2, 0x64\n\n    if-lt v1, v2, :cond_sf_hide\n\n    const/4 v0, 0x1\n\n    return v0\n\n    :cond_sf_hide\n    sget-object v1, Lio/mesalabs/unica/HideDeveloperStatusUtils;->settingsToHide:Ljava/util/Set;' \
+        > /dev/null
+fi
+
+# Auto-hide Root/Mod apps for Secure Folder and secondary profiles (userId >= 100)
+if [ -f "$APKTOOL_DIR/system/framework/framework.jar/smali_classes6/io/mesalabs/unica/HideAppListUtils.smali" ]; then
+    SMALI_PATCH "system" "system/framework/framework.jar" \
+        "smali_classes6/io/mesalabs/unica/HideAppListUtils.smali" "replace" \
+        'shouldHideAppList(Landroid/content/ContentResolver;Ljava/lang/String;)Z' \
+        'const-string v1, "unica_hma"' \
+        'invoke-virtual {p0}, Landroid/content/ContentResolver;->getUserId()I\n\n    move-result v1\n\n    const/16 v2, 0x64\n\n    if-lt v1, v2, :cond_sf_hma\n\n    invoke-static {p0}, Lio/mesalabs/unica/HideAppListUtils;->getApps(Landroid/content/ContentResolver;)Ljava/util/Set;\n\n    move-result-object p0\n\n    invoke-interface {p0, p1}, Ljava/util/Set;->contains(Ljava/lang/Object;)Z\n\n    move-result p0\n\n    return p0\n\n    :cond_sf_hma\n    const-string v1, "unica_hma"' \
+        > /dev/null
+fi
+
 unset PATCH_INST CONTENT
 
 LOG_STEP_OUT

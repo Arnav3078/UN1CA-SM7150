@@ -25,3 +25,21 @@ SMALI_PATCH "system" "system/framework/services.jar" \
     '<clinit>()V' \
     'ro.product.model' \
     'ro.product.vendor.model'
+
+# Bypass root checks in StorageManagerService
+SMALI_PATCH "system" "system/framework/services.jar" \
+    "smali/com/android/server/StorageManagerService.smali" "return" \
+    'isRootedDevice()Z' 'false'
+
+# Bypass ICD verification in samsungkeystoreutils
+SMALI_PATCH "system" "system/framework/samsungkeystoreutils.jar" \
+    "smali/com/samsung/android/security/keystore/AttestParameterSpec.smali" "return" \
+    'isVerifiableIntegrity()Z' 'true'
+
+# Disable SAK and DRK integrity verification in DarManagerService
+SMALI_PATCH "system" "system/framework/services.jar" \
+    "smali/com/android/server/knox/dar/DarManagerService.smali" "return" \
+    'checkDeviceIntegrity([Ljava/security/cert/Certificate;)Z' 'true'
+SMALI_PATCH "system" "system/framework/services.jar" \
+    "smali/com/android/server/knox/dar/DarManagerService.smali" "return" \
+    'isDeviceRootKeyInstalled()Z' 'true'
