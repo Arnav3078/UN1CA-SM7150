@@ -1002,8 +1002,11 @@
 
     invoke-static {v1, v6}, Lio/mesalabs/unica/settings/keybox/KeyboxUtils;->showToast(Landroid/content/Context;I)V
 
+    const/16 v16, 0x0
+
     return v16
 
+    :cond_check_rsa_root
     :check_rsa_root
     # Verify RSA root if RSA is present
     if-eqz v17, :all_verified
@@ -1051,6 +1054,8 @@
 
     invoke-static {v1, v6}, Lio/mesalabs/unica/settings/keybox/KeyboxUtils;->showToast(Landroid/content/Context;I)V
 
+    const/16 v16, 0x0
+
     return v16
 
     :all_verified
@@ -1071,12 +1076,17 @@
 
     invoke-static {v1, v5}, Lio/mesalabs/unica/settings/keybox/KeyboxUtils;->showToast(Landroid/content/Context;I)V
 
+    const/16 v16, 0x0
+
     return v16
 
     :cond_f
     const/4 v5, 0x3
 
     invoke-static {v1, v5}, Lio/mesalabs/unica/settings/keybox/KeyboxUtils;->showToast(Landroid/content/Context;I)V
+
+    :goto_5
+    const/16 v16, 0x0
 
     return v16
 
