@@ -14,3 +14,10 @@ on property:persist.sys.carbon.power_mode=normal
 
 on property:persist.sys.carbon.power_mode=performance
     exec_background -- /system/bin/sh /system/bin/carbon_power_engine performance
+
+# OTA Recovery Auto-Install Trigger
+on property:persist.sys.unica.install_update=*
+    exec_background -- /system/bin/sh /system/bin/carbon_power_engine install_update
+
+on property:debug.unica.install_update=*
+    exec_background -- /system/bin/sh /system/bin/carbon_power_engine install_update

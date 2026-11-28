@@ -78,10 +78,10 @@ case "$MODE" in
     performance|3)
         # 🔥 PERFORMANCE MODE (Speed & Peak 730G Power)
         # Unlocked max Kryo 470 frequencies with elevated floor for zero-stutter response
-        # Little cores: 940 MHz - 1.80 GHz; Big cores: 1.32 GHz - 2.21 GHz
+        # Little cores: 1.02 GHz - 1.80 GHz; Big cores: 1.32 GHz - 2.21 GHz
         echo 1804800 > /sys/devices/system/cpu/cpufreq/policy0/scaling_max_freq 2>/dev/null
         echo 2208000 > /sys/devices/system/cpu/cpufreq/policy6/scaling_max_freq 2>/dev/null
-        echo 940800 > /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq 2>/dev/null
+        echo 1017600 > /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq 2>/dev/null
         echo 1324800 > /sys/devices/system/cpu/cpufreq/policy6/scaling_min_freq 2>/dev/null
 
         # CPU Governor: Instant ramp (0us up), sustained frequency (20000us down) to eliminate micro-stutter
@@ -115,6 +115,28 @@ case "$MODE" in
             [ -f "$b/queue/scheduler" ] && echo ssg > "$b/queue/scheduler" 2>/dev/null || echo cfq > "$b/queue/scheduler" 2>/dev/null
             [ -f "$b/queue/read_ahead_kb" ] && echo 512 > "$b/queue/read_ahead_kb" 2>/dev/null
         done
+        ;;
+
+    install_update)
+        # 🚀 OTA RECOVERY AUTO-INSTALL ENGINE (TWRP / OrangeFox / PBRP)
+        TARGET_PKG=$(getprop persist.sys.unica.install_update)
+        [ -z "$TARGET_PKG" ] && TARGET_PKG=$(getprop debug.unica.install_update)
+        [ -z "$TARGET_PKG" ] && TARGET_PKG="/sdcard/Download/UN1CA_update.zip"
+
+        mkdir -p /cache/recovery
+        chmod 0777 /cache/recovery
+        if [ -f /sdcard/TWRP/openrecoveryscript ]; then
+            cp -f /sdcard/TWRP/openrecoveryscript /cache/recovery/openrecoveryscript
+        else
+            echo "install $TARGET_PKG" > /cache/recovery/openrecoveryscript
+            echo "reboot" >> /cache/recovery/openrecoveryscript
+        fi
+        echo "--update_package=$TARGET_PKG" > /cache/recovery/command
+        chmod 0666 /cache/recovery/* 2>/dev/null
+        chown system:cache /cache/recovery/* 2>/dev/null
+        sync
+        sleep 1
+        svc power reboot recovery || reboot recovery
         ;;
 
     boot)
@@ -151,5 +173,10 @@ SVCEOF
         if [ -d /data/app ]; then
             find /data/app -type d -name "*com.samsung.android.smartsuggestions*" -exec rm -rf {} + 2>/dev/null
         fi
+
+        # 7. Ensure /cache/recovery is writable for OTA recovery scripts
+        mkdir -p /cache/recovery 2>/dev/null
+        chmod 0777 /cache/recovery 2>/dev/null
+        chown system:cache /cache/recovery 2>/dev/null
         ;;
 esac
