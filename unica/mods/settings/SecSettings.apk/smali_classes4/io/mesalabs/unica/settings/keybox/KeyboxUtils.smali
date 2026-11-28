@@ -903,34 +903,44 @@
 
     move/from16 v21, v13
 
-    if-ne v11, v5, :cond_f
+    # Require NumberOfKeyboxes >= 1 (v5 is 1)
+    if-lt v11, v5, :cond_check_keys
 
-    if-eqz v20, :cond_f
+    goto :cond_f
 
-    if-eqz v21, :cond_f
+    :cond_check_keys
+    # Check ECDSA: has_ecdsa_cert (v20) && has_ecdsa_privkey (v21)
+    if-eqz v20, :check_rsa_only
 
-    if-eqz v14, :cond_f
+    if-eqz v21, :check_rsa_only
 
-    if-nez v15, :cond_b
+    const/16 v18, 0x1
 
-    goto :goto_7
+    goto :check_rsa
 
-    :cond_b
-    invoke-virtual {v0}, Ljava/util/ArrayList;->isEmpty()Z
+    :check_rsa_only
+    const/16 v18, 0x0
 
-    move-result v5
+    :check_rsa
+    # Check RSA: has_rsa_cert (v14) && has_rsa_privkey (v15)
+    if-eqz v14, :check_has_any
 
-    if-nez v5, :cond_e
+    if-eqz v15, :check_has_any
 
-    invoke-virtual {v4}, Ljava/util/ArrayList;->isEmpty()Z
+    const/16 v17, 0x1
 
-    move-result v5
+    goto :verify_keys
 
-    if-eqz v5, :cond_c
+    :check_has_any
+    const/16 v17, 0x0
 
-    goto :goto_6
+    :verify_keys
+    # If neither ECDSA nor RSA is complete, fail
+    if-nez v18, :cond_verify_roots
 
-    :cond_c
+    if-nez v17, :cond_f
+
+    :cond_verify_roots
     const-string v5, "MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAr7bHgiuxpwHsK7Qui8xUFmOr75gvMsd/dTEDDJdSSxtf6An7xyqpRR90PL2abxM1dEqlXnf2tqw1Ne4Xwl5jlRfdnJLmN0pTy/4lj4/7tv0Sk3iiKkypnEUtR6WfMgH0QZfKHM1+di+y9TFRtv6y//0rb+T+W8a9nsNL/ggjnar86461qO0rOs2cXjp3kOG1FEJ5MVmFmBGtnrKpa73XpXyTqRxB/M0n1n/W9nGqC4FSYa04T6N5RIZGBN2z2MT5IKGbFlbC8UrW0DxW7AYImQQcHtGl/m00QLVWutHQoVJYnFPlXTcHYvASLu+RhhsbDmxMgJJ0mcDpvsC4PjvB+TxywElgS70vE0XmLD+OJtvsBslHZvPBKCOdT0MS+tgSOIfga+z1Z1g7+DVagf7quvmag8jfPioyKvxnK/EgsTUVi2ghzq8wm27ud/mIM7AY2qEORR8Go3TVB4HzWQgpZrt3i5MIlCaY504LzSRiigHCzAPlHws+W0rB5N+er5/2pJKnfBSDiCiFAVtCLOZ7gLiMm0jhO2B6tUXHI/+MRPjy02i59lINMRRev56GKtcd9qO/0kUJWdZTdA2XoS82ixPvZtXQpUpuL12ab+9EaDK8Z4RHJYYfCT3Q5vNAXaiWQ+8PTWm2QgBR/bkwSWc+NpUFgNPN9PvQi8WEg5UmAGMCAwEAAQ=="
 
     move/from16 v6, v16
@@ -946,6 +956,18 @@
     move-result-object v7
 
     :try_start_5
+    # Verify ECDSA root if ECDSA is present
+    if-eqz v18, :check_rsa_root
+
+    invoke-virtual {v0}, Ljava/util/ArrayList;->isEmpty()Z
+
+    move-result v6
+
+    if-eqz v6, :cond_ec_certs_ok
+
+    goto :cond_f
+
+    :cond_ec_certs_ok
     invoke-virtual {v0}, Ljava/util/ArrayList;->getLast()Ljava/lang/Object;
 
     move-result-object v0
@@ -964,63 +986,81 @@
 
     move-result-object v0
 
-    invoke-virtual {v4}, Ljava/util/ArrayList;->getLast()Ljava/lang/Object;
-
-    move-result-object v4
-
-    check-cast v4, Ljava/lang/String;
-
-    invoke-static {v4}, Lio/mesalabs/unica/settings/keybox/KeyboxUtils;->parseCertificate(Ljava/lang/String;)Ljava/security/cert/X509Certificate;
-
-    move-result-object v4
-
-    invoke-virtual {v4}, Ljava/security/cert/X509Certificate;->getPublicKey()Ljava/security/PublicKey;
-
-    move-result-object v4
-
-    invoke-interface {v4}, Ljava/security/PublicKey;->getEncoded()[B
-
-    move-result-object v4
-
-    invoke-static {v0, v5}, Ljava/util/Arrays;->equals([B[B)Z
+    invoke-static {v0, v7}, Ljava/util/Arrays;->equals([B[B)Z
 
     move-result v6
 
-    if-nez v6, :cond_d
+    if-nez v6, :cond_check_rsa_root
+
+    invoke-static {v0, v5}, Ljava/util/Arrays;->equals([B[B)Z
+
+    move-result v0
+
+    if-nez v0, :cond_check_rsa_root
+
+    const/4 v6, 0x4
+
+    invoke-static {v1, v6}, Lio/mesalabs/unica/settings/keybox/KeyboxUtils;->showToast(Landroid/content/Context;I)V
+
+    return v16
+
+    :check_rsa_root
+    # Verify RSA root if RSA is present
+    if-eqz v17, :all_verified
+
+    invoke-virtual {v4}, Ljava/util/ArrayList;->isEmpty()Z
+
+    move-result v0
+
+    if-eqz v0, :cond_rsa_certs_ok
+
+    goto :cond_f
+
+    :cond_rsa_certs_ok
+    invoke-virtual {v4}, Ljava/util/ArrayList;->getLast()Ljava/lang/Object;
+
+    move-result-object v0
+
+    check-cast v0, Ljava/lang/String;
+
+    invoke-static {v0}, Lio/mesalabs/unica/settings/keybox/KeyboxUtils;->parseCertificate(Ljava/lang/String;)Ljava/security/cert/X509Certificate;
+
+    move-result-object v0
+
+    invoke-virtual {v0}, Ljava/security/cert/X509Certificate;->getPublicKey()Ljava/security/PublicKey;
+
+    move-result-object v0
+
+    invoke-interface {v0}, Ljava/security/PublicKey;->getEncoded()[B
+
+    move-result-object v0
+
+    invoke-static {v0, v5}, Ljava/util/Arrays;->equals([B[B)Z
+
+    move-result v4
+
+    if-nez v4, :cond_all_verified
 
     invoke-static {v0, v7}, Ljava/util/Arrays;->equals([B[B)Z
 
     move-result v0
 
-    if-nez v0, :cond_d
-
-    invoke-static {v4, v5}, Ljava/util/Arrays;->equals([B[B)Z
-
-    move-result v0
-
-    if-nez v0, :cond_d
-
-    invoke-static {v4, v7}, Ljava/util/Arrays;->equals([B[B)Z
-
-    move-result v0
-
-    if-nez v0, :cond_d
+    if-nez v0, :cond_all_verified
 
     const/4 v6, 0x4
 
     invoke-static {v1, v6}, Lio/mesalabs/unica/settings/keybox/KeyboxUtils;->showToast(Landroid/content/Context;I)V
-    :try_end_5
-    .catch Ljava/security/cert/CertificateException; {:try_start_5 .. :try_end_5} :catch_1
-    .catch Ljava/lang/IllegalArgumentException; {:try_start_5 .. :try_end_5} :catch_1
-
-    const/16 v16, 0x0
 
     return v16
 
-    :cond_d
-    const/16 v19, 0x1
+    :all_verified
+    :cond_all_verified
+    const/4 v0, 0x1
 
-    return v19
+    return v0
+    :try_end_5
+    .catch Ljava/security/cert/CertificateException; {:try_start_5 .. :try_end_5} :catch_1
+    .catch Ljava/lang/IllegalArgumentException; {:try_start_5 .. :try_end_5} :catch_1
 
     :catch_1
     move-exception v0
@@ -1031,21 +1071,9 @@
 
     invoke-static {v1, v5}, Lio/mesalabs/unica/settings/keybox/KeyboxUtils;->showToast(Landroid/content/Context;I)V
 
-    :goto_5
-    const/16 v16, 0x0
-
-    return v16
-
-    :cond_e
-    :goto_6
-    const/4 v5, 0x3
-
-    invoke-static {v1, v5}, Lio/mesalabs/unica/settings/keybox/KeyboxUtils;->showToast(Landroid/content/Context;I)V
-
     return v16
 
     :cond_f
-    :goto_7
     const/4 v5, 0x3
 
     invoke-static {v1, v5}, Lio/mesalabs/unica/settings/keybox/KeyboxUtils;->showToast(Landroid/content/Context;I)V
